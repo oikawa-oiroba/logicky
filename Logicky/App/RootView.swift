@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// アプリのルートビュー。スプラッシュ→メイン画面への遷移を管理する。
 struct RootView: View {
     @State private var showSplash = true
 
@@ -13,7 +12,6 @@ struct RootView: View {
             }
         }
         .onAppear {
-            // 2秒後にスプラッシュからホーム画面へ遷移
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation(.easeInOut(duration: 0.5)) {
                     showSplash = false
@@ -23,9 +21,9 @@ struct RootView: View {
     }
 }
 
-/// NavigationStackとQuizViewModelを保持するメインビュー
 struct MainNavigationView: View {
-    @StateObject private var viewModel = QuizViewModel()
+    @StateObject private var quizViewModel = QuizViewModel()
+    @StateObject private var attemptService = AttemptService.shared
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
@@ -33,19 +31,22 @@ struct MainNavigationView: View {
             HomeView(navigationPath: $navigationPath)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
-                    case .quiz:
-                        QuizContainerView(navigationPath: $navigationPath)
+                    case .quiz(let unitId):
+                        QuizContainerView(unitId: unitId, navigationPath: $navigationPath)
                     case .result:
                         ResultView(navigationPath: $navigationPath)
+                    case .history:
+                        HistoryView(navigationPath: $navigationPath)
                     }
                 }
         }
-        .environmentObject(viewModel)
+        .environmentObject(quizViewModel)
+        .environmentObject(attemptService)
     }
 }
 
-/// アプリ内のナビゲーションルート定義
 enum AppRoute: Hashable {
-    case quiz
+    case quiz(unitId: String)
     case result
+    case history
 }
