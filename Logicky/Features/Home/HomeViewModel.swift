@@ -54,6 +54,78 @@ final class HomeViewModel: ObservableObject {
         return prev.units.allSatisfy { isMCCompleted(for: $0) }
     }
 
+    // MARK: - Streak
+
+    var streakDays: Int {
+        let calendar = Calendar.current
+        var checkDate = calendar.startOfDay(for: Date())
+
+        let hasStudiedToday = attemptService.attempts.contains { calendar.isDateInToday($0.date) }
+        if !hasStudiedToday {
+            guard let yesterday = calendar.date(byAdding: .day, value: -1, to: checkDate) else { return 0 }
+            checkDate = yesterday
+        }
+
+        var streak = 0
+        while true {
+            let studied = attemptService.attempts.contains { calendar.isDate($0.date, inSameDayAs: checkDate) }
+            guard studied else { break }
+            streak += 1
+            guard let prev = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+            checkDate = prev
+        }
+        return streak
+    }
+
+    var streakMessage: String {
+        streakDays == 0 ? "今日から始めよう!" : "\(streakDays)日連続"
+    }
+
+    // MARK: - Today's Unit
+
+    var isAllUnitsCompleted: Bool {
+        UnitModel.all.allSatisfy { isMCCompleted(for: $0) }
+    }
+
+    var todayUnit: UnitModel? {
+        if isAllUnitsCompleted {
+            return UnitModel.all.min { bestMCScore(for: $0) < bestMCScore(for: $1) }
+        }
+        return UnitModel.all.first { !isMCCompleted(for: $0) }
+    }
+
+    private func bestMCScore(for unit: UnitModel) -> Int {
+        attemptService.attempts(for: unit.id).map { $0.totalScore }.max() ?? 0
+    }
+
+    func todayUnitAnsweredCount() -> Int {
+        guard let unit = todayUnit else { return 0 }
+        return mcAnsweredCount(for: unit)
+    }
+
+    func todayUnitMCCount() -> Int {
+        guard let unit = todayUnit else { return 0 }
+        return QuestionService.shared.trainingQuestions(for: unit.id).count
+    }
+
+    // MARK: - Growth / Level Progress
+
+    func abilityName(for level: LevelModel) -> String {
+        switch level.id {
+        case 1: return "整理力"
+        case 2: return "推論力"
+        case 3: return "判断力"
+        default: return level.description
+        }
+    }
+
+    func levelProgress(for level: LevelModel) -> Double {
+        let total = level.units.count
+        guard total > 0 else { return 0 }
+        let completed = level.units.filter { isMCCompleted(for: $0) }.count
+        return Double(completed) / Double(total)
+    }
+
     // MARK: - Legacy aliases
 
     func answeredCount(for unit: UnitModel) -> Int { mcAnsweredCount(for: unit) }
