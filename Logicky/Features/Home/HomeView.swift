@@ -240,15 +240,22 @@ struct HomeView: View {
     // MARK: - Quick Actions
 
     private var quickActionsSection: some View {
-        HStack(spacing: 12) {
-            QuickActionCard(icon: "graduationcap.fill", title: "学習を始める") {
-                navigationPath.append(AppRoute.categorySelection)
+        VStack(spacing: 12) {
+            HStack(spacing: 12) {
+                QuickActionCard(icon: "graduationcap.fill", title: "学習を始める") {
+                    navigationPath.append(AppRoute.categorySelection)
+                }
+                QuickActionCard(icon: "book.fill", title: "思考法辞典") {
+                    navigationPath.append(AppRoute.dictionaryList)
+                }
             }
-            QuickActionCard(icon: "book.fill", title: "思考法辞典") {
-                navigationPath.append(AppRoute.dictionaryList)
-            }
-            QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
-                navigationPath.append(AppRoute.history)
+            HStack(spacing: 12) {
+                QuickActionCard(icon: "exclamationmark.triangle.fill", title: "認知バイアス辞典") {
+                    navigationPath.append(AppRoute.cognitiveBiasList)
+                }
+                QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
+                    navigationPath.append(AppRoute.history)
+                }
             }
         }
     }

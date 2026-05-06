@@ -16,6 +16,8 @@ enum AppRoute: Hashable {
     case history
     case dictionaryList
     case dictionaryDetail(methodId: String)
+    case cognitiveBiasList
+    case cognitiveBiasDetail(biasId: String)
     case diagnosticDetail(result: DiagnosticResult)
 }
 
@@ -70,6 +72,10 @@ struct MainNavigationView: View {
                         DictionaryListView(navigationPath: $navigationPath)
                     case .dictionaryDetail(let methodId):
                         DictionaryDetailView(methodId: methodId, navigationPath: $navigationPath)
+                    case .cognitiveBiasList:
+                        CognitiveBiasListView(navigationPath: $navigationPath)
+                    case .cognitiveBiasDetail(let biasId):
+                        CognitiveBiasDetailView(biasId: biasId, navigationPath: $navigationPath)
                     case .diagnosticDetail(let result):
                         DiagnosticHistoryDetailView(result: result, navigationPath: $navigationPath)
                     }

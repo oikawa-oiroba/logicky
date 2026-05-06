@@ -31,4 +31,5 @@ struct Question: Codable, Identifiable {
     let rubricJson: RubricItem?
     let sampleGoodAnswer: String?
     let sampleGoodPoints: [String]?
+    let relatedBiases: [String]?
 }

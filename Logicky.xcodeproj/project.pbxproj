@@ -48,6 +48,11 @@
 		NBLD000000000000000000017 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000017 /* Color+App.swift */; };
 		NBLD000000000000000000018 /* DiagnosticHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */; };
 		NBLD000000000000000000019 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000019 /* CategorySelectionView.swift */; };
+		NBLD000000000000000000020 /* CognitiveBias.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000020 /* CognitiveBias.swift */; };
+		NBLD000000000000000000021 /* CognitiveBiasService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000021 /* CognitiveBiasService.swift */; };
+		NBLD000000000000000000022 /* CognitiveBiasListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000022 /* CognitiveBiasListView.swift */; };
+		NBLD000000000000000000023 /* CognitiveBiasDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */; };
+		NBLD000000000000000000024 /* cognitive_biases.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000024 /* cognitive_biases.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -92,6 +97,11 @@
 		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000017 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
 		NFIL000000000000000000019 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000020 /* CognitiveBias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBias.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000021 /* CognitiveBiasService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasService.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000022 /* CognitiveBiasListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasListView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasDetailView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000024 /* cognitive_biases.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cognitive_biases.json; sourceTree = "<group>"; };
 		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +155,7 @@
 				SVCG000000000000000000003 /* ScoringService */,
 				NGRP000000000000000000002 /* ThinkingMethodService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
+				NGRP000000000000000000006 /* CognitiveBiasService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -154,6 +165,7 @@
 			children = (
 				20000000000000000000000F /* questions.json */,
 				NFIL000000000000000000008 /* thinking_methods.json */,
+				NFIL000000000000000000024 /* cognitive_biases.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -184,6 +196,7 @@
 				FILE000000000000000000002 /* Attempt.swift */,
 				NFIL000000000000000000004 /* ThinkingMethod.swift */,
 				NFIL000000000000000000009 /* DiagnosticResult.swift */,
+				NFIL000000000000000000020 /* CognitiveBias.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -274,8 +287,18 @@
 				NFIL000000000000000000006 /* DictionaryListView.swift */,
 				NFIL000000000000000000007 /* DictionaryDetailView.swift */,
 				NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */,
+				NFIL000000000000000000022 /* CognitiveBiasListView.swift */,
+				NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */,
 			);
 			path = Dictionary;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000006 /* CognitiveBiasService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000021 /* CognitiveBiasService.swift */,
+			);
+			path = CognitiveBiasService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000002 /* ThinkingMethodService */ = {
@@ -390,6 +413,7 @@
 			files = (
 				30000000000000000000000F /* questions.json in Resources */,
 				NBLD000000000000000000008 /* thinking_methods.json in Resources */,
+				NBLD000000000000000000024 /* cognitive_biases.json in Resources */,
 				300000000000000000000010 /* Assets.xcassets in Resources */,
 				LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -439,6 +463,10 @@
 				NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */,
 				NBLD000000000000000000017 /* Color+App.swift in Sources */,
 				NBLD000000000000000000019 /* CategorySelectionView.swift in Sources */,
+				NBLD000000000000000000020 /* CognitiveBias.swift in Sources */,
+				NBLD000000000000000000021 /* CognitiveBiasService.swift in Sources */,
+				NBLD000000000000000000022 /* CognitiveBiasListView.swift in Sources */,
+				NBLD000000000000000000023 /* CognitiveBiasDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
