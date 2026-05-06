@@ -36,6 +36,7 @@ struct QuizContainerView: View {
                         Text("ホーム")
                     }
                     .font(.subheadline)
+                    .foregroundStyle(Color.tiffany)
                 }
             }
 
@@ -48,7 +49,7 @@ struct QuizContainerView: View {
                     viewModel.skip()
                 }
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
             }
         }
         .confirmationDialog(
@@ -78,22 +79,24 @@ struct QuizContainerView: View {
         VStack(spacing: 1) {
             Text(UnitModel.all.first { $0.id == unitId }?.displayName ?? "")
                 .font(.headline)
+                .foregroundStyle(Color.appText)
             Text(mode == .training ? "トレーニング" : "マスター")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
         }
     }
 
     private var bottomProgressBar: some View {
         VStack(spacing: 0) {
             Divider()
+                .background(Color.cardBorder)
             HStack(spacing: 12) {
                 Button {
                     viewModel.goPrevious()
                 } label: {
                     Image(systemName: "chevron.left")
                         .font(.body.weight(.semibold))
-                        .foregroundStyle(viewModel.isFirstQuestion ? Color(.tertiaryLabel) : .indigo)
+                        .foregroundStyle(viewModel.isFirstQuestion ? Color.cardBorder : Color.tiffany)
                 }
                 .disabled(viewModel.isFirstQuestion)
 
@@ -102,14 +105,14 @@ struct QuizContainerView: View {
                 HStack(spacing: 6) {
                     ForEach(0..<viewModel.questions.count, id: \.self) { i in
                         Circle()
-                            .fill(i == viewModel.currentIndex ? Color.indigo : Color(.systemFill))
+                            .fill(i == viewModel.currentIndex ? Color.tiffany : Color.cardBorder)
                             .frame(width: 8, height: 8)
                     }
                 }
 
                 Text(viewModel.progressText)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
                     .frame(width: 40, alignment: .center)
 
                 Spacer()
@@ -126,14 +129,14 @@ struct QuizContainerView: View {
                     .foregroundStyle(.white)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(canAdvance ? Color.indigo : Color(.systemFill))
+                    .background(canAdvance ? Color.tiffany : Color.cardBorder)
                     .clipShape(Capsule())
                 }
                 .disabled(!canAdvance)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
-            .background(Color(.systemBackground))
+            .background(Color.white)
         }
     }
 

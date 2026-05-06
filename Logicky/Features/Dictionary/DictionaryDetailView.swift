@@ -15,37 +15,40 @@ struct DictionaryDetailView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(method.displayName)
                             .font(.headline.bold())
-                            .foregroundStyle(.indigo)
+                            .foregroundStyle(Color.tiffany)
                         Text(method.tagline)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                     }
                     .padding(.top, 4)
 
                     ThinkingMethodDiagramView(method: method)
 
-                    sectionCard(title: "解説", icon: "text.book.closed.fill", color: .indigo) {
+                    sectionCard(title: "解説", icon: "text.book.closed.fill") {
                         Text(method.explanation)
                             .font(.body)
+                            .foregroundStyle(Color.appText)
                             .lineSpacing(6)
                     }
 
-                    sectionCard(title: "具体例", icon: "briefcase.fill", color: .teal) {
+                    sectionCard(title: "具体例", icon: "briefcase.fill") {
                         Text(method.example)
                             .font(.body)
+                            .foregroundStyle(Color.appText)
                             .lineSpacing(6)
                     }
 
-                    sectionCard(title: "よくある間違い", icon: "exclamationmark.triangle.fill", color: .orange) {
+                    sectionCard(title: "よくある間違い", icon: "exclamationmark.triangle.fill") {
                         VStack(alignment: .leading, spacing: 10) {
                             ForEach(Array(method.commonMistakes.enumerated()), id: \.offset) { _, mistake in
                                 HStack(alignment: .top, spacing: 8) {
                                     Image(systemName: "xmark.circle.fill")
                                         .font(.caption)
-                                        .foregroundStyle(.orange)
+                                        .foregroundStyle(Color.appGray)
                                         .padding(.top, 3)
                                     Text(mistake)
                                         .font(.subheadline)
+                                        .foregroundStyle(Color.appText)
                                         .lineSpacing(4)
                                 }
                             }
@@ -62,7 +65,7 @@ struct DictionaryDetailView: View {
         }
         .navigationTitle(method?.name ?? "")
         .navigationBarTitleDisplayMode(.large)
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
     }
 
     // MARK: - Section Card
@@ -70,19 +73,19 @@ struct DictionaryDetailView: View {
     private func sectionCard<Content: View>(
         title: String,
         icon: String,
-        color: Color,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Label(title, systemImage: icon)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(color)
+                .foregroundStyle(Color.tiffany)
             content()
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     // MARK: - Practice Button
@@ -100,10 +103,14 @@ struct DictionaryDetailView: View {
                     .font(.caption)
             }
             .font(.subheadline)
-            .foregroundStyle(.indigo)
+            .foregroundStyle(Color.tiffany)
             .padding(16)
-            .background(Color.indigo.opacity(0.08))
+            .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.tiffany, lineWidth: 1)
+            )
         }
     }
 }

@@ -45,6 +45,7 @@
 		NBLD000000000000000000015 /* ResultReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000015 /* ResultReviewView.swift */; };
 		NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */; };
 		LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = LSREF00000000000000000001 /* LaunchScreen.storyboard */; };
+		NBLD000000000000000000017 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000017 /* Color+App.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		NFIL000000000000000000014 /* DiagnosticResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResultView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000017 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
 		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,8 +158,17 @@
 			isa = PBXGroup;
 			children = (
 				CORE000000000000000000002 /* Models */,
+				NGRP000000000000000000005 /* Extensions */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000005 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000017 /* Color+App.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CORE000000000000000000002 /* Models */ = {
@@ -419,6 +430,7 @@
 				NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */,
 				NBLD000000000000000000015 /* ResultReviewView.swift in Sources */,
 				NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */,
+				NBLD000000000000000000017 /* Color+App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

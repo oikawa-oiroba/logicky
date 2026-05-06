@@ -2,30 +2,24 @@ import SwiftUI
 
 struct SplashView: View {
     @State private var opacity = 0.0
-    @State private var scale = 0.85
+    @State private var scale = 0.88
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: [Color.indigo, Color.purple],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            Color.white.ignoresSafeArea()
 
             VStack(spacing: 20) {
                 Image(systemName: "brain.head.profile")
-                    .font(.system(size: 80))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 72))
+                    .foregroundStyle(Color.tiffany)
 
                 Text("Logicky")
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .font(.system(size: 52, weight: .bold))
+                    .foregroundStyle(Color.appText)
 
                 Text("思考力を、見える化する")
-                    .font(.title3)
-                    .fontWeight(.medium)
-                    .foregroundStyle(.white.opacity(0.85))
+                    .font(.title3.weight(.medium))
+                    .foregroundStyle(Color.appSub)
             }
             .scaleEffect(scale)
             .opacity(opacity)

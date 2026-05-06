@@ -141,13 +141,6 @@ final class DiagnosticViewModel: ObservableObject {
     }
 
     func rankColor(for score: Int) -> Color {
-        switch score {
-        case 90...100: return Color(red: 1.0, green: 0.84, blue: 0.0)
-        case 80..<90:  return .green
-        case 70..<80:  return .blue
-        case 60..<70:  return .teal
-        case 50..<60:  return .orange
-        default:       return .red
-        }
+        return .tiffany
     }
 }

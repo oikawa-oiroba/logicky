@@ -6,7 +6,7 @@ struct LevelSelectionView: View {
 
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 ForEach(LevelModel.all) { level in
                     let unlocked = isLevelUnlocked(level)
                     LevelCard(
@@ -24,7 +24,7 @@ struct LevelSelectionView: View {
         }
         .navigationTitle("レベルを選択")
         .navigationBarTitleDisplayMode(.large)
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
     }
 
     private func isLevelUnlocked(_ level: LevelModel) -> Bool {
@@ -73,23 +73,23 @@ private struct LevelCard: View {
                     HStack {
                         Text(level.name)
                             .font(.headline)
-                            .foregroundStyle(isUnlocked ? .primary : .secondary)
+                            .foregroundStyle(isUnlocked ? Color.appText : Color.appGray)
                         Text(level.description)
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                         Spacer()
                         Text("\(completedUnits)/\(totalUnits) 単元")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                     }
 
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 3)
-                                .fill(Color(.systemFill))
+                                .fill(Color.cardBorder)
                                 .frame(height: 6)
                             RoundedRectangle(cornerRadius: 3)
-                                .fill(progress >= 1.0 ? Color.green : Color.indigo)
+                                .fill(Color.tiffany)
                                 .frame(width: geo.size.width * progress, height: 6)
                         }
                     }
@@ -98,14 +98,17 @@ private struct LevelCard: View {
                     if !isUnlocked {
                         Text("前のレベルをすべてクリアすると解放されます")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appGray)
                     }
                 }
             }
             .padding(20)
-            .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isUnlocked ? Color.cardBorder : Color.cardBorder.opacity(0.5), lineWidth: 1)
+            )
             .opacity(isUnlocked ? 1.0 : 0.55)
         }
         .disabled(!isUnlocked)
@@ -115,16 +118,16 @@ private struct LevelCard: View {
     private var levelBadge: some View {
         ZStack {
             Circle()
-                .fill(isUnlocked ? Color.indigo.opacity(0.12) : Color(.systemFill))
-                .frame(width: 56, height: 56)
+                .fill(isUnlocked ? Color.tiffany.opacity(0.1) : Color.cardBorder)
+                .frame(width: 52, height: 52)
             if isUnlocked {
                 Text("\(level.id)")
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
-                    .foregroundStyle(.indigo)
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.tiffany)
             } else {
                 Image(systemName: "lock.fill")
-                    .font(.system(size: 20))
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 18))
+                    .foregroundStyle(Color.appGray)
             }
         }
     }

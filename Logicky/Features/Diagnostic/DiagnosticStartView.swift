@@ -20,36 +20,34 @@ struct DiagnosticStartView: View {
     private var startContent: some View {
         ScrollView {
             VStack(spacing: 28) {
-                // Header
                 VStack(spacing: 12) {
-                    Text("🎯")
-                        .font(.system(size: 56))
+                    Image(systemName: "target")
+                        .font(.system(size: 52))
+                        .foregroundStyle(Color.tiffany)
                         .padding(.top, 24)
                     Text("ロジッキー診断")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundStyle(Color.appText)
                     Text("5分でわかる！あなたの思考力")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                 }
                 .frame(maxWidth: .infinity)
 
-                // Info cards
-                infoCard(icon: "list.bullet.clipboard", color: .indigo,
+                infoCard(icon: "list.bullet.clipboard",
                          title: "10問の選択問題",
                          body: "Level 1〜3 からバランスよく出題")
-                infoCard(icon: "chart.bar.fill", color: .teal,
+                infoCard(icon: "chart.bar.fill",
                          title: "3軸で診断",
                          body: "整理力・推論力・判断力を数値化")
-                infoCard(icon: "star.fill", color: .orange,
+                infoCard(icon: "star.fill",
                          title: "ランク判定",
                          body: "S〜D の 6 段階でスコアを評価")
 
-                // Previous result summary
                 if let prev = DiagnosticService.shared.latestResult {
                     previousResultCard(prev)
                 }
 
-                // CTA
                 Button {
                     vm.startDiagnostic()
                 } label: {
@@ -62,68 +60,67 @@ struct DiagnosticStartView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
-                    .background(
-                        LinearGradient(colors: [.indigo, .purple],
-                                       startPoint: .leading, endPoint: .trailing)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .background(Color.tiffany)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
 
                 Button("キャンセル") { dismiss() }
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
             }
             .padding(.horizontal, 24)
             .padding(.bottom, 40)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
         .navigationBarHidden(true)
     }
 
-    private func infoCard(icon: String, color: Color, title: String, body: String) -> some View {
+    private func infoCard(icon: String, title: String, body: String) -> some View {
         HStack(spacing: 14) {
             Image(systemName: icon)
                 .font(.title3)
-                .foregroundStyle(color)
+                .foregroundStyle(Color.tiffany)
                 .frame(width: 36)
             VStack(alignment: .leading, spacing: 2) {
-                Text(title).font(.subheadline.weight(.semibold))
-                Text(body).font(.caption).foregroundStyle(.secondary)
+                Text(title).font(.subheadline.weight(.semibold)).foregroundStyle(Color.appText)
+                Text(body).font(.caption).foregroundStyle(Color.appSub)
             }
             Spacer()
         }
         .padding(14)
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     private func previousResultCard(_ prev: DiagnosticResult) -> some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("前回の診断結果")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
             HStack {
                 Text(DiagnosticViewModel().rankLabel(for: prev.totalScore))
                     .font(.system(size: 32, weight: .bold, design: .rounded))
-                    .foregroundStyle(DiagnosticViewModel().rankColor(for: prev.totalScore))
+                    .foregroundStyle(Color.tiffany)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("\(prev.totalScore)点")
                         .font(.headline)
+                        .foregroundStyle(Color.appText)
                     Text(prev.date, style: .date)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                 }
                 Spacer()
                 Image(systemName: "arrow.clockwise")
                     .font(.subheadline)
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
                 Text("再挑戦")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
             }
         }
         .padding(14)
-        .background(Color.indigo.opacity(0.06))
+        .background(Color.tiffany.opacity(0.06))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }

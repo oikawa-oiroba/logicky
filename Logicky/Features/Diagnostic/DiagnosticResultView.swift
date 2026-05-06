@@ -24,7 +24,7 @@ struct DiagnosticResultView: View {
             .padding(.top, 24)
             .padding(.bottom, 40)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
         .navigationBarHidden(true)
         .sheet(isPresented: $showShareSheet) {
             if let img = shareImage {
@@ -38,24 +38,20 @@ struct DiagnosticResultView: View {
     private var scoreCircle: some View {
         ZStack {
             Circle()
-                .stroke(Color.indigo.opacity(0.12), lineWidth: 16)
+                .stroke(Color.cardBorder, lineWidth: 16)
                 .frame(width: 160, height: 160)
             Circle()
                 .trim(from: 0, to: CGFloat(vm.displayScore) / 100)
-                .stroke(
-                    LinearGradient(colors: [.indigo, .purple],
-                                   startPoint: .topLeading, endPoint: .bottomTrailing),
-                    style: StrokeStyle(lineWidth: 16, lineCap: .round)
-                )
+                .stroke(Color.tiffany, style: StrokeStyle(lineWidth: 16, lineCap: .round))
                 .frame(width: 160, height: 160)
                 .rotationEffect(.degrees(-90))
                 .animation(.easeOut(duration: 0.05), value: vm.displayScore)
             VStack(spacing: 2) {
                 Text("\(vm.displayScore)")
                     .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
                     .contentTransition(.numericText())
-                Text("点").font(.subheadline).foregroundStyle(.secondary)
+                Text("点").font(.subheadline).foregroundStyle(Color.appSub)
             }
         }
     }
@@ -67,14 +63,14 @@ struct DiagnosticResultView: View {
         return VStack(spacing: 6) {
             Text(vm.rankLabel(for: score))
                 .font(.system(size: 36, weight: .bold, design: .rounded))
-                .foregroundStyle(vm.rankColor(for: score))
+                .foregroundStyle(Color.tiffany)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 8)
-                .background(vm.rankColor(for: score).opacity(0.12))
+                .background(Color.tiffany.opacity(0.1))
                 .clipShape(Capsule())
             Text(vm.rankDescription(for: score))
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
         }
     }
 
@@ -85,13 +81,13 @@ struct DiagnosticResultView: View {
             Image(systemName: delta >= 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
             Text(delta >= 0 ? "前回より+\(delta)点！" : "前回より\(delta)点")
             Text("成長を続けよう")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
         }
         .font(.subheadline.weight(.semibold))
-        .foregroundStyle(delta >= 0 ? .green : .orange)
+        .foregroundStyle(delta >= 0 ? Color.tiffany : Color.appGray)
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
-        .background((delta >= 0 ? Color.green : Color.orange).opacity(0.1))
+        .background((delta >= 0 ? Color.tiffany : Color.appGray).opacity(0.1))
         .clipShape(Capsule())
     }
 
@@ -101,28 +97,30 @@ struct DiagnosticResultView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("3軸評価")
                 .font(.headline)
+                .foregroundStyle(Color.appText)
             VStack(spacing: 10) {
-                axisRow(label: "整理力", score: vm.result?.organizeScore ?? 0, color: .indigo)
-                axisRow(label: "推論力", score: vm.result?.reasonScore ?? 0, color: .purple)
-                axisRow(label: "判断力", score: vm.result?.judgeScore ?? 0, color: .teal)
+                axisRow(label: "整理力", score: vm.result?.organizeScore ?? 0)
+                axisRow(label: "推論力", score: vm.result?.reasonScore ?? 0)
+                axisRow(label: "判断力", score: vm.result?.judgeScore ?? 0)
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
-    private func axisRow(label: String, score: Int, color: Color) -> some View {
+    private func axisRow(label: String, score: Int) -> some View {
         HStack(spacing: 12) {
             Text(label)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(color)
+                .foregroundStyle(Color.tiffany)
                 .frame(width: 38, alignment: .leading)
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 4).fill(Color(.systemFill)).frame(height: 10)
+                    RoundedRectangle(cornerRadius: 4).fill(Color.cardBorder).frame(height: 10)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(color.opacity(0.8))
+                        .fill(Color.tiffany)
                         .frame(width: geo.size.width * CGFloat(score) / 100, height: 10)
                         .animation(.easeOut(duration: 0.8), value: score)
                 }
@@ -130,7 +128,7 @@ struct DiagnosticResultView: View {
             .frame(height: 10)
             Text("\(score)%")
                 .font(.caption.weight(.bold))
-                .foregroundStyle(color)
+                .foregroundStyle(Color.tiffany)
                 .frame(width: 34, alignment: .trailing)
         }
     }
@@ -145,12 +143,12 @@ struct DiagnosticResultView: View {
                 HStack {
                     Label("プロフィール登録（任意）", systemImage: "person.fill")
                         .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color.appText)
                     Spacer()
                     Image(systemName: showProfileInput ? "chevron.up" : "chevron.down")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appGray)
                 }
-                .foregroundStyle(.primary)
             }
             .buttonStyle(.plain)
 
@@ -174,28 +172,30 @@ struct DiagnosticResultView: View {
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 10)
-                            .background(Color.indigo)
+                            .background(Color.tiffany)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
             }
         }
         .padding(14)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     private func profilePicker(label: String, binding: Binding<String>, options: [String]) -> some View {
         HStack {
             Text(label)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
                 .frame(width: 50, alignment: .leading)
             Picker(label, selection: binding) {
                 ForEach(options, id: \.self) { Text($0) }
             }
             .labelsHidden()
             .pickerStyle(.menu)
+            .tint(Color.tiffany)
         }
     }
 
@@ -215,11 +215,8 @@ struct DiagnosticResultView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(
-                    LinearGradient(colors: [.indigo, .purple],
-                                   startPoint: .leading, endPoint: .trailing)
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .background(Color.tiffany)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
 
             Button {
@@ -227,11 +224,15 @@ struct DiagnosticResultView: View {
             } label: {
                 Text("学習を続ける")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 12)
-                    .background(Color.indigo.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.tiffany, lineWidth: 1)
+                    )
             }
         }
     }
@@ -241,7 +242,7 @@ struct DiagnosticResultView: View {
     private var shareText: String {
         let score = vm.result?.totalScore ?? 0
         let rank = vm.rankLabel(for: score)
-        return "ロジッキー診断で\(score)点！ランク\(rank)でした 🧠 #Logicky #論理的思考"
+        return "ロジッキー診断で\(score)点！ランク\(rank)でした #Logicky #論理的思考"
     }
 
     @MainActor
@@ -251,7 +252,6 @@ struct DiagnosticResultView: View {
             score: result.totalScore,
             rank: vm.rankLabel(for: result.totalScore),
             rankDesc: vm.rankDescription(for: result.totalScore),
-            rankColor: vm.rankColor(for: result.totalScore),
             organizeScore: result.organizeScore,
             reasonScore: result.reasonScore,
             judgeScore: result.judgeScore
@@ -269,30 +269,33 @@ private struct ShareCardView: View {
     let score: Int
     let rank: String
     let rankDesc: String
-    let rankColor: Color
     let organizeScore: Int
     let reasonScore: Int
     let judgeScore: Int
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("🧠 ロジッキー診断")
-                .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundStyle(.white.opacity(0.8))
+            HStack(spacing: 6) {
+                Image(systemName: "brain.head.profile")
+                    .foregroundStyle(Color.tiffany)
+                Text("ロジッキー診断")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Color.appText)
+            }
             HStack(alignment: .firstTextBaseline, spacing: 4) {
                 Text("\(score)")
                     .font(.system(size: 56, weight: .bold, design: .rounded))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.tiffany)
                 Text("点")
                     .font(.title3)
-                    .foregroundStyle(.white.opacity(0.8))
+                    .foregroundStyle(Color.appSub)
             }
             Text("ランク \(rank) — \(rankDesc)")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Color.tiffany)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 5)
-                .background(.white.opacity(0.2))
+                .background(Color.tiffany.opacity(0.1))
                 .clipShape(Capsule())
 
             HStack(spacing: 20) {
@@ -302,9 +305,10 @@ private struct ShareCardView: View {
             }
         }
         .padding(24)
-        .background(
-            LinearGradient(colors: [Color.indigo, Color.purple],
-                           startPoint: .topLeading, endPoint: .bottomTrailing)
+        .background(Color.white)
+        .overlay(
+            RoundedRectangle(cornerRadius: 20)
+                .stroke(Color.tiffany.opacity(0.3), lineWidth: 1.5)
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
@@ -313,10 +317,10 @@ private struct ShareCardView: View {
         VStack(spacing: 2) {
             Text("\(score)%")
                 .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+                .foregroundStyle(Color.tiffany)
             Text(label)
                 .font(.caption)
-                .foregroundStyle(.white.opacity(0.8))
+                .foregroundStyle(Color.appSub)
         }
     }
 }

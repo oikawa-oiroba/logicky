@@ -16,7 +16,7 @@ struct MultipleChoiceView: View {
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
                 }
-                .background(Color(.systemGroupedBackground))
+                .background(Color.appBg)
                 .sheet(isPresented: $showHint) {
                     if let method = hintMethod(for: question) {
                         HintSheetView(method: method)
@@ -38,20 +38,21 @@ struct MultipleChoiceView: View {
             HStack {
                 Text("4択問題")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(Color.indigo.opacity(0.12))
+                    .background(Color.tiffany.opacity(0.1))
                     .clipShape(Capsule())
                 Spacer()
             }
 
             Text(question.title)
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
 
             Text(question.body)
                 .font(.body)
+                .foregroundStyle(Color.appText)
                 .lineSpacing(6)
 
             if hintMethod(for: question) != nil {
@@ -59,15 +60,15 @@ struct MultipleChoiceView: View {
                     showHint = true
                 } label: {
                     HStack(spacing: 5) {
-                        Image(systemName: "lightbulb")
+                        Image(systemName: "lightbulb.fill")
                             .font(.caption)
-                        Text("💡 ヒント：この考え方とは？")
+                        Text("ヒント：この考え方とは？")
                             .font(.caption.weight(.semibold))
                     }
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.tiffany)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(Color.orange.opacity(0.1))
+                    .background(Color.tiffany.opacity(0.08))
                     .clipShape(Capsule())
                 }
                 .buttonStyle(.plain)
@@ -75,8 +76,12 @@ struct MultipleChoiceView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.cardBorder, lineWidth: 1)
+        )
     }
 
     private func choicesList(_ question: Question) -> some View {
@@ -105,9 +110,10 @@ struct HintSheetView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(method.displayName)
                         .font(.title3.bold())
+                        .foregroundStyle(Color.appText)
                     Text(method.name)
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                 }
                 Spacer()
                 Button {
@@ -115,46 +121,50 @@ struct HintSheetView: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appGray)
                 }
             }
 
             Divider()
+                .background(Color.cardBorder)
 
             VStack(alignment: .leading, spacing: 12) {
                 Label("どういう考え方？", systemImage: "lightbulb.fill")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(Color.tiffany)
                 Text(method.hintShort)
                     .font(.body)
+                    .foregroundStyle(Color.appText)
                     .lineSpacing(5)
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.orange.opacity(0.07))
+            .background(Color.tiffany.opacity(0.07))
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             VStack(alignment: .leading, spacing: 12) {
                 Label("身近な例", systemImage: "person.fill")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(Color.appSub)
                 Text(method.hintExample)
                     .font(.body)
+                    .foregroundStyle(Color.appText)
                     .lineSpacing(5)
             }
             .padding(14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.teal.opacity(0.07))
+            .background(Color.appBg)
             .clipShape(RoundedRectangle(cornerRadius: 12))
 
             Text("ヒントを見ても採点には影響しません")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appGray)
                 .frame(maxWidth: .infinity, alignment: .center)
 
             Spacer()
         }
         .padding(24)
+        .background(Color.white)
     }
 }
 
@@ -170,11 +180,11 @@ private struct ChoiceButton: View {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .stroke(isSelected ? Color.indigo : Color(.separator), lineWidth: 1.5)
+                        .stroke(isSelected ? Color.tiffany : Color.cardBorder, lineWidth: 1.5)
                         .frame(width: 22, height: 22)
                     if isSelected {
                         Circle()
-                            .fill(Color.indigo)
+                            .fill(Color.tiffany)
                             .frame(width: 12, height: 12)
                     }
                 }
@@ -182,19 +192,18 @@ private struct ChoiceButton: View {
                 Text(choice.text)
                     .font(.body)
                     .multilineTextAlignment(.leading)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Color.appText)
 
                 Spacer()
             }
             .padding(14)
-            .background(
-                isSelected ? Color.indigo.opacity(0.08) : Color(.systemBackground)
-            )
+            .background(isSelected ? Color.tiffany.opacity(0.07) : Color.white)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.indigo : Color(.separator), lineWidth: 1.5)
+                    .stroke(isSelected ? Color.tiffany : Color.cardBorder, lineWidth: isSelected ? 1.5 : 1)
             )
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
+        .buttonStyle(.plain)
     }
 }

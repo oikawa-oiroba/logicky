@@ -1,9 +1,5 @@
 import SwiftUI
 
-private extension Color {
-    static let appBackground = Color(red: 245/255, green: 245/255, blue: 250/255)
-}
-
 struct HomeView: View {
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = HomeViewModel()
@@ -24,7 +20,7 @@ struct HomeView: View {
             .padding(.top, 16)
             .padding(.bottom, 40)
         }
-        .background(Color.appBackground)
+        .background(Color.appBg)
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDiagnostic) {
             DiagnosticStartView()
@@ -38,29 +34,38 @@ struct HomeView: View {
             showDiagnostic = true
         } label: {
             HStack(spacing: 14) {
-                Text("🎯")
-                    .font(.system(size: 28))
+                Image(systemName: "target")
+                    .font(.system(size: 22))
+                    .foregroundStyle(Color.tiffany)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("ロジッキー診断")
                         .font(.subheadline.weight(.bold))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(Color.appText)
                     Text("5分でわかる！あなたの思考力レベル")
                         .font(.caption)
-                        .foregroundStyle(.white.opacity(0.85))
+                        .foregroundStyle(Color.appSub)
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.bold))
-                    .foregroundStyle(.white.opacity(0.7))
+                    .foregroundStyle(Color.appGray)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .background(
-                LinearGradient(colors: [Color.indigo, Color.purple],
-                               startPoint: .leading, endPoint: .trailing)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.cardBorder, lineWidth: 1)
             )
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: Color.indigo.opacity(0.3), radius: 6, x: 0, y: 3)
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Color.tiffany)
+                    .frame(width: 3)
+                    .padding(.vertical, 8)
+                    .offset(x: 0)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
     }
@@ -72,12 +77,10 @@ struct HomeView: View {
             HStack(spacing: 8) {
                 Image(systemName: "brain.head.profile")
                     .font(.system(size: 20))
-                    .foregroundStyle(
-                        LinearGradient(colors: [.indigo, .purple],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing)
-                    )
+                    .foregroundStyle(Color.tiffany)
                 Text("Logicky")
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(Color.appText)
             }
             Spacer()
         }
@@ -88,10 +91,9 @@ struct HomeView: View {
 
     private var statusBar: some View {
         HStack(spacing: 8) {
-            StatBadge(emoji: "🔥", value: viewModel.streakMessage, color: .orange)
-            StatBadge(emoji: "⚡️", value: viewModel.todayScore.map { "\($0)点" } ?? "--点",
-                      color: Color(red: 1, green: 0.75, blue: 0))
-            StatBadge(emoji: "🧠", value: "\(viewModel.totalAnsweredCount)問", color: .indigo)
+            StatBadge(icon: "flame.fill", value: viewModel.streakMessage)
+            StatBadge(icon: "star.fill", value: viewModel.todayScore.map { "\($0)点" } ?? "--点")
+            StatBadge(icon: "brain.head.profile", value: "\(viewModel.totalAnsweredCount)問")
             Spacer()
         }
     }
@@ -113,63 +115,60 @@ struct HomeView: View {
         let progress  = total > 0 ? Double(answered) / Double(total) : 0.0
 
         return VStack(alignment: .leading, spacing: 16) {
-            // タイトル
             VStack(alignment: .leading, spacing: 4) {
                 Text("今日の5問")
                     .font(.title2.bold())
+                    .foregroundStyle(Color.appText)
                 Text("思考を整えるトレーニング")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
             }
 
-            // Level・単元タグ
             Text("\(levelName)：\(unit.displayName)")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(.indigo)
+                .foregroundStyle(Color.tiffany)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
-                .background(Color.indigo.opacity(0.1))
+                .background(Color.tiffany.opacity(0.1))
                 .clipShape(Capsule())
 
             if viewModel.isAllUnitsCompleted {
-                // 全完了状態
-                Text("おめでとう！今日のトレーニング完了 🎉")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.green)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(12)
-                    .background(Color.green.opacity(0.08))
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                HStack(spacing: 6) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundStyle(Color.tiffany)
+                    Text("今日のトレーニング完了！")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Color.tiffany)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+                .background(Color.tiffany.opacity(0.08))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             } else {
-                // 進捗バー
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
                         Text("進捗")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                         Spacer()
                         Text("\(answered) / \(total)問")
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                     }
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(Color(.systemFill))
-                                .frame(height: 8)
+                                .fill(Color.cardBorder)
+                                .frame(height: 6)
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(
-                                    LinearGradient(colors: [.indigo, .purple],
-                                                   startPoint: .leading, endPoint: .trailing)
-                                )
-                                .frame(width: geo.size.width * progress, height: 8)
+                                .fill(Color.tiffany)
+                                .frame(width: geo.size.width * progress, height: 6)
                         }
                     }
-                    .frame(height: 8)
+                    .frame(height: 6)
                 }
             }
 
-            // CTAボタン
             Button {
                 navigationPath.append(AppRoute.quiz(unitId: unit.id, mode: .training))
             } label: {
@@ -182,30 +181,30 @@ struct HomeView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .background(
-                    LinearGradient(colors: [.indigo, .purple],
-                                   startPoint: .leading, endPoint: .trailing)
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .background(Color.tiffany)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
         .padding(20)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.cardBorder, lineWidth: 1)
+        )
     }
 
     // MARK: - Quick Actions
 
     private var quickActionsSection: some View {
         HStack(spacing: 12) {
-            QuickActionCard(emoji: "📖", title: "思考法辞典", bgColor: Color.indigo.opacity(0.08)) {
+            QuickActionCard(icon: "book.fill", title: "思考法辞典") {
                 navigationPath.append(AppRoute.dictionaryList)
             }
-            QuickActionCard(emoji: "📈", title: "成長記録", bgColor: Color.teal.opacity(0.08)) {
+            QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
                 navigationPath.append(AppRoute.history)
             }
-            QuickActionCard(emoji: "🏆", title: "実績", bgColor: Color(.systemFill), isDisabled: true) {}
+            QuickActionCard(icon: "trophy.fill", title: "実績", isDisabled: true) {}
         }
     }
 
@@ -215,6 +214,7 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 14) {
             Text("あなたの成長")
                 .font(.headline)
+                .foregroundStyle(Color.appText)
 
             VStack(spacing: 10) {
                 ForEach(LevelModel.all) { level in
@@ -235,52 +235,59 @@ struct HomeView: View {
 // MARK: - Stat Badge
 
 private struct StatBadge: View {
-    let emoji: String
+    let icon: String
     let value: String
-    let color: Color
 
     var body: some View {
         HStack(spacing: 4) {
-            Text(emoji).font(.system(size: 13))
+            Image(systemName: icon)
+                .font(.system(size: 11))
+                .foregroundStyle(Color.tiffany)
             Text(value)
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(color)
+                .foregroundStyle(Color.appSub)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
-        .background(color.opacity(0.12))
+        .background(Color.white)
         .clipShape(Capsule())
+        .overlay(Capsule().stroke(Color.cardBorder, lineWidth: 1))
     }
 }
 
 // MARK: - Quick Action Card
 
 private struct QuickActionCard: View {
-    let emoji: String
+    let icon: String
     let title: String
-    let bgColor: Color
     var isDisabled: Bool = false
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 8) {
-                Text(emoji).font(.system(size: 28))
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                    .foregroundStyle(isDisabled ? Color.appGray : Color.tiffany)
                 Text(title)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(isDisabled ? .secondary : .primary)
+                    .foregroundStyle(isDisabled ? Color.appGray : Color.appText)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                 if isDisabled {
                     Text("Coming Soon")
                         .font(.system(size: 9))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appGray)
                 }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(bgColor)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.cardBorder, lineWidth: 1)
+            )
         }
         .disabled(isDisabled)
         .opacity(isDisabled ? 0.5 : 1.0)
@@ -304,16 +311,16 @@ private struct LevelProgressRow: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(abilityName)
                             .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(isUnlocked ? .primary : .secondary)
+                            .foregroundStyle(isUnlocked ? Color.appText : Color.appGray)
                         Text(levelName)
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                     }
                     Spacer()
                     if isUnlocked {
                         Text("\(Int(progress * 100))%")
                             .font(.caption.weight(.bold))
-                            .foregroundStyle(progress >= 1.0 ? .green : .indigo)
+                            .foregroundStyle(progress >= 1.0 ? Color.tiffany : Color.appSub)
                     } else {
                         HStack(spacing: 4) {
                             Image(systemName: "lock.fill")
@@ -321,30 +328,34 @@ private struct LevelProgressRow: View {
                             Text("ロック中")
                                 .font(.caption)
                         }
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appGray)
                     }
                     Image(systemName: "chevron.right")
                         .font(.caption2)
-                        .foregroundStyle(isUnlocked ? Color(.tertiaryLabel) : .clear)
+                        .foregroundStyle(isUnlocked ? Color.appGray : .clear)
                 }
 
                 GeometryReader { geo in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 4)
-                            .fill(Color(.systemFill))
-                            .frame(height: 8)
+                            .fill(Color.cardBorder)
+                            .frame(height: 6)
                         if isUnlocked && progress > 0 {
                             RoundedRectangle(cornerRadius: 4)
-                                .fill(progress >= 1.0 ? Color.green : Color.indigo)
-                                .frame(width: geo.size.width * progress, height: 8)
+                                .fill(Color.tiffany)
+                                .frame(width: geo.size.width * progress, height: 6)
                         }
                     }
                 }
-                .frame(height: 8)
+                .frame(height: 6)
             }
             .padding(14)
-            .background(Color(.systemBackground))
+            .background(Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.cardBorder, lineWidth: 1)
+            )
         }
         .disabled(!isUnlocked)
         .buttonStyle(.plain)

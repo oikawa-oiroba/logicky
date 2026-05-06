@@ -30,17 +30,17 @@ struct HistoryView: View {
         VStack(spacing: 16) {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appGray)
             Text("まだ回答履歴がありません")
                 .font(.headline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
             Text("単元を選んで問題に挑戦してみましょう")
                 .font(.subheadline)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Color.appGray)
                 .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
     }
 }
 
@@ -61,10 +61,9 @@ private struct AttemptRow: View {
 
     var body: some View {
         HStack(spacing: 14) {
-            // スコアバッジ
             ZStack {
                 Circle()
-                    .fill(scoreColor(attempt.totalScore).opacity(0.15))
+                    .fill(scoreColor(attempt.totalScore).opacity(0.12))
                     .frame(width: 52, height: 52)
                 VStack(spacing: 0) {
                     Text("\(attempt.totalScore)")
@@ -72,22 +71,23 @@ private struct AttemptRow: View {
                         .foregroundStyle(scoreColor(attempt.totalScore))
                     Text("点")
                         .font(.caption2)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                 }
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(unitName)
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.appText)
                 Text(dateText)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
 
                 let answered = attempt.questionResults.filter { !$0.isSkipped }.count
                 let total    = attempt.questionResults.count
                 Text("\(answered)/\(total) 問回答")
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(Color.appGray)
             }
 
             Spacer()
@@ -96,11 +96,6 @@ private struct AttemptRow: View {
     }
 
     private func scoreColor(_ score: Int) -> Color {
-        switch score {
-        case 80...100: return .green
-        case 60..<80:  return .blue
-        case 40..<60:  return .orange
-        default:       return .red
-        }
+        score >= 70 ? Color.tiffany : Color.appGray
     }
 }

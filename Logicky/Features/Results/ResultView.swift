@@ -10,17 +10,12 @@ struct ResultView: View {
                 titleHeader
 
                 if let result = viewModel.quizResult {
-                    // 総合スコア
                     totalScoreSection(result)
-
-                    // レーダーチャート
                     radarSection(result)
-
-                    // 問題別フィードバック
                     feedbackSection(result)
                 } else {
                     Text("結果を計算中...")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                         .padding()
                 }
 
@@ -30,7 +25,7 @@ struct ResultView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 40)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -41,16 +36,14 @@ struct ResultView: View {
         VStack(spacing: 8) {
             Image(systemName: "checkmark.seal.fill")
                 .font(.system(size: 44))
-                .foregroundStyle(
-                    LinearGradient(colors: [.indigo, .purple],
-                                   startPoint: .topLeading, endPoint: .bottomTrailing)
-                )
+                .foregroundStyle(Color.tiffany)
                 .padding(.top, 28)
             Text("単元クリア！")
                 .font(.title.bold())
+                .foregroundStyle(Color.appText)
             Text("結果フィードバック")
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
         }
     }
 
@@ -60,16 +53,12 @@ struct ResultView: View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
-                    .stroke(Color.indigo.opacity(0.15), lineWidth: 14)
+                    .stroke(Color.cardBorder, lineWidth: 14)
                     .frame(width: 150, height: 150)
 
                 Circle()
                     .trim(from: 0, to: CGFloat(result.totalScore) / 100)
-                    .stroke(
-                        LinearGradient(colors: [.indigo, .purple],
-                                       startPoint: .topLeading, endPoint: .bottomTrailing),
-                        style: StrokeStyle(lineWidth: 14, lineCap: .round)
-                    )
+                    .stroke(Color.tiffany, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .frame(width: 150, height: 150)
                     .rotationEffect(.degrees(-90))
                     .animation(.easeOut(duration: 1.0), value: result.totalScore)
@@ -77,25 +66,26 @@ struct ResultView: View {
                 VStack(spacing: 2) {
                     Text("\(result.totalScore)")
                         .font(.system(size: 48, weight: .bold, design: .rounded))
-                        .foregroundStyle(.indigo)
+                        .foregroundStyle(Color.tiffany)
                     Text("点")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                 }
             }
 
             Text(rankLabel(result.totalScore))
                 .font(.headline)
-                .foregroundStyle(rankColor(result.totalScore))
+                .foregroundStyle(Color.tiffany)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
-                .background(rankColor(result.totalScore).opacity(0.12))
+                .background(Color.tiffany.opacity(0.1))
                 .clipShape(Capsule())
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     // MARK: - Radar
@@ -104,6 +94,7 @@ struct ResultView: View {
         VStack(spacing: 12) {
             Text("3軸評価")
                 .font(.headline)
+                .foregroundStyle(Color.appText)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             RadarChartView(
@@ -117,14 +108,15 @@ struct ResultView: View {
             .frame(height: 220)
 
             HStack(spacing: 12) {
-                ScoreChip(title: "構造", score: result.structureScore, color: .indigo)
-                ScoreChip(title: "論理性", score: result.logicScore, color: .purple)
-                ScoreChip(title: "具体性", score: result.specificityScore, color: .teal)
+                ScoreChip(title: "構造", score: result.structureScore)
+                ScoreChip(title: "論理性", score: result.logicScore)
+                ScoreChip(title: "具体性", score: result.specificityScore)
             }
         }
         .padding()
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     // MARK: - Per-Question Feedback
@@ -133,6 +125,7 @@ struct ResultView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("問題ごとのフィードバック")
                 .font(.headline)
+                .foregroundStyle(Color.appText)
 
             ForEach(Array(result.feedbacks.enumerated()), id: \.offset) { index, fb in
                 questionFeedbackCard(index: index + 1, feedback: fb)
@@ -142,18 +135,18 @@ struct ResultView: View {
 
     private func questionFeedbackCard(index: Int, feedback: QuestionFeedback) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            // ヘッダー
             HStack {
                 Text("Q\(index)")
                     .font(.caption.weight(.bold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.indigo)
+                    .background(Color.tiffany)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
 
                 Text(feedback.question.title)
                     .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.appText)
                     .lineLimit(2)
 
                 Spacer()
@@ -161,19 +154,18 @@ struct ResultView: View {
                 if feedback.answer.isSkipped {
                     Text("スキップ")
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appGray)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 3)
-                        .background(Color(.systemFill))
+                        .background(Color.appBg)
                         .clipShape(Capsule())
                 } else {
                     Text("\(feedback.score)点")
                         .font(.subheadline.bold())
-                        .foregroundStyle(feedback.score >= 70 ? .green : .red)
+                        .foregroundStyle(feedback.score >= 70 ? Color.tiffany : Color.appGray)
                 }
             }
 
-            // MC フィードバック
             if feedback.question.type == .multipleChoice {
                 mcFeedback(feedback)
             } else {
@@ -181,13 +173,13 @@ struct ResultView: View {
             }
         }
         .padding(16)
-        .background(Color(.systemBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
     private func mcFeedback(_ feedback: QuestionFeedback) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            // 正解/不正解
             if !feedback.answer.isSkipped, let correct = feedback.isCorrect {
                 HStack {
                     Image(systemName: correct ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -195,50 +187,50 @@ struct ResultView: View {
                     Text(correct ? "正解！" : "不正解")
                         .font(.subheadline.weight(.semibold))
                 }
-                .foregroundStyle(correct ? .green : .red)
+                .foregroundStyle(correct ? Color.tiffany : Color.appGray)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
-                .background((correct ? Color.green : Color.red).opacity(0.08))
+                .background((correct ? Color.tiffany : Color.appGray).opacity(0.08))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
 
-            // 選択した回答
             if let selectedId = feedback.answer.selectedChoiceId,
                let selected = feedback.question.choices?.first(where: { $0.id == selectedId }) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("あなたの回答")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                     Text(selected.text)
                         .font(.subheadline)
+                        .foregroundStyle(Color.appText)
                 }
             }
 
-            // 正解
             if let correctId = feedback.question.correctChoiceId,
                let correct = feedback.question.choices?.first(where: { $0.id == correctId }) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("正解")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.tiffany)
                     Text(correct.text)
                         .font(.subheadline)
+                        .foregroundStyle(Color.appText)
                 }
             }
 
-            // 解説
             if let explanation = feedback.question.explanation {
                 VStack(alignment: .leading, spacing: 6) {
                     Label("解説", systemImage: "lightbulb.fill")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.orange)
+                        .foregroundStyle(Color.tiffany)
                     Text(explanation)
                         .font(.subheadline)
+                        .foregroundStyle(Color.appText)
                         .lineSpacing(4)
                 }
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.orange.opacity(0.08))
+                .background(Color.tiffany.opacity(0.07))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
@@ -246,35 +238,34 @@ struct ResultView: View {
 
     private func ftFeedback(_ feedback: QuestionFeedback) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            // 回答内容
             if !feedback.answer.freeText.isEmpty {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("あなたの回答")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.appSub)
                     Text(feedback.answer.freeText)
                         .font(.subheadline)
+                        .foregroundStyle(Color.appText)
                         .lineSpacing(4)
                         .padding(12)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color(.systemFill))
+                        .background(Color.appBg)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
             }
 
-            // ルーブリック
             if let rubric = feedback.question.rubricJson {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("採点観点", systemImage: "list.bullet.clipboard")
                         .font(.caption.weight(.semibold))
-                        .foregroundStyle(.purple)
+                        .foregroundStyle(Color.appSub)
 
                     RubricRow(axis: "構造", description: rubric.structure)
                     RubricRow(axis: "論理性", description: rubric.logic)
                     RubricRow(axis: "具体性", description: rubric.specificity)
                 }
                 .padding(12)
-                .background(Color.purple.opacity(0.06))
+                .background(Color.appBg)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
@@ -292,11 +283,15 @@ struct ResultView: View {
                     .fontWeight(.semibold)
             }
             .font(.headline)
-            .foregroundStyle(.indigo)
+            .foregroundStyle(Color.tiffany)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(Color.indigo.opacity(0.1))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.tiffany, lineWidth: 1)
+            )
         }
     }
 
@@ -316,11 +311,8 @@ struct ResultView: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(
-                LinearGradient(colors: [.indigo, .purple],
-                               startPoint: .leading, endPoint: .trailing)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .background(Color.tiffany)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
 
@@ -334,15 +326,6 @@ struct ResultView: View {
         default:       return "基礎から積み上げよう"
         }
     }
-
-    private func rankColor(_ score: Int) -> Color {
-        switch score {
-        case 80...100: return .green
-        case 60..<80:  return .blue
-        case 40..<60:  return .orange
-        default:       return .red
-        }
-    }
 }
 
 // MARK: - Sub-components
@@ -350,18 +333,18 @@ struct ResultView: View {
 private struct ScoreChip: View {
     let title: String
     let score: Int
-    let color: Color
 
     var body: some View {
         VStack(spacing: 4) {
-            Text(title).font(.caption2.weight(.semibold)).foregroundStyle(.secondary)
-            Text("\(score)").font(.title3.bold()).foregroundStyle(color)
-            Text("点").font(.caption2).foregroundStyle(.secondary)
+            Text(title).font(.caption2.weight(.semibold)).foregroundStyle(Color.appSub)
+            Text("\(score)").font(.title3.bold()).foregroundStyle(Color.tiffany)
+            Text("点").font(.caption2).foregroundStyle(Color.appSub)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.cardBorder, lineWidth: 1))
     }
 }
 
@@ -373,11 +356,11 @@ private struct RubricRow: View {
         HStack(alignment: .top, spacing: 8) {
             Text(axis)
                 .font(.caption.weight(.bold))
-                .foregroundStyle(.purple)
+                .foregroundStyle(Color.tiffany)
                 .frame(width: 40, alignment: .leading)
             Text(description)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.appSub)
                 .lineSpacing(3)
         }
     }

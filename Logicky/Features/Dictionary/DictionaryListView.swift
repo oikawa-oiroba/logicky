@@ -20,7 +20,7 @@ struct DictionaryListView: View {
         }
         .navigationTitle("思考法辞典")
         .navigationBarTitleDisplayMode(.large)
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
     }
 }
 
@@ -33,20 +33,20 @@ private struct MethodListCard: View {
         HStack(spacing: 14) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(Color.indigo.opacity(0.1))
+                    .fill(Color.tiffany.opacity(0.1))
                     .frame(width: 46, height: 46)
                 Image(systemName: method.icon)
                     .font(.system(size: 20))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
             }
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(method.name)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Color.appText)
                 Text(method.tagline)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
                     .lineLimit(1)
             }
 
@@ -54,14 +54,14 @@ private struct MethodListCard: View {
 
             Image(systemName: "chevron.right")
                 .font(.caption)
-                .foregroundStyle(Color(.tertiaryLabel))
+                .foregroundStyle(Color.appGray)
         }
         .padding(14)
-        .background(Color(.systemBackground))
+        .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
+                .stroke(Color.cardBorder, lineWidth: 1)
         )
     }
 }

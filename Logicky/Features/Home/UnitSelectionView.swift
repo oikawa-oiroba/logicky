@@ -25,7 +25,7 @@ struct UnitSelectionView: View {
         }
         .navigationTitle(level.map { "\($0.name) · \($0.description)" } ?? "単元を選択")
         .navigationBarTitleDisplayMode(.large)
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
     }
 
     private func mcAnsweredCount(for unit: UnitModel) -> Int {
@@ -77,30 +77,31 @@ private struct UnitProgressCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(unit.displayName)
                             .font(.headline)
+                            .foregroundStyle(Color.appText)
                         Text(unit.name)
                             .font(.caption2)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.appSub)
                     }
                     Spacer()
                     if mcCompleted {
                         Image(systemName: "checkmark.circle.fill")
                             .font(.title3)
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.tiffany)
                     }
                 }
 
                 Text(unit.description)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
 
                 VStack(alignment: .leading, spacing: 4) {
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 3)
-                                .fill(Color(.systemFill))
+                                .fill(Color.cardBorder)
                                 .frame(height: 6)
                             RoundedRectangle(cornerRadius: 3)
-                                .fill(mcCompleted ? Color.green : Color.indigo)
+                                .fill(Color.tiffany)
                                 .frame(width: geo.size.width * progress, height: 6)
                         }
                     }
@@ -108,28 +109,31 @@ private struct UnitProgressCard: View {
 
                     Text(mcCompleted ? "トレーニング完了" : "トレーニング \(mcAnswered)/\(unit.totalQuestions)")
                         .font(.caption)
-                        .foregroundStyle(mcCompleted ? .green : .secondary)
+                        .foregroundStyle(mcCompleted ? Color.tiffany : Color.appSub)
                 }
 
                 if mcCompleted && hasMaster {
                     HStack(spacing: 5) {
-                        Image(systemName: "pencil.line")
+                        Image(systemName: "pencil.and.outline")
                             .font(.caption)
                         Text("マスターに挑戦できます")
                             .font(.caption)
                     }
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color.tiffany)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(Color.purple.opacity(0.1))
+                    .background(Color.tiffany.opacity(0.08))
                     .clipShape(Capsule())
                 }
             }
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.cardBorder, lineWidth: 1)
+            )
         }
         .buttonStyle(.plain)
     }

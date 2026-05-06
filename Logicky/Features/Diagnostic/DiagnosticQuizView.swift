@@ -12,7 +12,7 @@ struct DiagnosticQuizView: View {
             }
             Spacer(minLength: 0)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color.appBg)
         .navigationBarHidden(true)
     }
 
@@ -23,23 +23,20 @@ struct DiagnosticQuizView: View {
             HStack {
                 Text("Q\(vm.currentIndex + 1) / \(vm.questions.count)")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
                 Spacer()
                 Text("ロジッキー診断")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
             }
 
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color(.systemFill))
+                        .fill(Color.cardBorder)
                         .frame(height: 6)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(
-                            LinearGradient(colors: [.indigo, .purple],
-                                           startPoint: .leading, endPoint: .trailing)
-                        )
+                        .fill(Color.tiffany)
                         .frame(width: geo.size.width * vm.progressRatio, height: 6)
                         .animation(.easeInOut(duration: 0.3), value: vm.progressRatio)
                 }
@@ -55,23 +52,22 @@ struct DiagnosticQuizView: View {
 
     private func questionBody(_ q: Question) -> some View {
         VStack(spacing: 20) {
-            // Question card
             VStack(alignment: .leading, spacing: 10) {
                 Text(q.title)
                     .font(.headline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.appSub)
                 Text(q.body)
                     .font(.body)
+                    .foregroundStyle(Color.appText)
                     .lineSpacing(5)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.systemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 2)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
 
-            // Choices
             VStack(spacing: 10) {
                 ForEach(q.choices ?? []) { choice in
                     choiceButton(choice, question: q)
@@ -95,19 +91,19 @@ struct DiagnosticQuizView: View {
         let isCorrect = vm.isCorrectChoice(choice.id)
 
         let bgColor: Color = {
-            guard answered else { return Color(.systemBackground) }
-            if selected && isCorrect { return Color.green.opacity(0.15) }
-            if selected && !isCorrect { return Color.red.opacity(0.12) }
-            if isCorrect { return Color.green.opacity(0.08) }
-            return Color(.systemBackground)
+            guard answered else { return Color.white }
+            if selected && isCorrect { return Color.tiffany.opacity(0.12) }
+            if selected && !isCorrect { return Color.appGray.opacity(0.1) }
+            if isCorrect { return Color.tiffany.opacity(0.07) }
+            return Color.white
         }()
 
         let borderColor: Color = {
-            guard answered else { return Color(.separator) }
-            if selected && isCorrect { return .green }
-            if selected && !isCorrect { return .red }
-            if isCorrect { return Color.green.opacity(0.5) }
-            return Color(.separator)
+            guard answered else { return Color.cardBorder }
+            if selected && isCorrect { return Color.tiffany }
+            if selected && !isCorrect { return Color.appGray }
+            if isCorrect { return Color.tiffany.opacity(0.5) }
+            return Color.cardBorder
         }()
 
         return Button {
@@ -116,17 +112,17 @@ struct DiagnosticQuizView: View {
             HStack(spacing: 12) {
                 Text(choice.text)
                     .font(.subheadline)
-                    .foregroundStyle(answered ? (selected || isCorrect ? .primary : .secondary) : .primary)
+                    .foregroundStyle(answered ? (selected || isCorrect ? Color.appText : Color.appGray) : Color.appText)
                     .multilineTextAlignment(.leading)
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 if answered {
                     if selected && isCorrect {
-                        Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                        Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.tiffany)
                     } else if selected && !isCorrect {
-                        Image(systemName: "xmark.circle.fill").foregroundStyle(.red)
+                        Image(systemName: "xmark.circle.fill").foregroundStyle(Color.appGray)
                     } else if isCorrect {
-                        Image(systemName: "checkmark.circle").foregroundStyle(.green)
+                        Image(systemName: "checkmark.circle").foregroundStyle(Color.tiffany)
                     }
                 }
             }
@@ -136,7 +132,7 @@ struct DiagnosticQuizView: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(borderColor, lineWidth: answered ? 1.5 : 0.5)
+                    .stroke(borderColor, lineWidth: answered ? 1.5 : 1)
             )
         }
         .disabled(answered)
