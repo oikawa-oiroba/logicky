@@ -46,7 +46,7 @@ struct UnitDetailView: View {
 
             actionButtons
         }
-        .navigationTitle(unit?.name ?? "")
+        .navigationTitle(unit?.displayName ?? "")
         .navigationBarTitleDisplayMode(.large)
         .background(Color(.systemGroupedBackground))
     }

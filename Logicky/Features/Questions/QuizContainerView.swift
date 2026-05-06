@@ -76,7 +76,7 @@ struct QuizContainerView: View {
 
     private var unitNameLabel: some View {
         VStack(spacing: 1) {
-            Text(UnitModel.all.first { $0.id == unitId }?.name ?? "")
+            Text(UnitModel.all.first { $0.id == unitId }?.displayName ?? "")
                 .font(.headline)
             Text(mode == .training ? "トレーニング" : "マスター")
                 .font(.caption2)

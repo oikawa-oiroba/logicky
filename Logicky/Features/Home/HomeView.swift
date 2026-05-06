@@ -123,7 +123,7 @@ struct HomeView: View {
             }
 
             // Level・単元タグ
-            Text("\(levelName)：\(unit.name)")
+            Text("\(levelName)：\(unit.displayName)")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.indigo)
                 .padding(.horizontal, 10)

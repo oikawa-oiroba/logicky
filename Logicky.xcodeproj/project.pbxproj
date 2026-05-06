@@ -43,6 +43,7 @@
 		NBLD000000000000000000013 /* DiagnosticQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000013 /* DiagnosticQuizView.swift */; };
 		NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000014 /* DiagnosticResultView.swift */; };
 		NBLD000000000000000000015 /* ResultReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000015 /* ResultReviewView.swift */; };
+		NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -83,6 +84,7 @@
 		NFIL000000000000000000013 /* DiagnosticQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticQuizView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000014 /* DiagnosticResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResultView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +254,7 @@
 			children = (
 				NFIL000000000000000000006 /* DictionaryListView.swift */,
 				NFIL000000000000000000007 /* DictionaryDetailView.swift */,
+				NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */,
 			);
 			path = Dictionary;
 			sourceTree = "<group>";
@@ -411,6 +414,7 @@
 				NBLD000000000000000000013 /* DiagnosticQuizView.swift in Sources */,
 				NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */,
 				NBLD000000000000000000015 /* ResultReviewView.swift in Sources */,
+				NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

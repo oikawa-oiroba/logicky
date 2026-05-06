@@ -74,8 +74,13 @@ private struct UnitProgressCard: View {
         Button(action: onTap) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Text(unit.name)
-                        .font(.headline)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(unit.displayName)
+                            .font(.headline)
+                        Text(unit.name)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                     Spacer()
                     if mcCompleted {
                         Image(systemName: "checkmark.circle.fill")

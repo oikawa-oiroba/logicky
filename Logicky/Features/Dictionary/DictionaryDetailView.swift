@@ -12,10 +12,17 @@ struct DictionaryDetailView: View {
         ScrollView {
             if let method {
                 VStack(alignment: .leading, spacing: 22) {
-                    Text(method.tagline)
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
-                        .padding(.top, 4)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(method.displayName)
+                            .font(.headline.bold())
+                            .foregroundStyle(.indigo)
+                        Text(method.tagline)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.top, 4)
+
+                    ThinkingMethodDiagramView(method: method)
 
                     sectionCard(title: "解説", icon: "text.book.closed.fill", color: .indigo) {
                         Text(method.explanation)
