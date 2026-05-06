@@ -112,8 +112,22 @@ final class DiagnosticViewModel: ObservableObject {
 
     var scoreDelta: Int? {
         guard let prev = previousResult, let curr = result else { return nil }
-        let delta = curr.totalScore - prev.totalScore
-        return delta
+        return curr.totalScore - prev.totalScore
+    }
+
+    var organizeScoreDelta: Int? {
+        guard let prev = previousResult, let curr = result else { return nil }
+        return curr.organizeScore - prev.organizeScore
+    }
+
+    var reasonScoreDelta: Int? {
+        guard let prev = previousResult, let curr = result else { return nil }
+        return curr.reasonScore - prev.reasonScore
+    }
+
+    var judgeScoreDelta: Int? {
+        guard let prev = previousResult, let curr = result else { return nil }
+        return curr.judgeScore - prev.judgeScore
     }
 
     // MARK: - Rank Helpers

@@ -111,9 +111,15 @@ struct HintSheetView: View {
                     Text(method.displayName)
                         .font(.title3.bold())
                         .foregroundStyle(Color.appText)
-                    Text(method.name)
-                        .font(.subheadline)
-                        .foregroundStyle(Color.appSub)
+                    Group {
+                        if let reading = method.reading {
+                            Text("\(method.name)（\(reading)）")
+                        } else {
+                            Text(method.name)
+                        }
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
                 }
                 Spacer()
                 Button {

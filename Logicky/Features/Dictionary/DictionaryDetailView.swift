@@ -16,6 +16,11 @@ struct DictionaryDetailView: View {
                         Text(method.displayName)
                             .font(.headline.bold())
                             .foregroundStyle(Color.tiffany)
+                        if let reading = method.reading {
+                            Text("\(method.name)（\(reading)）")
+                                .font(.caption)
+                                .foregroundStyle(Color.appGray)
+                        }
                         Text(method.tagline)
                             .font(.subheadline)
                             .foregroundStyle(Color.appSub)

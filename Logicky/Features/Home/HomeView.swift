@@ -30,7 +30,8 @@ struct HomeView: View {
     // MARK: - Diagnostic Banner
 
     private var diagnosticBanner: some View {
-        Button {
+        let latest = DiagnosticService.shared.latestResult
+        return Button {
             showDiagnostic = true
         } label: {
             HStack(spacing: 14) {
@@ -41,9 +42,22 @@ struct HomeView: View {
                     Text("ロジッキー診断")
                         .font(.subheadline.weight(.bold))
                         .foregroundStyle(Color.appText)
-                    Text("5分でわかる！あなたの思考力レベル")
-                        .font(.caption)
-                        .foregroundStyle(Color.appSub)
+                    if let result = latest {
+                        HStack(spacing: 6) {
+                            Text("前回 \(result.totalScore)点")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(Color.tiffany)
+                            Text("·")
+                                .foregroundStyle(Color.appGray)
+                            Text(formattedDate(result.date))
+                                .font(.caption)
+                                .foregroundStyle(Color.appSub)
+                        }
+                    } else {
+                        Text("まだ診断を受けていません")
+                            .font(.caption)
+                            .foregroundStyle(Color.appSub)
+                    }
                 }
                 Spacer()
                 Image(systemName: "chevron.right")
@@ -68,6 +82,13 @@ struct HomeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
+    }
+
+    private func formattedDate(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: "ja_JP")
+        f.dateFormat = "M月d日"
+        return f.string(from: date)
     }
 
     // MARK: - Logo

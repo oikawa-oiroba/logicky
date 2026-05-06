@@ -137,8 +137,13 @@ struct ResultReviewView: View {
                     HStack(spacing: 6) {
                         Image(systemName: method.icon)
                             .font(.caption)
-                        Text(method.name)
-                            .font(.caption.weight(.semibold))
+                        if let reading = method.reading {
+                            Text("\(method.name)（\(reading)）")
+                                .font(.caption.weight(.semibold))
+                        } else {
+                            Text(method.name)
+                                .font(.caption.weight(.semibold))
+                        }
                         Image(systemName: "chevron.right")
                             .font(.system(size: 9))
                     }

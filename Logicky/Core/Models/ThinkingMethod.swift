@@ -12,4 +12,5 @@ struct ThinkingMethod: Identifiable, Codable {
     let unitId: String?
     let hintShort: String     // ≤50 chars, shown as in-quiz hint
     let hintExample: String   // ≤100 chars, shown as in-quiz example
+    let reading: String?      // furigana reading, e.g. "えんえきほう"
 }

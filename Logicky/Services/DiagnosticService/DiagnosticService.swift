@@ -6,40 +6,17 @@ final class DiagnosticService {
 
     private let storageKey = "logicky_diagnostic_results_v1"
 
-    // MARK: - Question Selection (10 questions: L1×3, L2×4, L3×3)
+    // MARK: - Question Selection (15 questions: 1 per unit across all 5×3 units)
 
     func selectQuestions() -> [Question] {
-        var selected: [Question] = []
-
-        let l1Units = ["mece", "deduction", "fact_opinion"]
-        let l2Units = ["logic_tree", "3c", "5w2h"]
-        let l3Units = ["fermi", "causality", "critical"]
-
-        for unitId in l1Units {
-            if let q = QuestionService.shared.trainingQuestions(for: unitId).first {
-                selected.append(q)
-            }
+        let allUnits = [
+            "mece", "deduction", "fact_opinion", "pyramid", "so_what",
+            "logic_tree", "3c", "5w2h", "4p", "matrix",
+            "fermi", "causality", "critical", "profit_tree", "sanity_check"
+        ]
+        return allUnits.compactMap { unitId in
+            QuestionService.shared.trainingQuestions(for: unitId).first
         }
-        for unitId in l2Units {
-            if let q = QuestionService.shared.trainingQuestions(for: unitId).first {
-                selected.append(q)
-            }
-        }
-        // 1 extra Level2 question (second MC from any Level2 unit)
-        for unitId in l2Units {
-            let qs = QuestionService.shared.trainingQuestions(for: unitId)
-            if qs.count > 1 {
-                selected.append(qs[1])
-                break
-            }
-        }
-        for unitId in l3Units {
-            if let q = QuestionService.shared.trainingQuestions(for: unitId).first {
-                selected.append(q)
-            }
-        }
-
-        return selected
     }
 
     // MARK: - Scoring
@@ -88,6 +65,7 @@ final class DiagnosticService {
     func save(_ result: DiagnosticResult) {
         var all = allResults
         all.insert(result, at: 0)
+        if all.count > 20 { all = Array(all.prefix(20)) }
         if let data = try? JSONEncoder().encode(all) {
             UserDefaults.standard.set(data, forKey: storageKey)
         }

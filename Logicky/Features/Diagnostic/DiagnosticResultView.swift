@@ -98,10 +98,10 @@ struct DiagnosticResultView: View {
             Text("3軸評価")
                 .font(.headline)
                 .foregroundStyle(Color.appText)
-            VStack(spacing: 10) {
-                axisRow(label: "整理力", score: vm.result?.organizeScore ?? 0)
-                axisRow(label: "推論力", score: vm.result?.reasonScore ?? 0)
-                axisRow(label: "判断力", score: vm.result?.judgeScore ?? 0)
+            VStack(spacing: 12) {
+                axisRow(label: "整理力", score: vm.result?.organizeScore ?? 0, delta: vm.organizeScoreDelta)
+                axisRow(label: "推論力", score: vm.result?.reasonScore ?? 0,   delta: vm.reasonScoreDelta)
+                axisRow(label: "判断力", score: vm.result?.judgeScore ?? 0,    delta: vm.judgeScoreDelta)
             }
         }
         .padding(16)
@@ -110,12 +110,31 @@ struct DiagnosticResultView: View {
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
 
-    private func axisRow(label: String, score: Int) -> some View {
-        HStack(spacing: 12) {
-            Text(label)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.tiffany)
-                .frame(width: 38, alignment: .leading)
+    private func axisRow(label: String, score: Int, delta: Int?) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Text(label)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.tiffany)
+                    .frame(width: 38, alignment: .leading)
+                if let delta {
+                    HStack(spacing: 2) {
+                        Image(systemName: delta >= 0 ? "arrow.up" : "arrow.down")
+                            .font(.system(size: 9, weight: .bold))
+                        Text(delta >= 0 ? "+\(delta)%" : "\(delta)%")
+                            .font(.system(size: 10, weight: .semibold))
+                    }
+                    .foregroundStyle(delta >= 0 ? Color.tiffany : Color.appGray)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background((delta >= 0 ? Color.tiffany : Color.appGray).opacity(0.1))
+                    .clipShape(Capsule())
+                }
+                Spacer()
+                Text("\(score)%")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color.tiffany)
+            }
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4).fill(Color.cardBorder).frame(height: 10)
@@ -126,10 +145,6 @@ struct DiagnosticResultView: View {
                 }
             }
             .frame(height: 10)
-            Text("\(score)%")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(Color.tiffany)
-                .frame(width: 34, alignment: .trailing)
         }
     }
 

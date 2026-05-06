@@ -40,10 +40,15 @@ private struct MethodListCard: View {
                     .foregroundStyle(Color.tiffany)
             }
 
-            VStack(alignment: .leading, spacing: 3) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text(method.name)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.appText)
+                if let reading = method.reading {
+                    Text("（\(reading)）")
+                        .font(.system(size: 10))
+                        .foregroundStyle(Color.appGray)
+                }
                 Text(method.tagline)
                     .font(.caption)
                     .foregroundStyle(Color.appSub)
