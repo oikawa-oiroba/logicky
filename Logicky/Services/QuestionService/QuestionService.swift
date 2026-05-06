@@ -5,18 +5,11 @@ final class QuestionService {
     private init() {}
 
     private lazy var _all: [Question] = {
-        guard let url = Bundle.main.url(forResource: "questions", withExtension: "json") else {
-            print("⚠️ questions.json が見つかりません")
-            return []
-        }
-        do {
-            let data = try Data(contentsOf: url)
-            let container = try JSONDecoder().decode(QuestionsContainer.self, from: data)
-            return container.questions
-        } catch {
-            print("⚠️ questions.json のデコードに失敗: \(error)")
-            return []
-        }
+        guard let url = Bundle.main.url(forResource: "questions", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let container = try? JSONDecoder().decode(QuestionsContainer.self, from: data)
+        else { return [] }
+        return container.questions
     }()
 
     func loadAll() -> [Question] { _all }
