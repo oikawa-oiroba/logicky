@@ -2,6 +2,7 @@ import SwiftUI
 
 struct QuizContainerView: View {
     let unitId: String
+    let mode: QuizMode
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var viewModel: QuizViewModel
     @State private var showExitConfirmation = false
@@ -10,7 +11,6 @@ struct QuizContainerView: View {
         Group {
             if let question = viewModel.currentQuestion {
                 ZStack(alignment: .bottom) {
-                    // 問題ビュー
                     switch question.type {
                     case .multipleChoice:
                         MultipleChoiceView()
@@ -18,7 +18,6 @@ struct QuizContainerView: View {
                         FreeTextView()
                     }
 
-                    // 画面下部プログレスバー
                     bottomProgressBar
                 }
             } else {
@@ -71,20 +70,24 @@ struct QuizContainerView: View {
             }
         }
         .onAppear {
-            viewModel.startQuiz(unitId: unitId)
+            viewModel.startQuiz(unitId: unitId, mode: mode)
         }
     }
 
     private var unitNameLabel: some View {
-        Text(UnitModel.all.first { $0.id == unitId }?.name ?? "")
-            .font(.headline)
+        VStack(spacing: 1) {
+            Text(UnitModel.all.first { $0.id == unitId }?.name ?? "")
+                .font(.headline)
+            Text(mode == .training ? "トレーニング" : "マスター")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
     }
 
     private var bottomProgressBar: some View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 12) {
-                // 前へ ボタン
                 Button {
                     viewModel.goPrevious()
                 } label: {
@@ -96,7 +99,6 @@ struct QuizContainerView: View {
 
                 Spacer()
 
-                // ページ表示
                 HStack(spacing: 6) {
                     ForEach(0..<viewModel.questions.count, id: \.self) { i in
                         Circle()
@@ -112,7 +114,6 @@ struct QuizContainerView: View {
 
                 Spacer()
 
-                // 次へ / 完了 ボタン
                 Button {
                     viewModel.goNext()
                 } label: {

@@ -28,6 +28,14 @@
 		BFIL000000000000000000004 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000004 /* HistoryView.swift */; };
 		BFIL000000000000000000005 /* AttemptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000005 /* AttemptService.swift */; };
 		BFIL000000000000000000006 /* ScoringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000006 /* ScoringService.swift */; };
+		NBLD000000000000000000001 /* LevelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000001 /* LevelSelectionView.swift */; };
+		NBLD000000000000000000002 /* UnitSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000002 /* UnitSelectionView.swift */; };
+		NBLD000000000000000000003 /* UnitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000003 /* UnitDetailView.swift */; };
+		NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000004 /* ThinkingMethod.swift */; };
+		NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000005 /* ThinkingMethodService.swift */; };
+		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
+		NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000007 /* DictionaryDetailView.swift */; };
+		NBLD000000000000000000008 /* thinking_methods.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000008 /* thinking_methods.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +61,14 @@
 		FILE000000000000000000004 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		FILE000000000000000000005 /* AttemptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptService.swift; sourceTree = "<group>"; };
 		FILE000000000000000000006 /* ScoringService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringService.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000001 /* LevelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectionView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000002 /* UnitSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSelectionView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000003 /* UnitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDetailView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000004 /* ThinkingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethod.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000005 /* ThinkingMethodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodService.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000007 /* DictionaryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDetailView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000008 /* thinking_methods.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = thinking_methods.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,8 +129,18 @@
 				FEAT000000000000000000005 /* Results */,
 				FEAT000000000000000000006 /* History */,
 				FEAT000000000000000000007 /* Settings */,
+				NGRP000000000000000000001 /* Dictionary */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000001 /* Dictionary */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000006 /* DictionaryListView.swift */,
+				NFIL000000000000000000007 /* DictionaryDetailView.swift */,
+			);
+			path = Dictionary;
 			sourceTree = "<group>";
 		};
 		FEAT000000000000000000002 /* Onboarding */ = {
@@ -130,6 +156,9 @@
 			children = (
 				200000000000000000000008 /* HomeView.swift */,
 				FILE000000000000000000003 /* HomeViewModel.swift */,
+				NFIL000000000000000000001 /* LevelSelectionView.swift */,
+				NFIL000000000000000000002 /* UnitSelectionView.swift */,
+				NFIL000000000000000000003 /* UnitDetailView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -184,6 +213,7 @@
 				200000000000000000000005 /* QuizResult.swift */,
 				FILE000000000000000000001 /* Unit.swift */,
 				FILE000000000000000000002 /* Attempt.swift */,
+				NFIL000000000000000000004 /* ThinkingMethod.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -194,8 +224,17 @@
 				SVCG000000000000000000001 /* QuestionService */,
 				SVCG000000000000000000002 /* AttemptService */,
 				SVCG000000000000000000003 /* ScoringService */,
+				NGRP000000000000000000002 /* ThinkingMethodService */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000002 /* ThinkingMethodService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000005 /* ThinkingMethodService.swift */,
+			);
+			path = ThinkingMethodService;
 			sourceTree = "<group>";
 		};
 		SVCG000000000000000000001 /* QuestionService */ = {
@@ -226,6 +265,7 @@
 			isa = PBXGroup;
 			children = (
 				20000000000000000000000F /* questions.json */,
+				NFIL000000000000000000008 /* thinking_methods.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -289,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				30000000000000000000000F /* questions.json in Resources */,
+				NBLD000000000000000000008 /* thinking_methods.json in Resources */,
 				300000000000000000000010 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -319,6 +360,13 @@
 				BFIL000000000000000000004 /* HistoryView.swift in Sources */,
 				BFIL000000000000000000005 /* AttemptService.swift in Sources */,
 				BFIL000000000000000000006 /* ScoringService.swift in Sources */,
+				NBLD000000000000000000001 /* LevelSelectionView.swift in Sources */,
+				NBLD000000000000000000002 /* UnitSelectionView.swift in Sources */,
+				NBLD000000000000000000003 /* UnitDetailView.swift in Sources */,
+				NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */,
+				NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */,
+				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,
+				NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

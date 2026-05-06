@@ -5,20 +5,21 @@ struct UnitModel: Identifiable, Codable, Hashable {
     let name: String
     let levelId: Int
     let totalQuestions: Int
+    let description: String
 
     static let all: [UnitModel] = [
         // Level 1 基礎
-        UnitModel(id: "mece",        name: "MECE",      levelId: 1, totalQuestions: 3),
-        UnitModel(id: "deduction",   name: "演繹法",     levelId: 1, totalQuestions: 3),
-        UnitModel(id: "fact_opinion",name: "事実と意見", levelId: 1, totalQuestions: 3),
+        UnitModel(id: "mece",        name: "MECE",          levelId: 1, totalQuestions: 3, description: "漏れなく・重複なく分類する技術"),
+        UnitModel(id: "deduction",   name: "演繹法",         levelId: 1, totalQuestions: 3, description: "前提から結論を論理的に導く推論法"),
+        UnitModel(id: "fact_opinion",name: "事実と意見",     levelId: 1, totalQuestions: 3, description: "客観的事実と主観的意見を見分ける力"),
         // Level 2 応用
-        UnitModel(id: "logic_tree",  name: "ロジックツリー", levelId: 2, totalQuestions: 3),
-        UnitModel(id: "3c",          name: "3C分析",    levelId: 2, totalQuestions: 3),
-        UnitModel(id: "5w2h",        name: "5W2H",      levelId: 2, totalQuestions: 3),
+        UnitModel(id: "logic_tree",  name: "ロジックツリー", levelId: 2, totalQuestions: 3, description: "問題を構造的に分解する手法"),
+        UnitModel(id: "3c",          name: "3C分析",         levelId: 2, totalQuestions: 3, description: "顧客・競合・自社で市場を読む分析法"),
+        UnitModel(id: "5w2h",        name: "5W2H",           levelId: 2, totalQuestions: 3, description: "具体的な行動計画を作るフレームワーク"),
         // Level 3 実践
-        UnitModel(id: "fermi",       name: "フェルミ推定",  levelId: 3, totalQuestions: 3),
-        UnitModel(id: "causality",   name: "因果関係",   levelId: 3, totalQuestions: 3),
-        UnitModel(id: "critical",    name: "批判的思考", levelId: 3, totalQuestions: 3),
+        UnitModel(id: "fermi",       name: "フェルミ推定",   levelId: 3, totalQuestions: 3, description: "未知の数字を論理で推定する技術"),
+        UnitModel(id: "causality",   name: "因果関係",       levelId: 3, totalQuestions: 3, description: "相関と因果を見分ける思考法"),
+        UnitModel(id: "critical",    name: "批判的思考",     levelId: 3, totalQuestions: 3, description: "主張の弱点を見つける批判的思考"),
     ]
 }
 

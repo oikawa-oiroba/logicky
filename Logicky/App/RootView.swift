@@ -1,5 +1,21 @@
 import SwiftUI
 
+enum QuizMode: String, Hashable {
+    case training
+    case master
+}
+
+enum AppRoute: Hashable {
+    case levelSelection
+    case unitSelection(levelId: Int)
+    case unitDetail(unitId: String, levelId: Int)
+    case quiz(unitId: String, mode: QuizMode)
+    case result
+    case history
+    case dictionaryList
+    case dictionaryDetail(methodId: String)
+}
+
 struct RootView: View {
     @State private var showSplash = true
 
@@ -31,22 +47,26 @@ struct MainNavigationView: View {
             HomeView(navigationPath: $navigationPath)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
-                    case .quiz(let unitId):
-                        QuizContainerView(unitId: unitId, navigationPath: $navigationPath)
+                    case .levelSelection:
+                        LevelSelectionView(navigationPath: $navigationPath)
+                    case .unitSelection(let levelId):
+                        UnitSelectionView(levelId: levelId, navigationPath: $navigationPath)
+                    case .unitDetail(let unitId, let levelId):
+                        UnitDetailView(unitId: unitId, levelId: levelId, navigationPath: $navigationPath)
+                    case .quiz(let unitId, let mode):
+                        QuizContainerView(unitId: unitId, mode: mode, navigationPath: $navigationPath)
                     case .result:
                         ResultView(navigationPath: $navigationPath)
                     case .history:
                         HistoryView(navigationPath: $navigationPath)
+                    case .dictionaryList:
+                        DictionaryListView(navigationPath: $navigationPath)
+                    case .dictionaryDetail(let methodId):
+                        DictionaryDetailView(methodId: methodId, navigationPath: $navigationPath)
                     }
                 }
         }
         .environmentObject(quizViewModel)
         .environmentObject(attemptService)
     }
-}
-
-enum AppRoute: Hashable {
-    case quiz(unitId: String)
-    case result
-    case history
 }

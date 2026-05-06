@@ -12,6 +12,7 @@ final class QuizViewModel: ObservableObject {
     @Published private(set) var isCompleted: Bool = false
     @Published private(set) var quizResult: QuizResult?
     @Published private(set) var unitId: String = ""
+    @Published private(set) var mode: QuizMode = .training
 
     // MARK: - Computed
 
@@ -41,9 +42,16 @@ final class QuizViewModel: ObservableObject {
 
     // MARK: - Session Management
 
-    func startQuiz(unitId: String) {
+    func startQuiz(unitId: String, mode: QuizMode = .training) {
         self.unitId = unitId
-        self.questions = QuestionService.shared.questions(for: unitId)
+        self.mode = mode
+        let all = QuestionService.shared.questions(for: unitId)
+        switch mode {
+        case .training:
+            self.questions = all.filter { $0.type == .multipleChoice }
+        case .master:
+            self.questions = all.filter { $0.type == .freeText }
+        }
         self.sessionAnswers = Array(repeating: SessionAnswer(), count: questions.count)
         self.currentIndex = 0
         self.isCompleted = false
@@ -57,6 +65,7 @@ final class QuizViewModel: ObservableObject {
         isCompleted = false
         quizResult = nil
         unitId = ""
+        mode = .training
     }
 
     // MARK: - Answer Input

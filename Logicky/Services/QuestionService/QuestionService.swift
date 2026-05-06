@@ -4,7 +4,7 @@ final class QuestionService {
     static let shared = QuestionService()
     private init() {}
 
-    func loadAll() -> [Question] {
+    private lazy var _all: [Question] = {
         guard let url = Bundle.main.url(forResource: "questions", withExtension: "json") else {
             print("⚠️ questions.json が見つかりません")
             return []
@@ -17,10 +17,20 @@ final class QuestionService {
             print("⚠️ questions.json のデコードに失敗: \(error)")
             return []
         }
-    }
+    }()
+
+    func loadAll() -> [Question] { _all }
 
     func questions(for unitId: String) -> [Question] {
-        loadAll().filter { $0.unit == unitId }
+        _all.filter { $0.unit == unitId }
+    }
+
+    func trainingQuestions(for unitId: String) -> [Question] {
+        questions(for: unitId).filter { $0.type == .multipleChoice }
+    }
+
+    func masterQuestions(for unitId: String) -> [Question] {
+        questions(for: unitId).filter { $0.type == .freeText }
     }
 
     /// 旧API互換
