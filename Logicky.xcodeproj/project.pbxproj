@@ -36,6 +36,13 @@
 		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
 		NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000007 /* DictionaryDetailView.swift */; };
 		NBLD000000000000000000008 /* thinking_methods.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000008 /* thinking_methods.json */; };
+		NBLD000000000000000000009 /* DiagnosticResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000009 /* DiagnosticResult.swift */; };
+		NBLD000000000000000000010 /* DiagnosticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000010 /* DiagnosticService.swift */; };
+		NBLD000000000000000000011 /* DiagnosticViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000011 /* DiagnosticViewModel.swift */; };
+		NBLD000000000000000000012 /* DiagnosticStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000012 /* DiagnosticStartView.swift */; };
+		NBLD000000000000000000013 /* DiagnosticQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000013 /* DiagnosticQuizView.swift */; };
+		NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000014 /* DiagnosticResultView.swift */; };
+		NBLD000000000000000000015 /* ResultReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000015 /* ResultReviewView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +76,13 @@
 		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000007 /* DictionaryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000008 /* thinking_methods.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = thinking_methods.json; sourceTree = "<group>"; };
+		NFIL000000000000000000009 /* DiagnosticResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResult.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000010 /* DiagnosticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticService.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000011 /* DiagnosticViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticViewModel.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000012 /* DiagnosticStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticStartView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000013 /* DiagnosticQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticQuizView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000014 /* DiagnosticResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResultView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +133,7 @@
 				SVCG000000000000000000002 /* AttemptService */,
 				SVCG000000000000000000003 /* ScoringService */,
 				NGRP000000000000000000002 /* ThinkingMethodService */,
+				NGRP000000000000000000003 /* DiagnosticService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -148,6 +163,7 @@
 				FILE000000000000000000001 /* Unit.swift */,
 				FILE000000000000000000002 /* Attempt.swift */,
 				NFIL000000000000000000004 /* ThinkingMethod.swift */,
+				NFIL000000000000000000009 /* DiagnosticResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -170,6 +186,7 @@
 				FEAT000000000000000000006 /* History */,
 				FEAT000000000000000000007 /* Settings */,
 				NGRP000000000000000000001 /* Dictionary */,
+				NGRP000000000000000000004 /* Diagnostic */,
 			);
 			path = Features;
 			sourceTree = "<group>";
@@ -210,6 +227,7 @@
 			children = (
 				20000000000000000000000C /* ResultView.swift */,
 				20000000000000000000000D /* RadarChartView.swift */,
+				NFIL000000000000000000015 /* ResultReviewView.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -244,6 +262,25 @@
 				NFIL000000000000000000005 /* ThinkingMethodService.swift */,
 			);
 			path = ThinkingMethodService;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000003 /* DiagnosticService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000010 /* DiagnosticService.swift */,
+			);
+			path = DiagnosticService;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000004 /* Diagnostic */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000011 /* DiagnosticViewModel.swift */,
+				NFIL000000000000000000012 /* DiagnosticStartView.swift */,
+				NFIL000000000000000000013 /* DiagnosticQuizView.swift */,
+				NFIL000000000000000000014 /* DiagnosticResultView.swift */,
+			);
+			path = Diagnostic;
 			sourceTree = "<group>";
 		};
 		SVCG000000000000000000001 /* QuestionService */ = {
@@ -367,6 +404,13 @@
 				NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */,
 				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,
 				NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */,
+				NBLD000000000000000000009 /* DiagnosticResult.swift in Sources */,
+				NBLD000000000000000000010 /* DiagnosticService.swift in Sources */,
+				NBLD000000000000000000011 /* DiagnosticViewModel.swift in Sources */,
+				NBLD000000000000000000012 /* DiagnosticStartView.swift in Sources */,
+				NBLD000000000000000000013 /* DiagnosticQuizView.swift in Sources */,
+				NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */,
+				NBLD000000000000000000015 /* ResultReviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

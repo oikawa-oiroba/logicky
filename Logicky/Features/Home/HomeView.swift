@@ -8,11 +8,14 @@ struct HomeView: View {
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = HomeViewModel()
 
+    @State private var showDiagnostic = false
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 logoHeader
                 statusBar
+                diagnosticBanner
                 todayCard
                 quickActionsSection
                 growthSection
@@ -23,6 +26,43 @@ struct HomeView: View {
         }
         .background(Color.appBackground)
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $showDiagnostic) {
+            DiagnosticStartView()
+        }
+    }
+
+    // MARK: - Diagnostic Banner
+
+    private var diagnosticBanner: some View {
+        Button {
+            showDiagnostic = true
+        } label: {
+            HStack(spacing: 14) {
+                Text("🎯")
+                    .font(.system(size: 28))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("ロジッキー診断")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(.white)
+                    Text("5分でわかる！あなたの思考力レベル")
+                        .font(.caption)
+                        .foregroundStyle(.white.opacity(0.85))
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.white.opacity(0.7))
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
+            .background(
+                LinearGradient(colors: [Color.indigo, Color.purple],
+                               startPoint: .leading, endPoint: .trailing)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .shadow(color: Color.indigo.opacity(0.3), radius: 6, x: 0, y: 3)
+        }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Logo
