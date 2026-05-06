@@ -6,12 +6,15 @@ final class DiagnosticService {
 
     private let storageKey = "logicky_diagnostic_results_v1"
 
-    // MARK: - Question Selection (10 questions: L1×3〜4, L2×3〜4, L3×2〜3, randomized)
+    // MARK: - Question Selection (10 questions: basic×3, L1×3, L2×2, L3×2, randomized)
 
     func selectQuestions() -> [Question] {
-        let l1Units = ["mece", "deduction", "fact_opinion", "pyramid", "so_what"]
-        let l2Units = ["logic_tree", "3c", "5w2h", "4p", "matrix"]
-        let l3Units = ["fermi", "causality", "critical", "profit_tree", "sanity_check"]
+        let basicUnits = ["grouping", "why_deep", "syllogism", "induction", "analogy",
+                          "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
+                          "fact_opinion", "pyramid", "so_what", "5w2h"]
+        let l1Units = ["mece", "logic_tree", "matrix"]
+        let l2Units = ["3c", "4p", "profit_tree"]
+        let l3Units = ["fermi", "causation", "critical", "sanity_check"]
 
         func pickRandom(_ unitIds: [String], count: Int) -> [Question] {
             let shuffled = unitIds.shuffled()
@@ -24,11 +27,12 @@ final class DiagnosticService {
             return picked
         }
 
-        let l1 = pickRandom(l1Units, count: 4)
-        let l2 = pickRandom(l2Units, count: 3)
-        let l3 = pickRandom(l3Units, count: 3)
+        let basic = pickRandom(basicUnits, count: 3)
+        let l1 = pickRandom(l1Units, count: 3)
+        let l2 = pickRandom(l2Units, count: 2)
+        let l3 = pickRandom(l3Units, count: 2)
 
-        return (l1 + l2 + l3).shuffled()
+        return (basic + l1 + l2 + l3).shuffled()
     }
 
     // MARK: - Scoring

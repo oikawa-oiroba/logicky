@@ -98,8 +98,8 @@
     {
       "id": "q2",
       "type": "multiple_choice",
-      "level": 1,
-      "unit": "deduction",
+      "level": 0,
+      "unit": "syllogism",
       "title": "演繹法 - AI導入と純利益",
       "body": "「AI導入→生産性向上→純利益倍増」という論理の最大の飛躍（穴）は？",
       "choices": [
@@ -132,8 +132,8 @@
     {
       "id": "ded_q2",
       "type": "multiple_choice",
-      "level": 1,
-      "unit": "deduction",
+      "level": 0,
+      "unit": "syllogism",
       "title": "演繹法 - 研修効果の論理",
       "body": "部下の報告：「先月、全員が営業研修を受講しました。その翌月、チームの売上が15%増加しました。研修が売上向上に効果的だったと証明されました。」この論理の最大の問題点は何ですか？",
       "choices": [
@@ -167,8 +167,8 @@
     {
       "id": "ded_q3_ft",
       "type": "free_text",
-      "level": 1,
-      "unit": "deduction",
+      "level": 0,
+      "unit": "syllogism",
       "title": "演繹法 - 方針の論理的飛躍を指摘する",
       "body": "経営会議で次の方針が提案されました。「当社の離職率が業界平均より5%高い。したがって職場環境が悪い。採用を強化して離職分を補充すべきだ。」この論理の飛躍を2つ以上指摘し、より論理的な対応プロセスを提案してください。",
       "choices": null,
@@ -194,7 +194,7 @@
     {
       "id": "q3",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "fact_opinion",
       "title": "事実と意見 - イベント報告",
       "body": "次の文章の中で、客観的な「事実（Fact）」はどれ？\n「昨日のイベントは来場者が100名を超え（あ）、大盛況でした（い）。お客様も満足しており（う）、次回も成功するに違いありません（え）。」",
@@ -228,7 +228,7 @@
     {
       "id": "q3_ft",
       "type": "free_text",
-      "level": 1,
+      "level": 0,
       "unit": "fact_opinion",
       "title": "事実と意見 - 文章の仕分け",
       "body": "次の文章から「事実」と「意見・推測」を分類し、それぞれの理由を説明してください。\n「先月の売上は前月比15%増加した。顧客満足度が上がった証拠だ。新しいキャンペーンが効果的だったに違いない。来月も好調が続くだろう。」",
@@ -255,7 +255,7 @@
     {
       "id": "fact_q3",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "fact_opinion",
       "title": "事実と意見 - 営業会議の発言",
       "body": "営業会議での発言のうち、純粋な「事実」のみの組み合わせはどれですか？\n（あ）今月の新規顧客数は15社だった　（い）先月比で30%増加した　（う）営業チームの努力の成果だ　（え）来月もこの勢いで伸ばせるはずだ",
@@ -289,7 +289,7 @@
     {
       "id": "q4",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "pyramid",
       "title": "ピラミッド - 結論ファースト",
       "body": "次の中で、最も「結論ファースト」で論理的な断り文句は？",
@@ -323,7 +323,7 @@
     {
       "id": "q5",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "so_what",
       "title": "So What? - 20代客のデータ",
       "body": "20代顧客の「満足度・クリック率・リピート率が高い」という3つの事実から導かれる、最も筋の良い「So What?」は？",
@@ -357,7 +357,7 @@
     {
       "id": "q6",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 1,
       "unit": "logic_tree",
       "title": "ロジックツリー - 収益改善",
       "body": "あるカフェの「利益が減っている」課題に対し、店長がツリーを作成しました。\n「利益低下→①客数が減った、②客単価が下がった、③接客が悪くなった」\n「モレなく・ダブりなく」整理する観点から、最も適切な修正は？",
@@ -392,7 +392,7 @@
     {
       "id": "q6_ft",
       "type": "free_text",
-      "level": 2,
+      "level": 1,
       "unit": "logic_tree",
       "title": "ロジックツリー - 原因分析の構造化",
       "body": "あなたの会社のWebサイトへの「月間アクセス数が前月比50%減少」しました。この問題の原因を探るためのロジックツリー（Why So?ツリー）を作成してください。最低でも2階層以上の構造で記述し、MECEを意識してください。",
@@ -420,7 +420,7 @@
     {
       "id": "lt_q3",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 1,
       "unit": "logic_tree",
       "title": "ロジックツリー - 受注率改善",
       "body": "営業チームの「受注率が低い」という課題を、木の枝のように分解していきます。「受注率低下」の第1階層として、最も「モレなく・ダブりなく」に近い分解はどれですか？",
@@ -584,7 +584,7 @@
     {
       "id": "q9",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 0,
       "unit": "5w2h",
       "title": "5W2H - アクションプラン",
       "body": "新規事業のキックオフ会議で、「誰が・何を・いつ・どこで・なぜ・どうやって・いくらで」という情報が最も不足している発言はどれですか？",
@@ -618,7 +618,7 @@
     {
       "id": "q9_ft",
       "type": "free_text",
-      "level": 2,
+      "level": 0,
       "unit": "5w2h",
       "title": "5W2H - 具体的なアクションプラン作成",
       "body": "あなたのチームで「新規顧客獲得キャンペーンを来月実施する」ことが決まりました。5W2H（Who / What / When / Where / Why / How / How much）を使って、具体的なアクションプランを記述してください。",
@@ -645,7 +645,7 @@
     {
       "id": "5w_q3",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 0,
       "unit": "5w2h",
       "title": "5W2H - 上司の指示の確認",
       "body": "部長から「来週中に新規開拓の数字を改善してほしい」と指示されました。5W2Hの視点で、最初に確認すべき最重要事項はどれですか？",
@@ -679,7 +679,7 @@
     {
       "id": "q10",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 1,
       "unit": "matrix",
       "title": "マトリックス分析 - 優先順位",
       "body": "山積みの課題に優先順位をつけるため、「重要度」と「緊急度」の2軸でマトリックスを作成しました。最も先に着手すべき（第1優先）はどの領域の課題ですか？",
@@ -808,7 +808,7 @@
     {
       "id": "q12",
       "type": "multiple_choice",
-      "level": 3,
+      "level": 2,
       "unit": "profit_tree",
       "title": "利益ツリーと要因分析",
       "body": "売上が10%増加したのに営業利益率が5%低下したメーカーがあります。この「矛盾」を説明する仮説として、論理的に最も可能性が高いものはどれですか？",
@@ -843,7 +843,7 @@
       "id": "q13",
       "type": "multiple_choice",
       "level": 3,
-      "unit": "causality",
+      "unit": "causation",
       "title": "因果関係の特定",
       "body": "「福利厚生が充実している企業ほど、1人あたりの売上高が高い」というデータがあります。「福利厚生を増やせば売上が上がる」と結論づける際に見落とされている視点は？",
       "choices": [
@@ -877,7 +877,7 @@
       "id": "cau_q2",
       "type": "multiple_choice",
       "level": 3,
-      "unit": "causality",
+      "unit": "causation",
       "title": "因果関係 - 営業マネージャー登用",
       "body": "「営業マネージャーに登用された人の多くは、昇進前に年間売上TOPに入っていた。だからTOP営業をマネージャーにすれば組織のパフォーマンスが上がる」という主張の根本的な論理的問題は？",
       "choices": [
@@ -911,7 +911,7 @@
       "id": "cau_q3_ft",
       "type": "free_text",
       "level": 3,
-      "unit": "causality",
+      "unit": "causation",
       "title": "因果関係 - 相関と因果の誤謬",
       "body": "「残業時間を削減したら翌月の売上が10%減少した」というデータが出ました。上司が「残業削減が売上低下の原因だ。残業規制を緩和すべき」と主張しています。この結論の問題点を指摘し、代替的な原因仮説を2つ以上挙げたうえで、適切な意思決定のプロセスを提案してください。",
       "choices": null,
@@ -1064,7 +1064,7 @@
     {
       "id": "pyramid_q2",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "pyramid",
       "title": "ピラミッド原則 - 結果報告の構成",
       "body": "上司から「今月の営業結果を報告してほしい」と言われました。「結論を先に述べてから理由を添える」正しい報告の始め方はどれですか？",
@@ -1098,7 +1098,7 @@
     {
       "id": "pyramid_q3",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "pyramid",
       "title": "ピラミッド原則 - メール構成の改善",
       "body": "チームへの改善提案をメールで送ります。「読む人が迷わない」最も説得力のある構成はどれですか？",
@@ -1132,7 +1132,7 @@
     {
       "id": "so_what_q2",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "so_what",
       "title": "So What? - 営業データの解釈",
       "body": "「先月のアポ数は50件、成約数は8件、成約率は16%でした」というデータがあります。このデータから最も有益な示唆（だから何？）はどれですか？",
@@ -1166,7 +1166,7 @@
     {
       "id": "so_what_q3",
       "type": "multiple_choice",
-      "level": 1,
+      "level": 0,
       "unit": "so_what",
       "title": "So What? - 会議での発言",
       "body": "会議で「当社の顧客の70%が30〜40代女性」というデータが示されました。「だから何？（示唆を引き出す）」を正しく使えているのはどの発言ですか？",
@@ -1268,7 +1268,7 @@
     {
       "id": "matrix_q2",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 1,
       "unit": "matrix",
       "title": "マトリックス分析 - 軸の選び方",
       "body": "営業チームが訪問先顧客の優先順位を2軸のマトリックスで整理しようとしています。最も実用的な2軸の組み合わせはどれですか？",
@@ -1302,7 +1302,7 @@
     {
       "id": "matrix_q3",
       "type": "multiple_choice",
-      "level": 2,
+      "level": 1,
       "unit": "matrix",
       "title": "マトリックス分析 - 顧客セグメント",
       "body": "顧客を「購入頻度（高・低）」と「1回あたりの購入金額（大・小）」の2軸で分類しました。最も優先的に維持・フォローすべき顧客はどの組み合わせですか？",
@@ -1336,7 +1336,7 @@
     {
       "id": "profit_tree_q2",
       "type": "multiple_choice",
-      "level": 3,
+      "level": 2,
       "unit": "profit_tree",
       "title": "利益ツリー - コスト削減の優先順位",
       "body": "ある会社の利益構造を分解すると「コスト」は「売上に連動して増える費用（変動費）」と「売上によらず一定の費用（固定費）」に分かれます。変動費は売上の45%、固定費は10億円です。コスト削減の観点として正しいのはどれですか？",
@@ -1370,7 +1370,7 @@
     {
       "id": "profit_tree_q3",
       "type": "multiple_choice",
-      "level": 3,
+      "level": 2,
       "unit": "profit_tree",
       "title": "利益ツリー - 売上向上の打ち手",
       "body": "「売上 ＝ 客数 × 客単価」と分解したとき、原因が「既存顧客の1人あたり購入額の低下」と特定されました。最も直接的な改善策はどれですか？",
@@ -1468,6 +1468,978 @@
       ],
       "abilityAxis": "論理精度",
       "rubricJson": null
+    },
+    {
+      "id": "grp_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "grouping",
+      "title": "分類・グルーピング - 切り口の選び方",
+      "body": "社員旅行の行き先アンケート結果を整理したい。最も適切なグルーピングの切り口はどれ？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "好きな人と嫌いな人で分ける"
+        },
+        {
+          "id": "b",
+          "text": "国内/海外、さらにリゾート/都市観光で分ける"
+        },
+        {
+          "id": "c",
+          "text": "アンケートを出した順番で並べる"
+        },
+        {
+          "id": "d",
+          "text": "行き先の文字数で分ける"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "目的に沿った意味のある軸でグループ分けすることが重要。「国内/海外」+「リゾート/都市」は旅行の選択に直結する軸で、MECEに近い分類になっている。",
+      "tags": [
+        "分類",
+        "グルーピング"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "grp_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "grouping",
+      "title": "分類・グルーピング - クレーム分析",
+      "body": "クレーム100件を分析するとき、まず最初にすべきことは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "全部読んで感想をまとめる"
+        },
+        {
+          "id": "b",
+          "text": "クレームの種類ごとに分類して件数を数える"
+        },
+        {
+          "id": "c",
+          "text": "一番怒っている人から対応する"
+        },
+        {
+          "id": "d",
+          "text": "クレームが多い曜日を調べる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "まず分類して全体像を把握することで、優先すべき課題が見える。感情的な優先ではなく、件数ベースで重要度を判断できる。",
+      "tags": [
+        "分類",
+        "優先順位"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "grp_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "grouping",
+      "title": "分類・グルーピング - 基準の明確化",
+      "body": "お客様を「よく買う人」と「あまり買わない人」に分けました。この分類の問題点は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "分け方が細かすぎる"
+        },
+        {
+          "id": "b",
+          "text": "「よく」「あまり」の基準が曖昧で人によって判断が変わる"
+        },
+        {
+          "id": "c",
+          "text": "お客様を分けること自体が失礼"
+        },
+        {
+          "id": "d",
+          "text": "2つに分けるのは少なすぎる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "分類には明確な基準が必要。「月3回以上/未満」のように数値化すると客観的になり、誰が分類しても同じ結果が得られる。",
+      "tags": [
+        "分類",
+        "基準"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "why_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "why_deep",
+      "title": "なぜなぜ分析 - 深い原因を探る",
+      "body": "「営業成績が下がった」に対して「なぜ？」を繰り返したとき、最も深い原因に近いのはどれ？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "訪問件数が減った"
+        },
+        {
+          "id": "b",
+          "text": "新規リストが枯渇し、アプローチ先がなくなっていた"
+        },
+        {
+          "id": "c",
+          "text": "最近やる気が出ない"
+        },
+        {
+          "id": "d",
+          "text": "景気が悪い"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "「やる気」や「景気」は漠然としていて対策が打ちにくい。「リストが枯渇」は具体的で、リスト獲得の仕組みを改善するという対策に直結する深い原因。",
+      "tags": [
+        "なぜなぜ",
+        "根本原因"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "why_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "why_deep",
+      "title": "なぜなぜ分析 - 注意点",
+      "body": "「なぜ？」を繰り返す際、やってはいけないことはどれ？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "5回以上繰り返す"
+        },
+        {
+          "id": "b",
+          "text": "原因を1つに絞り込んで深掘りする"
+        },
+        {
+          "id": "c",
+          "text": "途中で「誰が悪いか」という犯人探しになる"
+        },
+        {
+          "id": "d",
+          "text": "メモを取りながら進める"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "なぜなぜ分析は人を責めるためではなく、仕組みや構造の問題を見つけるもの。犯人探しになると本質的な原因が見えなくなり、再発防止につながらない。",
+      "tags": [
+        "なぜなぜ",
+        "注意点"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "why_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "why_deep",
+      "title": "なぜなぜ分析 - 適切な連鎖",
+      "body": "「コピー機がよく紙詰まりする」の原因を深掘りするとき、最も適切な「なぜ？」の連鎖はどれ？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "紙詰まりする→古いから→買い替えよう"
+        },
+        {
+          "id": "b",
+          "text": "紙詰まりする→湿った紙を使っている→保管場所が湿度の高い倉庫→倉庫の除湿対策が必要"
+        },
+        {
+          "id": "c",
+          "text": "紙詰まりする→運が悪い→お祓いに行く"
+        },
+        {
+          "id": "d",
+          "text": "紙詰まりする→みんなが乱暴に使う→注意する"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "具体的な原因を辿り、対策可能な根本原因（倉庫の除湿）にたどり着いている。「古いから」「運が悪い」「乱暴に使う」では対策が曖昧になる。",
+      "tags": [
+        "なぜなぜ",
+        "連鎖"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ind_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "induction",
+      "title": "帰納法 - 複数事例からの結論",
+      "body": "「A支店もB支店もC支店も、朝礼を始めたら遅刻が減った」から導ける最も適切な結論は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "朝礼をすれば必ず遅刻はゼロになる"
+        },
+        {
+          "id": "b",
+          "text": "朝礼の導入は遅刻の減少に効果がある傾向が見られる"
+        },
+        {
+          "id": "c",
+          "text": "遅刻する人は朝礼が嫌いだ"
+        },
+        {
+          "id": "d",
+          "text": "全国の会社が朝礼をすべきだ"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "複数の事例から「傾向」を導くのが帰納法。「必ず」「すべき」は言い過ぎ。観察した事例から導けるのは「傾向・可能性」であり、そこから仮説を立てて検証するのが正しい使い方。",
+      "tags": [
+        "帰納法",
+        "傾向"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ind_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "induction",
+      "title": "帰納法 - 弱点と限界",
+      "body": "帰納法の弱点として最も正しいものは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "難しすぎて誰にも使えない"
+        },
+        {
+          "id": "b",
+          "text": "観察した事例が偏っていると、間違った法則を導いてしまう"
+        },
+        {
+          "id": "c",
+          "text": "結論が必ず正しくなるので疑う余地がない"
+        },
+        {
+          "id": "d",
+          "text": "数字を使わないと成り立たない"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "帰納法は「見たものから推測する」ので、サンプルが偏ると結論も偏る（確証バイアス）。特定の属性の人だけに聞いた意見を「全員の意見」として扱うのは典型的な誤り。",
+      "tags": [
+        "帰納法",
+        "弱点"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ind_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "induction",
+      "title": "帰納法 - 実務への応用",
+      "body": "顧客インタビュー10件で全員が「価格が高い」と言った。この結果から最も適切な行動は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "すぐに値下げする"
+        },
+        {
+          "id": "b",
+          "text": "「価格が高いと感じる層が一定数いる」という仮説を立て、さらにデータで検証する"
+        },
+        {
+          "id": "c",
+          "text": "インタビュー結果は信用できないので無視する"
+        },
+        {
+          "id": "d",
+          "text": "10件では少ないので100件に増やしてから考える"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "帰納法で得た仮説をすぐ行動に移すのではなく、検証プロセスを挟むのが正しい使い方。10件でも傾向はつかめる。仮説として持ちつつ、定量データで検証する。",
+      "tags": [
+        "帰納法",
+        "仮説"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ana_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "analogy",
+      "title": "アナロジー思考 - 構造の転用",
+      "body": "コンビニの「棚の配置戦略」を自社Webサイトに応用するとしたら、最も適切な考え方は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "Webサイトの背景色をコンビニの色にする"
+        },
+        {
+          "id": "b",
+          "text": "よく見られるページ（人気商品）を目立つ位置に、関連ページ（ついで買い商品）を近くに配置する"
+        },
+        {
+          "id": "c",
+          "text": "Webサイトに「いらっしゃいませ」と音声を流す"
+        },
+        {
+          "id": "d",
+          "text": "24時間対応のチャットを入れる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "コンビニの「動線設計（人気商品→ついで買い）」という構造をWebの「導線設計（主要コンテンツ→関連コンテンツ）」に応用するアナロジー。表面的な模倣ではなく構造の転用がポイント。",
+      "tags": [
+        "アナロジー",
+        "構造"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ana_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "analogy",
+      "title": "アナロジー思考 - 本質",
+      "body": "アナロジー思考で最も重要なのは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "似ている業界の事例だけを探すこと"
+        },
+        {
+          "id": "b",
+          "text": "表面的な類似ではなく、構造的な共通点を見つけること"
+        },
+        {
+          "id": "c",
+          "text": "できるだけ多くの事例を集めること"
+        },
+        {
+          "id": "d",
+          "text": "成功事例だけを参考にすること"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "アナロジーの本質は「構造の転用」。見た目が似ているかではなく、仕組みが似ているかが重要。回転寿司と工場ラインは見た目は全然違うが「ベルトコンベアで効率的に届ける」という構造が同じ。",
+      "tags": [
+        "アナロジー",
+        "本質"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "ana_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "analogy",
+      "title": "アナロジー思考 - サブスクモデルの応用",
+      "body": "「サブスクモデル」を不動産仲介に応用する場合、最もアナロジーが効いている案は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "物件の家賃を月額で払ってもらう"
+        },
+        {
+          "id": "b",
+          "text": "月額定額で住み替え相談・物件提案を受け放題にする"
+        },
+        {
+          "id": "c",
+          "text": "不動産会社の看板をサブスク企業風のデザインにする"
+        },
+        {
+          "id": "d",
+          "text": "社員にサブスクの研修を受けさせる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "サブスクの「定額で継続利用」「顧客との継続関係構築」という構造を仲介サービスに転用している。Aは単純な月払いでモデルの本質を理解していない。",
+      "tags": [
+        "アナロジー",
+        "応用"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "cmp_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "comparison",
+      "title": "対比・比較 - 公正な比較",
+      "body": "2つの営業手法を比較するとき、最も意味のある比較の仕方は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "好きな方を選ぶ"
+        },
+        {
+          "id": "b",
+          "text": "同じ条件（期間・人数・商材）で結果を並べて比較する"
+        },
+        {
+          "id": "c",
+          "text": "先輩が薦める方を選ぶ"
+        },
+        {
+          "id": "d",
+          "text": "コストだけで比較する"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "公正な比較には条件を揃えることが不可欠。条件が異なる結果を比較しても意味がない。「同じ土俵で比べる」ことで初めて差異の原因が特定できる。",
+      "tags": [
+        "比較",
+        "条件統一"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "cmp_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "comparison",
+      "title": "対比・比較 - 比較の根拠",
+      "body": "「うちの会社は離職率が10%で業界平均より低い」この主張を正しく評価するために必要な情報は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "社長の経歴"
+        },
+        {
+          "id": "b",
+          "text": "業界平均の離職率の出典と、計算期間が同じかどうか"
+        },
+        {
+          "id": "c",
+          "text": "会社の設立年"
+        },
+        {
+          "id": "d",
+          "text": "社員の平均年齢"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "比較するには「同じ基準・同じ期間」で測定されているか確認が必要。出典が異なれば定義や期間が違う可能性があり、単純比較はできない。",
+      "tags": [
+        "比較",
+        "根拠確認"
+      ],
+      "abilityAxis": "具体性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "cmp_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "comparison",
+      "title": "対比・比較 - 片方有利な比較",
+      "body": "A案とB案を比較するとき、最も避けるべきことは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "それぞれのメリット・デメリットを洗い出す"
+        },
+        {
+          "id": "b",
+          "text": "判断基準を先に決めてから比較する"
+        },
+        {
+          "id": "c",
+          "text": "A案の良いところとB案の悪いところだけを比べる"
+        },
+        {
+          "id": "d",
+          "text": "第三者の意見を聞く"
+        }
+      ],
+      "correctChoiceId": "c",
+      "explanation": "フェアな比較には同じ観点で両方を評価する必要がある。片方の長所と他方の短所だけを比べると、意図的または無意識に結論を誘導してしまう。",
+      "tags": [
+        "比較",
+        "公正性"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "abs_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "abstraction",
+      "title": "抽象化と具体化 - 目標の具体化",
+      "body": "「顧客満足度を上げる」という抽象的な目標を具体化したものとして最も適切なのは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "もっと頑張る"
+        },
+        {
+          "id": "b",
+          "text": "問い合わせへの初回返信を24時間以内にし、満足度アンケートで4.0以上を目指す"
+        },
+        {
+          "id": "c",
+          "text": "顧客を大事にする"
+        },
+        {
+          "id": "d",
+          "text": "笑顔で接客する"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "数値と行動が明確で、達成したかどうかが判断できる具体化になっている。「頑張る」「大事にする」「笑顔」は測定不能で、何をすればよいか明確でない。",
+      "tags": [
+        "具体化",
+        "目標設定"
+      ],
+      "abilityAxis": "具体性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "abs_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "abstraction",
+      "title": "抽象化と具体化 - 抽象化",
+      "body": "「りんご・みかん・バナナ」→果物。「電車・バス・タクシー」→交通手段。では「メール・電話・チャット」を抽象化すると？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "IT"
+        },
+        {
+          "id": "b",
+          "text": "コミュニケーション手段"
+        },
+        {
+          "id": "c",
+          "text": "仕事道具"
+        },
+        {
+          "id": "d",
+          "text": "テクノロジー"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "3つに共通する本質は「人と連絡を取る手段」。「IT」や「テクノロジー」は属性の一部に過ぎない。抽象化は「何のためのものか」という本質を見抜くこと。",
+      "tags": [
+        "抽象化",
+        "共通点"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "abs_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "abstraction",
+      "title": "抽象化と具体化 - フィードバックの具体化",
+      "body": "上司に「もっと戦略的に考えて」と言われた。最も適切な対応は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "戦略の本を読む"
+        },
+        {
+          "id": "b",
+          "text": "「戦略的とは具体的にどの場面のどんな判断のことですか？」と確認する"
+        },
+        {
+          "id": "c",
+          "text": "自分なりに頑張る"
+        },
+        {
+          "id": "d",
+          "text": "戦略コンサルに転職する"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "抽象的なフィードバックを具体化して確認することで、何をすべきかが明確になる。「戦略的」という言葉は人によって意味が異なる抽象概念なので、具体的な場面・行動に落とす必要がある。",
+      "tags": [
+        "具体化",
+        "コミュニケーション"
+      ],
+      "abilityAxis": "具体性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "hyp_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "hypothesis",
+      "title": "仮説思考 - 初動の考え方",
+      "body": "新商品の売上が想定の半分だった。最も適切な初動は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "すぐに商品を値下げする"
+        },
+        {
+          "id": "b",
+          "text": "「価格が高い」「認知が足りない」「ニーズがない」等の仮説を立て、最も可能性の高いものから検証する"
+        },
+        {
+          "id": "c",
+          "text": "開発チームを叱責する"
+        },
+        {
+          "id": "d",
+          "text": "半年待って様子を見る"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "仮説思考は「まず仮説を立てて優先順位をつけて検証する」アプローチ。全ての原因を網羅的に調べるのではなく、最も可能性の高い仮説から効率的に検証する。",
+      "tags": [
+        "仮説思考",
+        "初動"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "hyp_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "hypothesis",
+      "title": "仮説思考 - メリット",
+      "body": "仮説思考の最大のメリットは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "必ず正解にたどり着ける"
+        },
+        {
+          "id": "b",
+          "text": "全ての情報を集めなくても、効率よく答えに近づける"
+        },
+        {
+          "id": "c",
+          "text": "上司に褒められる"
+        },
+        {
+          "id": "d",
+          "text": "会議が短くなる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "完璧な情報がなくても、仮説→検証のサイクルでスピーディに意思決定できる。特にビジネスでは情報収集に時間をかけすぎるより、仮説を立てて行動しながら修正する方が価値が高い。",
+      "tags": [
+        "仮説思考",
+        "効率"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "hyp_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "hypothesis",
+      "title": "仮説思考 - 仮説と思い込みの違い",
+      "body": "「仮説」と「思い込み」の違いとして最も正しいのは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "仮説は正しくて、思い込みは間違い"
+        },
+        {
+          "id": "b",
+          "text": "仮説は検証する前提で立てるが、思い込みは検証せずに信じ込む"
+        },
+        {
+          "id": "c",
+          "text": "仮説はデータに基づき、思い込みは経験に基づく"
+        },
+        {
+          "id": "d",
+          "text": "違いはない"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "仮説は「仮の答え」として検証するためのもの。検証なしに信じるのは思い込み。仮説思考のポイントは「正しいかもしれない答え」を持ちながらも、それを検証しようとする姿勢にある。",
+      "tags": [
+        "仮説",
+        "思い込み"
+      ],
+      "abilityAxis": "論理性",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "wp_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "whole_part",
+      "title": "ズームイン・ズームアウト - 俯瞰から始める",
+      "body": "チームの売上が落ちている。まず全体を俯瞰するために見るべきデータは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "特定の1人の成績を詳しく調べる"
+        },
+        {
+          "id": "b",
+          "text": "チーム全体の月別売上推移と市場全体の傾向"
+        },
+        {
+          "id": "c",
+          "text": "昨日の日報"
+        },
+        {
+          "id": "d",
+          "text": "競合の社長のSNS"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "まずズームアウトして全体像を把握してから、問題箇所にズームインする。最初から個人の成績を詳しく調べると、全体的な問題か個人的な問題か判断できない。",
+      "tags": [
+        "俯瞰",
+        "全体像"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "wp_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "whole_part",
+      "title": "ズームイン・ズームアウト - 逆の失敗",
+      "body": "「木を見て森を見ず」の反対の失敗として最も近いものは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "細かいことを気にしすぎる"
+        },
+        {
+          "id": "b",
+          "text": "全体の戦略ばかり語って目の前の顧客対応が疎かになる"
+        },
+        {
+          "id": "c",
+          "text": "会議が長い"
+        },
+        {
+          "id": "d",
+          "text": "資料が多すぎる"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "「森を見て木を見ず」。全体像ばかり見て具体的な行動が伴わないのも問題。ズームイン・ズームアウトのポイントは、全体と細部を状況に応じて切り替えることにある。",
+      "tags": [
+        "俯瞰",
+        "バランス"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "wp_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "whole_part",
+      "title": "ズームイン・ズームアウト - 会議での応用",
+      "body": "経営会議で細かい経費の話が1時間続いている。最も適切な介入は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "黙って聞いている"
+        },
+        {
+          "id": "b",
+          "text": "「一度全体の損益を確認してから、インパクトの大きい経費に絞って議論しませんか」と提案する"
+        },
+        {
+          "id": "c",
+          "text": "会議を中止する"
+        },
+        {
+          "id": "d",
+          "text": "経費を全部カットする"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "細部（ズームイン）に入り込みすぎたとき、全体（ズームアウト）に戻す提案。損益全体から見れば、議論すべき経費の優先順位が見えてくる。",
+      "tags": [
+        "俯瞰",
+        "優先順位"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "seq_q1",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "sequencing",
+      "title": "順序立て - 手順の説明",
+      "body": "新入社員に営業の手順を教えるとき、最も適切な教え方は？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "「とにかくお客さんのところに行って」と伝える"
+        },
+        {
+          "id": "b",
+          "text": "「リスト作成→アポ取り→ヒアリング→提案→クロージング」とステップで説明する"
+        },
+        {
+          "id": "c",
+          "text": "「先輩の真似をして」と言う"
+        },
+        {
+          "id": "d",
+          "text": "営業の本を1冊渡す"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "プロセスをステップに分解して示すことで、再現性のある行動ができる。手順が明確なら誰でも同じように実行でき、どこで詰まったかも特定しやすい。",
+      "tags": [
+        "順序立て",
+        "手順"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "seq_q2",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "sequencing",
+      "title": "順序立て - ボトルネック特定",
+      "body": "プロジェクトが遅延している。原因を特定するために最初にすべきことは？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "メンバーを増やす"
+        },
+        {
+          "id": "b",
+          "text": "全体の工程を書き出し、どのステップで詰まっているか特定する"
+        },
+        {
+          "id": "c",
+          "text": "締切を延ばす"
+        },
+        {
+          "id": "d",
+          "text": "毎日残業する"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "プロセス全体を可視化して、ボトルネックを特定することが先。どこで詰まっているかわからないまま人を増やしても、ボトルネック以外を改善しても遅延は解消されない。",
+      "tags": [
+        "順序立て",
+        "ボトルネック"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
+    },
+    {
+      "id": "seq_q3",
+      "type": "multiple_choice",
+      "level": 0,
+      "unit": "sequencing",
+      "title": "順序立て - 企画書作成の順序",
+      "body": "「企画書を書く」という作業を正しい順序に並べたものはどれ？",
+      "choices": [
+        {
+          "id": "a",
+          "text": "文章を書く→目的を決める→構成を考える→見直す"
+        },
+        {
+          "id": "b",
+          "text": "目的を決める→情報を集める→構成を考える→文章を書く→見直す"
+        },
+        {
+          "id": "c",
+          "text": "とりあえず書き始める→後で直す"
+        },
+        {
+          "id": "d",
+          "text": "テンプレートをコピーする→内容を変える"
+        }
+      ],
+      "correctChoiceId": "b",
+      "explanation": "目的→情報収集→構成→執筆→推敲の順序が、最も手戻りが少ない。目的が決まる前に書き始めると、後から大幅に書き直すことになる。",
+      "tags": [
+        "順序立て",
+        "企画書"
+      ],
+      "abilityAxis": "構造化",
+      "rubricJson": null,
+      "sampleGoodAnswer": null,
+      "sampleGoodPoints": null
     }
   ]
 }

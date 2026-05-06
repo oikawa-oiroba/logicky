@@ -7,13 +7,15 @@ struct ThinkingMethodDiagramView: View {
         Group {
             switch method.id {
             case "mece":              MECEDiagram()
-            case "deduction":         DeductionDiagram()
+            case "deduction":         SyllogismDiagram()
+            case "syllogism":         SyllogismDiagram()
             case "fact_opinion":      FactOpinionDiagram()
             case "logic_tree":        LogicTreeDiagram()
             case "3c":                ThreeCDiagram()
             case "5w2h":              FiveW2HDiagram()
             case "fermi":             FermiDiagram()
             case "causality":         CausalityDiagram()
+            case "causation":         CausalityDiagram()
             case "critical":          CriticalDiagram()
             case "pyramid_principle": PyramidDiagram()
             case "pyramid":           PyramidPrincipleDiagram()
@@ -22,6 +24,15 @@ struct ThinkingMethodDiagramView: View {
             case "matrix":            MatrixDiagram()
             case "profit_tree":       ProfitTreeDiagram()
             case "sanity_check":      SanityCheckDiagram()
+            case "grouping":          GroupingDiagram()
+            case "why_deep":          WhyDeepDiagram()
+            case "induction":         InductionDiagram()
+            case "analogy":           AnalogyDiagram()
+            case "comparison":        ComparisonDiagram()
+            case "abstraction":       AbstractionDiagram()
+            case "hypothesis":        HypothesisDiagram()
+            case "whole_part":        WholePartDiagram()
+            case "sequencing":        SequencingDiagram()
             default:                  EmptyView()
             }
         }
@@ -77,16 +88,20 @@ private struct MECEDiagram: View {
     }
 }
 
-// MARK: - 演繹法
+// MARK: - 三段論法（旧: 演繹法）
 
 private struct DeductionDiagram: View {
+    var body: some View { SyllogismDiagram() }
+}
+
+private struct SyllogismDiagram: View {
     var body: some View {
         VStack(spacing: 8) {
-            flowBox(label: "大前提", text: "コーヒーは眠気を覚ます", style: .sub)
+            flowBox(label: "前提①", text: "すべての人間は死ぬ", style: .sub)
             arrowDown
-            flowBox(label: "小前提", text: "今、コーヒーを飲んだ", style: .sub)
+            flowBox(label: "前提②", text: "ソクラテスは人間だ", style: .sub)
             arrowDown
-            flowBox(label: "結　論", text: "眠気が覚めるはず", style: .accent)
+            flowBox(label: "結　論", text: "ソクラテスは死ぬ", style: .accent)
         }
     }
 
@@ -758,5 +773,468 @@ private struct SanityCheckDiagram: View {
         .background(Color.appBg)
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.cardBorder, lineWidth: 1))
+    }
+}
+
+// MARK: - 分類・グルーピング
+
+private struct GroupingDiagram: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            Text("バラバラな情報を整理する")
+                .font(.caption2)
+                .foregroundStyle(Color.appSub)
+
+            HStack(spacing: 8) {
+                scatteredItems
+                Image(systemName: "arrow.right")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color.tiffany)
+                groupedBoxes
+            }
+        }
+    }
+
+    private var scatteredItems: some View {
+        VStack(spacing: 4) {
+            ForEach(["みかん", "バス", "りんご", "電車", "バナナ"], id: \.self) { item in
+                Text(item)
+                    .font(.system(size: 9))
+                    .foregroundStyle(Color.appText)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(Color.appBg)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.cardBorder, lineWidth: 1))
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private var groupedBoxes: some View {
+        VStack(spacing: 6) {
+            groupBox(title: "果物", items: ["みかん", "りんご", "バナナ"], color: .tiffany)
+            groupBox(title: "乗り物", items: ["バス", "電車"], color: .appGray)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func groupBox(title: String, items: [String], color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(title)
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(color)
+            ForEach(items, id: \.self) { item in
+                Text(item)
+                    .font(.system(size: 9))
+                    .foregroundStyle(Color.appText)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(color.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+            }
+        }
+        .padding(6)
+        .background(color.opacity(0.05))
+        .clipShape(RoundedRectangle(cornerRadius: 7))
+        .overlay(RoundedRectangle(cornerRadius: 7).stroke(color.opacity(0.3), lineWidth: 1))
+    }
+}
+
+// MARK: - なぜなぜ分析
+
+private struct WhyDeepDiagram: View {
+    private let steps: [(String, String)] = [
+        ("問題", "機械が止まった"),
+        ("なぜ①", "ヒューズが切れた"),
+        ("なぜ②", "過負荷がかかった"),
+        ("なぜ③", "潤滑油が不足"),
+        ("根本原因", "フィルターがなかった"),
+    ]
+
+    var body: some View {
+        VStack(spacing: 4) {
+            ForEach(Array(steps.enumerated()), id: \.offset) { i, step in
+                HStack(spacing: 8) {
+                    Text(step.0)
+                        .font(.system(size: 8, weight: .bold))
+                        .foregroundStyle(i == steps.count - 1 ? Color.tiffany : Color.appSub)
+                        .frame(width: 46, alignment: .trailing)
+                    Text(step.1)
+                        .font(.system(size: 9, weight: i == steps.count - 1 ? .semibold : .regular))
+                        .foregroundStyle(i == steps.count - 1 ? Color.tiffany : Color.appText)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 5)
+                        .background(i == steps.count - 1 ? Color.tiffany.opacity(0.1) : Color.appBg)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                }
+                if i < steps.count - 1 {
+                    HStack {
+                        Spacer().frame(width: 54)
+                        Image(systemName: "arrow.down")
+                            .font(.system(size: 8))
+                            .foregroundStyle(Color.appGray)
+                        Spacer()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 帰納法
+
+private struct InductionDiagram: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 6) {
+                exampleBox("A支店\n朝礼→遅刻減")
+                exampleBox("B支店\n朝礼→遅刻減")
+                exampleBox("C支店\n朝礼→遅刻減")
+            }
+            HStack(spacing: 4) {
+                Image(systemName: "arrow.down.forward")
+                    .font(.caption)
+                Image(systemName: "arrow.down")
+                    .font(.caption)
+                Image(systemName: "arrow.down.backward")
+                    .font(.caption)
+            }
+            .foregroundStyle(Color.appGray)
+            Text("朝礼には遅刻削減の効果がある（傾向）")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .background(Color.tiffany)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            Text("※必ずしも法則ではなく「仮説」として扱う")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+        }
+    }
+
+    private func exampleBox(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 9))
+            .foregroundStyle(Color.tiffany)
+            .multilineTextAlignment(.center)
+            .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
+            .background(Color.tiffany.opacity(0.08))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.tiffany.opacity(0.25), lineWidth: 1))
+    }
+}
+
+// MARK: - アナロジー思考
+
+private struct AnalogyDiagram: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
+                analogyBox(title: "元ネタ", subtitle: "コンビニ\n動線設計", color: .appGray)
+                VStack(spacing: 2) {
+                    Image(systemName: "arrow.right.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(Color.tiffany)
+                    Text("構造が\n同じ")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(Color.tiffany)
+                        .multilineTextAlignment(.center)
+                }
+                analogyBox(title: "応用先", subtitle: "Webサイト\n導線設計", color: .tiffany)
+            }
+            Text("「人気商品→ついで買い」の構造を転用")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+                .multilineTextAlignment(.center)
+        }
+    }
+
+    private func analogyBox(title: String, subtitle: String, color: Color) -> some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.system(size: 9, weight: .bold))
+                .foregroundStyle(color)
+            Text(subtitle)
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appText)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .background(color.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(color.opacity(0.3), lineWidth: 1))
+    }
+}
+
+// MARK: - 対比・比較
+
+private struct ComparisonDiagram: View {
+    private let criteria = ["コスト", "リーチ", "CVR", "継続性"]
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("同じ軸で比べる")
+                .font(.caption2)
+                .foregroundStyle(Color.appSub)
+
+            HStack(spacing: 0) {
+                Text("比較軸")
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(Color.appSub)
+                    .frame(width: 44)
+                Text("A案")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.tiffany)
+                    .frame(maxWidth: .infinity)
+                Text("VS")
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(Color.appGray)
+                    .frame(width: 20)
+                Text("B案")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.appGray)
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.vertical, 4)
+            .background(Color.appBg)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+
+            ForEach(Array(criteria.enumerated()), id: \.offset) { i, criterion in
+                HStack(spacing: 0) {
+                    Text(criterion)
+                        .font(.system(size: 8))
+                        .foregroundStyle(Color.appSub)
+                        .frame(width: 44)
+                    Text(i % 2 == 0 ? "◎" : "△")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.tiffany)
+                        .frame(maxWidth: .infinity)
+                    Spacer().frame(width: 20)
+                    Text(i % 2 == 0 ? "△" : "◎")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Color.appGray)
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 抽象化と具体化
+
+private struct AbstractionDiagram: View {
+    var body: some View {
+        VStack(spacing: 6) {
+            // 抽象レイヤー
+            VStack(spacing: 3) {
+                Text("抽象")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.tiffany)
+                Text("コミュニケーション手段")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(Color.tiffany)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.tiffany.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+
+            // 双方向矢印
+            VStack(spacing: 2) {
+                Image(systemName: "arrow.up")
+                    .font(.caption)
+                    .foregroundStyle(Color.appGray)
+                Text("抽象化 ↕ 具体化")
+                    .font(.system(size: 9))
+                    .foregroundStyle(Color.appSub)
+                Image(systemName: "arrow.down")
+                    .font(.caption)
+                    .foregroundStyle(Color.appGray)
+            }
+
+            // 具体レイヤー
+            VStack(spacing: 3) {
+                Text("具体")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.appGray)
+                HStack(spacing: 4) {
+                    ForEach(["メール", "電話", "チャット"], id: \.self) { item in
+                        Text(item)
+                            .font(.system(size: 9))
+                            .foregroundStyle(Color.appText)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 5)
+                            .frame(maxWidth: .infinity)
+                            .background(Color.appBg)
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.cardBorder, lineWidth: 1))
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 仮説思考
+
+private struct HypothesisDiagram: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("仮説→検証のサイクル")
+                .font(.caption2)
+                .foregroundStyle(Color.appSub)
+
+            ZStack {
+                Circle()
+                    .stroke(Color.cardBorder, lineWidth: 1)
+                    .frame(width: 120, height: 120)
+
+                VStack(spacing: 4) {
+                    cycleNode("仮説を立てる", position: .top)
+                }
+            }
+            .frame(height: 130)
+            .overlay {
+                VStack(spacing: 0) {
+                    cycleLabel("①仮説")
+                    HStack {
+                        cycleLabel("④修正")
+                        Spacer().frame(width: 50)
+                        cycleLabel("②検証")
+                    }
+                    cycleLabel("③結果確認")
+                }
+                .frame(width: 160, height: 120)
+            }
+
+            Text("情報不足でも「仮の答え」を先に立てる")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+                .multilineTextAlignment(.center)
+        }
+    }
+
+    private enum NodePosition { case top }
+
+    private func cycleNode(_ text: String, position: NodePosition) -> some View {
+        Text(text)
+            .font(.system(size: 8))
+            .foregroundStyle(Color.tiffany)
+    }
+
+    private func cycleLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 10, weight: .semibold))
+            .foregroundStyle(Color.tiffany)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Color.tiffany.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+    }
+}
+
+// MARK: - ズームイン・ズームアウト
+
+private struct WholePartDiagram: View {
+    var body: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 12) {
+                // 全体（ズームアウト）
+                VStack(spacing: 4) {
+                    Text("全体")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(Color.appGray)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.cardBorder, lineWidth: 1.5)
+                            .frame(width: 80, height: 60)
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.tiffany.opacity(0.15))
+                            .frame(width: 20, height: 15)
+                    }
+                    Text("ズームアウト")
+                        .font(.system(size: 8))
+                        .foregroundStyle(Color.appSub)
+                }
+
+                VStack(spacing: 2) {
+                    Image(systemName: "arrow.left.and.right")
+                        .font(.caption)
+                        .foregroundStyle(Color.tiffany)
+                    Text("切替")
+                        .font(.system(size: 8))
+                        .foregroundStyle(Color.tiffany)
+                }
+
+                // 部分（ズームイン）
+                VStack(spacing: 4) {
+                    Text("部分")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(Color.tiffany)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.tiffany.opacity(0.08))
+                            .frame(width: 80, height: 60)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.tiffany.opacity(0.4), lineWidth: 1.5))
+                        Image(systemName: "magnifyingglass")
+                            .font(.title3)
+                            .foregroundStyle(Color.tiffany)
+                    }
+                    Text("ズームイン")
+                        .font(.system(size: 8))
+                        .foregroundStyle(Color.tiffany)
+                }
+            }
+
+            Text("全体を把握してから、問題箇所を詳しく見る")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+                .multilineTextAlignment(.center)
+        }
+    }
+}
+
+// MARK: - 順序立て・プロセス思考
+
+private struct SequencingDiagram: View {
+    private let steps = ["①調査", "②仮説", "③設計", "④実行", "⑤振返"]
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Text("プロセスをステップに分解する")
+                .font(.caption2)
+                .foregroundStyle(Color.appSub)
+
+            HStack(spacing: 4) {
+                ForEach(Array(steps.enumerated()), id: \.offset) { i, step in
+                    Text(step)
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(i == 0 ? .white : Color.tiffany)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background(i == 0 ? Color.tiffany : Color.tiffany.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+
+                    if i < steps.count - 1 {
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 7))
+                            .foregroundStyle(Color.appGray)
+                    }
+                }
+            }
+
+            Text("順序が明確→抜け漏れ・手戻りを防ぐ")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+        }
     }
 }

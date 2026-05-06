@@ -47,6 +47,7 @@
 		LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = LSREF00000000000000000001 /* LaunchScreen.storyboard */; };
 		NBLD000000000000000000017 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000017 /* Color+App.swift */; };
 		NBLD000000000000000000018 /* DiagnosticHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */; };
+		NBLD000000000000000000019 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000019 /* CategorySelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,7 @@
 		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000017 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
+		NFIL000000000000000000019 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -225,6 +227,7 @@
 				NFIL000000000000000000001 /* LevelSelectionView.swift */,
 				NFIL000000000000000000002 /* UnitSelectionView.swift */,
 				NFIL000000000000000000003 /* UnitDetailView.swift */,
+				NFIL000000000000000000019 /* CategorySelectionView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				NBLD000000000000000000015 /* ResultReviewView.swift in Sources */,
 				NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */,
 				NBLD000000000000000000017 /* Color+App.swift in Sources */,
+				NBLD000000000000000000019 /* CategorySelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

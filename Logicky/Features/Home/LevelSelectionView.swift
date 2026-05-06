@@ -7,7 +7,7 @@ struct LevelSelectionView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
-                ForEach(LevelModel.all) { level in
+                ForEach(LevelModel.practical) { level in
                     let unlocked = isLevelUnlocked(level)
                     LevelCard(
                         level: level,
@@ -29,7 +29,7 @@ struct LevelSelectionView: View {
 
     private func isLevelUnlocked(_ level: LevelModel) -> Bool {
         if level.id == 1 { return true }
-        guard let prev = LevelModel.all.first(where: { $0.id == level.id - 1 }) else { return false }
+        guard let prev = LevelModel.practical.first(where: { $0.id == level.id - 1 }) else { return false }
         return prev.units.allSatisfy { isMCCompleted($0) }
     }
 

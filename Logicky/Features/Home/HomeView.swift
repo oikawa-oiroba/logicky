@@ -241,13 +241,15 @@ struct HomeView: View {
 
     private var quickActionsSection: some View {
         HStack(spacing: 12) {
+            QuickActionCard(icon: "graduationcap.fill", title: "学習を始める") {
+                navigationPath.append(AppRoute.categorySelection)
+            }
             QuickActionCard(icon: "book.fill", title: "思考法辞典") {
                 navigationPath.append(AppRoute.dictionaryList)
             }
             QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
                 navigationPath.append(AppRoute.history)
             }
-            QuickActionCard(icon: "trophy.fill", title: "実績", isDisabled: true) {}
         }
     }
 
@@ -265,7 +267,7 @@ struct HomeView: View {
                         abilityName: viewModel.abilityName(for: level),
                         levelName: level.name,
                         progress: viewModel.levelProgress(for: level),
-                        isUnlocked: viewModel.isLevelUnlocked(level)
+                        isUnlocked: true
                     ) {
                         navigationPath.append(AppRoute.unitSelection(levelId: level.id))
                     }

@@ -46,12 +46,10 @@ final class HomeViewModel: ObservableObject {
         !QuestionService.shared.questions(for: unit.id).filter { $0.type == .freeText }.isEmpty
     }
 
-    // MARK: - Level Unlock (MC completion only)
+    // MARK: - Level Unlock (all levels always unlocked)
 
     func isLevelUnlocked(_ level: LevelModel) -> Bool {
-        if level.id == 1 { return true }
-        guard let prev = LevelModel.all.first(where: { $0.id == level.id - 1 }) else { return false }
-        return prev.units.allSatisfy { isMCCompleted(for: $0) }
+        return true
     }
 
     // MARK: - Streak
@@ -112,9 +110,10 @@ final class HomeViewModel: ObservableObject {
 
     func abilityName(for level: LevelModel) -> String {
         switch level.id {
-        case 1: return "整理力"
-        case 2: return "推論力"
-        case 3: return "判断力"
+        case 0: return "基礎力"
+        case 1: return "整理する力"
+        case 2: return "分析する力"
+        case 3: return "検証する力"
         default: return level.description
         }
     }

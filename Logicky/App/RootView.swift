@@ -6,6 +6,7 @@ enum QuizMode: String, Hashable {
 }
 
 enum AppRoute: Hashable {
+    case categorySelection
     case levelSelection
     case unitSelection(levelId: Int)
     case unitDetail(unitId: String, levelId: Int)
@@ -49,6 +50,8 @@ struct MainNavigationView: View {
             HomeView(navigationPath: $navigationPath)
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
+                    case .categorySelection:
+                        CategorySelectionView(navigationPath: $navigationPath)
                     case .levelSelection:
                         LevelSelectionView(navigationPath: $navigationPath)
                     case .unitSelection(let levelId):
