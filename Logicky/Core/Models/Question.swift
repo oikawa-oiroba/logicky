@@ -29,4 +29,6 @@ struct Question: Codable, Identifiable {
     let tags: [String]?
     let abilityAxis: String?
     let rubricJson: RubricItem?
+    let sampleGoodAnswer: String?
+    let sampleGoodPoints: [String]?
 }

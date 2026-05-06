@@ -254,6 +254,10 @@ struct ResultView: View {
                 }
             }
 
+            if let detail = feedback.freeTextDetail {
+                ftScoreDetail(detail)
+            }
+
             if let rubric = feedback.question.rubricJson {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("採点観点", systemImage: "list.bullet.clipboard")
@@ -268,7 +272,83 @@ struct ResultView: View {
                 .background(Color.appBg)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+
+            if feedback.question.sampleGoodAnswer != nil {
+                SampleAnswerAccordion(question: feedback.question)
+            }
         }
+    }
+
+    private func ftScoreDetail(_ detail: FreeTextScoreDetail) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 8) {
+                ftScoreBar(label: "構造", score: detail.structureScore)
+                ftScoreBar(label: "論理性", score: detail.logicScore)
+                ftScoreBar(label: "具体性", score: detail.specificityScore)
+            }
+
+            if !detail.strengths.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(detail.strengths, id: \.self) { s in
+                        HStack(alignment: .top, spacing: 6) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption)
+                                .foregroundStyle(Color.tiffany)
+                            Text(s).font(.caption).foregroundStyle(Color.appText)
+                        }
+                    }
+                }
+            }
+
+            if !detail.weaknesses.isEmpty {
+                VStack(alignment: .leading, spacing: 4) {
+                    ForEach(detail.weaknesses, id: \.self) { w in
+                        HStack(alignment: .top, spacing: 6) {
+                            Image(systemName: "arrow.up.circle")
+                                .font(.caption)
+                                .foregroundStyle(Color.appGray)
+                            Text(w).font(.caption).foregroundStyle(Color.appText)
+                        }
+                    }
+                }
+            }
+
+            if !detail.advice.isEmpty {
+                HStack(alignment: .top, spacing: 6) {
+                    Image(systemName: "lightbulb.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.tiffany)
+                    Text(detail.advice)
+                        .font(.caption)
+                        .foregroundStyle(Color.appText)
+                        .lineSpacing(3)
+                }
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.tiffany.opacity(0.07))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+        }
+        .padding(12)
+        .background(Color.appBg)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    private func ftScoreBar(label: String, score: Int) -> some View {
+        VStack(spacing: 4) {
+            Text(label).font(.caption2).foregroundStyle(Color.appSub)
+            HStack(spacing: 2) {
+                ForEach(1...5, id: \.self) { i in
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(i <= score ? Color.tiffany : Color.cardBorder)
+                        .frame(height: 8)
+                }
+            }
+            Text("\(score)/5")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(score >= 4 ? Color.tiffany : Color.appGray)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - Review Button
@@ -363,5 +443,75 @@ private struct RubricRow: View {
                 .foregroundStyle(Color.appSub)
                 .lineSpacing(3)
         }
+    }
+}
+
+private struct SampleAnswerAccordion: View {
+    let question: Question
+    @State private var isExpanded = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { isExpanded.toggle() }
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "star.fill")
+                        .font(.caption)
+                        .foregroundStyle(Color.tiffany)
+                    Text("模範解答例を見る")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Color.tiffany)
+                    Spacer()
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundStyle(Color.appGray)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+            }
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 8) {
+                    Divider()
+                    if let answer = question.sampleGoodAnswer {
+                        Text(answer)
+                            .font(.caption)
+                            .foregroundStyle(Color.appText)
+                            .lineSpacing(4)
+                            .padding(.horizontal, 12)
+                            .padding(.top, 8)
+                    }
+                    if let points = question.sampleGoodPoints, !points.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("ポイント")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(Color.tiffany)
+                            ForEach(points, id: \.self) { point in
+                                HStack(alignment: .top, spacing: 6) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 9))
+                                        .foregroundStyle(Color.tiffany)
+                                        .padding(.top, 1)
+                                    Text(point)
+                                        .font(.caption)
+                                        .foregroundStyle(Color.appText)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 12)
+                    }
+                    Text("※ AIによる自動採点です。参考程度にご活用ください。")
+                        .font(.system(size: 9))
+                        .foregroundStyle(Color.appGray)
+                        .padding(.horizontal, 12)
+                        .padding(.bottom, 10)
+                }
+            }
+        }
+        .background(Color.tiffany.opacity(0.05))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.tiffany.opacity(0.2), lineWidth: 1))
     }
 }

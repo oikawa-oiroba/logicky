@@ -32,10 +32,10 @@ struct FreeTextView: View {
             HStack {
                 Text("自由記述")
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(.purple)
+                    .foregroundStyle(Color.tiffany)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
-                    .background(Color.purple.opacity(0.12))
+                    .background(Color.tiffany.opacity(0.1))
                     .clipShape(Capsule())
                 Spacer()
             }
@@ -82,7 +82,7 @@ struct FreeTextView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(
-                        isEditorFocused ? Color.purple : Color(.separator),
+                        isEditorFocused ? Color.tiffany : Color(.separator),
                         lineWidth: isEditorFocused ? 2 : 1
                     )
             )

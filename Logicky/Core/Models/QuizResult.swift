@@ -10,11 +10,22 @@ struct SessionAnswer {
     }
 }
 
+struct FreeTextScoreDetail {
+    let structureScore: Int   // 1-5
+    let logicScore: Int       // 1-5
+    let specificityScore: Int // 1-5
+    let normalizedScore: Int  // 0-100
+    let strengths: [String]
+    let weaknesses: [String]
+    let advice: String
+}
+
 struct QuestionFeedback {
     let question: Question
     let answer: SessionAnswer
     let isCorrect: Bool?
     let score: Int
+    var freeTextDetail: FreeTextScoreDetail?
 }
 
 struct QuizResult {
