@@ -24,6 +24,7 @@ struct ResultView: View {
                         .padding()
                 }
 
+                reviewButton
                 homeButton
             }
             .padding(.horizontal, 20)
@@ -276,6 +277,26 @@ struct ResultView: View {
                 .background(Color.purple.opacity(0.06))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+        }
+    }
+
+    // MARK: - Review Button
+
+    private var reviewButton: some View {
+        Button {
+            navigationPath.append(AppRoute.review)
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "doc.text.magnifyingglass")
+                Text("回答を振り返る")
+                    .fontWeight(.semibold)
+            }
+            .font(.headline)
+            .foregroundStyle(.indigo)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 16)
+            .background(Color.indigo.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
 

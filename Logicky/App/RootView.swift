@@ -11,6 +11,7 @@ enum AppRoute: Hashable {
     case unitDetail(unitId: String, levelId: Int)
     case quiz(unitId: String, mode: QuizMode)
     case result
+    case review
     case history
     case dictionaryList
     case dictionaryDetail(methodId: String)
@@ -57,6 +58,8 @@ struct MainNavigationView: View {
                         QuizContainerView(unitId: unitId, mode: mode, navigationPath: $navigationPath)
                     case .result:
                         ResultView(navigationPath: $navigationPath)
+                    case .review:
+                        ResultReviewView(navigationPath: $navigationPath)
                     case .history:
                         HistoryView(navigationPath: $navigationPath)
                     case .dictionaryList:
