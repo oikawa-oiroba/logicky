@@ -13,6 +13,7 @@ struct CognitiveBiasDetailView: View {
             if let bias {
                 VStack(alignment: .leading, spacing: 22) {
                     header(bias: bias)
+                    CognitiveBiasDiagramView(bias: bias)
                     sectionCard(title: "解説", icon: "text.book.closed.fill") {
                         Text(bias.description)
                             .font(.body)

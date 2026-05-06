@@ -3,15 +3,26 @@ import SwiftUI
 struct MultipleChoiceView: View {
     @EnvironmentObject var viewModel: QuizViewModel
     @State private var showHint = false
+    @State private var answeredChoiceId: String? = nil
+    @State private var showExplanation = false
+    @State private var showConfetti = false
+    @State private var shakeOffset: CGFloat = 0
+
+    private var isAnswered: Bool { answeredChoiceId != nil }
+
+    private var isCorrect: Bool {
+        guard let q = viewModel.currentQuestion, let id = answeredChoiceId else { return false }
+        return id == q.correctChoiceId
+    }
 
     var body: some View {
-        Group {
+        ZStack(alignment: .bottom) {
             if let question = viewModel.currentQuestion {
                 ScrollView {
                     VStack(spacing: 16) {
                         questionCard(question)
                         choicesList(question)
-                        Spacer(minLength: 80)
+                        Spacer(minLength: showExplanation ? 320 : 40)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -24,14 +35,62 @@ struct MultipleChoiceView: View {
                             .presentationDragIndicator(.visible)
                     }
                 }
+
+                if showExplanation {
+                    explanationCard(question)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .zIndex(10)
+                }
+
+                if showConfetti {
+                    ConfettiView()
+                        .zIndex(20)
+                }
+            }
+        }
+        .onChange(of: viewModel.currentIndex) { _, _ in
+            withAnimation(.spring(response: 0.3)) {
+                showExplanation = false
+            }
+            answeredChoiceId = nil
+            showConfetti = false
+            shakeOffset = 0
+        }
+    }
+
+    // MARK: - Choice tap handler
+
+    private func handleChoiceTap(_ choiceId: String, question: Question) {
+        guard !isAnswered else { return }
+        viewModel.selectChoice(choiceId)
+        answeredChoiceId = choiceId
+
+        let correct = choiceId == question.correctChoiceId
+        withAnimation(.spring(response: 0.4)) {
+            showExplanation = true
+        }
+        if correct {
+            showConfetti = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                showConfetti = false
+            }
+        } else {
+            withAnimation(.default) {
+                shakeOffset = 8
+            }
+            withAnimation(.default.delay(0.1)) {
+                shakeOffset = -8
+            }
+            withAnimation(.default.delay(0.2)) {
+                shakeOffset = 4
+            }
+            withAnimation(.default.delay(0.3)) {
+                shakeOffset = 0
             }
         }
     }
 
-    private func hintMethod(for question: Question) -> ThinkingMethod? {
-        guard let unitId = question.unit else { return nil }
-        return ThinkingMethodService.shared.all.first { $0.unitId == unitId }
-    }
+    // MARK: - Question Card
 
     private func questionCard(_ question: Question) -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -55,7 +114,7 @@ struct MultipleChoiceView: View {
                 .foregroundStyle(Color.appText)
                 .lineSpacing(6)
 
-            if hintMethod(for: question) != nil {
+            if !isAnswered, hintMethod(for: question) != nil {
                 Button {
                     showHint = true
                 } label: {
@@ -78,23 +137,240 @@ struct MultipleChoiceView: View {
         .padding(16)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay(
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.cardBorder, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
     }
+
+    // MARK: - Choices List
 
     private func choicesList(_ question: Question) -> some View {
         VStack(spacing: 10) {
             ForEach(question.choices ?? []) { choice in
-                ChoiceButton(
+                AnswerChoiceButton(
                     choice: choice,
-                    isSelected: viewModel.currentAnswer.selectedChoiceId == choice.id
+                    state: choiceState(choice, question: question)
                 ) {
-                    viewModel.selectChoice(choice.id)
+                    handleChoiceTap(choice.id, question: question)
+                }
+                .offset(x: !isAnswered || choice.id == answeredChoiceId ? 0 : 0)
+                .offset(x: choice.id == answeredChoiceId && !isCorrect ? shakeOffset : 0)
+            }
+        }
+    }
+
+    private func choiceState(_ choice: Choice, question: Question) -> ChoiceState {
+        guard let answeredId = answeredChoiceId else { return .normal }
+        if choice.id == question.correctChoiceId { return .correct }
+        if choice.id == answeredId { return .wrong }
+        return .faded
+    }
+
+    // MARK: - Explanation Card
+
+    private func explanationCard(_ question: Question) -> some View {
+        VStack(spacing: 0) {
+            Capsule()
+                .fill(Color.cardBorder)
+                .frame(width: 36, height: 4)
+                .padding(.top, 10)
+                .padding(.bottom, 6)
+
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    // Correct / incorrect header
+                    HStack(spacing: 10) {
+                        Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .font(.system(size: 26))
+                            .foregroundStyle(isCorrect ? Color.tiffany : Color.appGray)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(isCorrect ? "正解！" : "不正解")
+                                .font(.title3.bold())
+                                .foregroundStyle(isCorrect ? Color.tiffany : Color.appText)
+                            if !isCorrect, let correctChoice = question.choices?.first(where: { $0.id == question.correctChoiceId }) {
+                                Text("正解：\(correctChoice.text)")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.tiffany)
+                                    .lineLimit(2)
+                            }
+                        }
+                        Spacer()
+                    }
+
+                    Divider().background(Color.cardBorder)
+
+                    // Explanation
+                    if let explanation = question.explanation {
+                        Text(explanation)
+                            .font(.subheadline)
+                            .foregroundStyle(Color.appText)
+                            .lineSpacing(5)
+                    }
+
+                    // Badges row
+                    badgesRow(question)
+
+                    // Next button
+                    Button {
+                        viewModel.goNext()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text(viewModel.isLastQuestion ? "結果を見る" : "次の問題へ")
+                                .font(.headline)
+                            Image(systemName: viewModel.isLastQuestion ? "flag.checkered" : "arrow.right")
+                                .font(.subheadline.weight(.bold))
+                        }
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color.tiffany)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
+            }
+            .frame(maxHeight: 320)
+        }
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.1), radius: 20, y: -4)
+        .padding(.horizontal, 0)
+    }
+
+    @ViewBuilder
+    private func badgesRow(_ question: Question) -> some View {
+        let unitId = question.unit ?? ""
+        let method = ThinkingMethodService.shared.all.first { $0.unitId == unitId }
+        let biases = (question.relatedBiases ?? []).compactMap { CognitiveBiasService.shared.bias(for: $0) }
+
+        if method != nil || !biases.isEmpty {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    if let method {
+                        BadgeChip(icon: "book.closed.fill", text: method.name, color: Color.tiffany)
+                    }
+                    ForEach(biases) { bias in
+                        BadgeChip(icon: "exclamationmark.triangle.fill", text: bias.technicalName, color: Color.appGray)
+                    }
                 }
             }
         }
+    }
+
+    private func hintMethod(for question: Question) -> ThinkingMethod? {
+        guard let unitId = question.unit else { return nil }
+        return ThinkingMethodService.shared.all.first { $0.unitId == unitId }
+    }
+}
+
+// MARK: - Choice State
+
+private enum ChoiceState {
+    case normal, correct, wrong, faded
+}
+
+// MARK: - Answer Choice Button
+
+private struct AnswerChoiceButton: View {
+    let choice: Choice
+    let state: ChoiceState
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                stateIcon
+                Text(choice.text)
+                    .font(.body)
+                    .multilineTextAlignment(.leading)
+                    .foregroundStyle(textColor)
+                Spacer()
+            }
+            .padding(14)
+            .background(bgColor)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(borderColor, lineWidth: borderWidth))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .opacity(state == .faded ? 0.4 : 1.0)
+        }
+        .disabled(state != .normal)
+        .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.25), value: state)
+    }
+
+    @ViewBuilder
+    private var stateIcon: some View {
+        switch state {
+        case .normal:
+            Circle()
+                .stroke(Color.cardBorder, lineWidth: 1.5)
+                .frame(width: 22, height: 22)
+        case .correct:
+            Image(systemName: "checkmark.circle.fill")
+                .font(.system(size: 22))
+                .foregroundStyle(Color.tiffany)
+        case .wrong:
+            Image(systemName: "xmark.circle.fill")
+                .font(.system(size: 22))
+                .foregroundStyle(Color.appGray)
+        case .faded:
+            Circle()
+                .stroke(Color.cardBorder.opacity(0.5), lineWidth: 1.5)
+                .frame(width: 22, height: 22)
+        }
+    }
+
+    private var bgColor: Color {
+        switch state {
+        case .normal: return .white
+        case .correct: return Color.tiffany.opacity(0.07)
+        case .wrong: return Color.appGray.opacity(0.07)
+        case .faded: return .white
+        }
+    }
+
+    private var borderColor: Color {
+        switch state {
+        case .normal: return Color.cardBorder
+        case .correct: return Color.tiffany
+        case .wrong: return Color.appGray
+        case .faded: return Color.cardBorder.opacity(0.3)
+        }
+    }
+
+    private var borderWidth: CGFloat {
+        switch state {
+        case .correct, .wrong: return 1.5
+        default: return 1
+        }
+    }
+
+    private var textColor: Color {
+        switch state {
+        case .faded: return Color.appGray
+        default: return Color.appText
+        }
+    }
+}
+
+// MARK: - Badge Chip
+
+private struct BadgeChip: View {
+    let icon: String
+    let text: String
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: icon)
+                .font(.system(size: 10))
+            Text(text)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(color.opacity(0.1))
+        .clipShape(Capsule())
     }
 }
 
@@ -122,17 +398,14 @@ struct HintSheetView: View {
                     .foregroundStyle(Color.appSub)
                 }
                 Spacer()
-                Button {
-                    dismiss()
-                } label: {
+                Button { dismiss() } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.title2)
                         .foregroundStyle(Color.appGray)
                 }
             }
 
-            Divider()
-                .background(Color.cardBorder)
+            Divider().background(Color.cardBorder)
 
             VStack(alignment: .leading, spacing: 12) {
                 Label("どういう考え方？", systemImage: "lightbulb.fill")
@@ -171,45 +444,5 @@ struct HintSheetView: View {
         }
         .padding(24)
         .background(Color.white)
-    }
-}
-
-// MARK: - Choice Button
-
-private struct ChoiceButton: View {
-    let choice: Choice
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 12) {
-                ZStack {
-                    Circle()
-                        .stroke(isSelected ? Color.tiffany : Color.cardBorder, lineWidth: 1.5)
-                        .frame(width: 22, height: 22)
-                    if isSelected {
-                        Circle()
-                            .fill(Color.tiffany)
-                            .frame(width: 12, height: 12)
-                    }
-                }
-
-                Text(choice.text)
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
-                    .foregroundStyle(Color.appText)
-
-                Spacer()
-            }
-            .padding(14)
-            .background(isSelected ? Color.tiffany.opacity(0.07) : Color.white)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? Color.tiffany : Color.cardBorder, lineWidth: isSelected ? 1.5 : 1)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-        }
-        .buttonStyle(.plain)
     }
 }

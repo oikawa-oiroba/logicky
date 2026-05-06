@@ -41,12 +41,8 @@ struct LevelSelectionView: View {
         let mcQuestions = QuestionService.shared.questions(for: unit.id).filter { $0.type == .multipleChoice }
         guard !mcQuestions.isEmpty else { return false }
         let mcIds = Set(mcQuestions.map { $0.id })
-        return attemptService.attempts(for: unit.id).contains { attempt in
-            let answeredIds = Set(attempt.questionResults
-                .filter { !$0.isSkipped && mcIds.contains($0.questionId) }
-                .map { $0.questionId })
-            return answeredIds.count >= mcQuestions.count
-        }
+        let answered = attemptService.answeredMCQuestionIds(for: unit.id, mcIds: mcIds)
+        return answered.count >= min(5, mcQuestions.count)
     }
 }
 

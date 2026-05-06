@@ -32,6 +32,11 @@ final class AttemptService: ObservableObject {
         return latest.questionResults.filter { !$0.isSkipped }.count
     }
 
+    func answeredMCQuestionIds(for unitId: String, mcIds: Set<String>) -> Set<String> {
+        let allResults = attempts(for: unitId).flatMap { $0.questionResults }
+        return Set(allResults.filter { !$0.isSkipped && mcIds.contains($0.questionId) }.map { $0.questionId })
+    }
+
     var totalAnsweredCount: Int {
         attempts.reduce(0) { $0 + $1.questionResults.filter { !$0.isSkipped }.count }
     }

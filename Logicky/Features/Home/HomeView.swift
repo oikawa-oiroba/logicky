@@ -240,22 +240,19 @@ struct HomeView: View {
     // MARK: - Quick Actions
 
     private var quickActionsSection: some View {
-        VStack(spacing: 12) {
-            HStack(spacing: 12) {
-                QuickActionCard(icon: "graduationcap.fill", title: "学習を始める") {
-                    navigationPath.append(AppRoute.categorySelection)
-                }
-                QuickActionCard(icon: "book.fill", title: "思考法辞典") {
-                    navigationPath.append(AppRoute.dictionaryList)
-                }
+        let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+        return LazyVGrid(columns: columns, spacing: 12) {
+            QuickActionCard(icon: "book.fill", title: "学習を始める", isHighlighted: true) {
+                navigationPath.append(AppRoute.categorySelection)
             }
-            HStack(spacing: 12) {
-                QuickActionCard(icon: "exclamationmark.triangle.fill", title: "認知バイアス辞典") {
-                    navigationPath.append(AppRoute.cognitiveBiasList)
-                }
-                QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
-                    navigationPath.append(AppRoute.history)
-                }
+            QuickActionCard(icon: "chart.line.uptrend.xyaxis", title: "成長記録") {
+                navigationPath.append(AppRoute.history)
+            }
+            QuickActionCard(icon: "book.closed.fill", title: "思考法辞典") {
+                navigationPath.append(AppRoute.dictionaryList)
+            }
+            QuickActionCard(icon: "exclamationmark.triangle.fill", title: "認知バイアス辞典") {
+                navigationPath.append(AppRoute.cognitiveBiasList)
             }
         }
     }
@@ -312,6 +309,7 @@ private struct StatBadge: View {
 private struct QuickActionCard: View {
     let icon: String
     let title: String
+    var isHighlighted: Bool = false
     var isDisabled: Bool = false
     let action: () -> Void
 
@@ -319,26 +317,21 @@ private struct QuickActionCard: View {
         Button(action: action) {
             VStack(spacing: 8) {
                 Image(systemName: icon)
-                    .font(.system(size: 24))
+                    .font(.system(size: 28))
                     .foregroundStyle(isDisabled ? Color.appGray : Color.tiffany)
                 Text(title)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(isDisabled ? Color.appGray : Color.appText)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
-                if isDisabled {
-                    Text("Coming Soon")
-                        .font(.system(size: 9))
-                        .foregroundStyle(Color.appGray)
-                }
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .background(Color.white)
+            .padding(.vertical, 20)
+            .background(isHighlighted ? Color.tiffany.opacity(0.08) : Color.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.cardBorder, lineWidth: 1)
+                    .stroke(isHighlighted ? Color.tiffany.opacity(0.3) : Color.cardBorder, lineWidth: isHighlighted ? 1.5 : 1)
             )
         }
         .disabled(isDisabled)

@@ -18,7 +18,11 @@ struct QuizContainerView: View {
                         FreeTextView()
                     }
 
-                    bottomProgressBar
+                    if viewModel.mode == .master {
+                        bottomProgressBar
+                    } else {
+                        trainingProgressDots
+                    }
                 }
             } else {
                 Color.clear
@@ -44,12 +48,14 @@ struct QuizContainerView: View {
                 unitNameLabel
             }
 
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("スキップ") {
-                    viewModel.skip()
+            if viewModel.mode == .master {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("スキップ") {
+                        viewModel.skip()
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
                 }
-                .font(.subheadline)
-                .foregroundStyle(Color.appSub)
             }
         }
         .confirmationDialog(
@@ -138,6 +144,26 @@ struct QuizContainerView: View {
             .padding(.vertical, 12)
             .background(Color.white)
         }
+    }
+
+    private var trainingProgressDots: some View {
+        HStack(spacing: 8) {
+            ForEach(0..<viewModel.questions.count, id: \.self) { i in
+                Circle()
+                    .fill(i < viewModel.currentIndex ? Color.tiffany
+                          : i == viewModel.currentIndex ? Color.tiffany.opacity(0.5)
+                          : Color.cardBorder)
+                    .frame(width: 7, height: 7)
+                    .animation(.easeInOut, value: viewModel.currentIndex)
+            }
+            Text("\(viewModel.currentIndex + 1)/\(viewModel.questions.count)")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(Color.appSub)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 10)
+        .background(Color.white)
+        .overlay(alignment: .top) { Divider() }
     }
 
     private var canAdvance: Bool {

@@ -53,6 +53,8 @@
 		NBLD000000000000000000022 /* CognitiveBiasListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000022 /* CognitiveBiasListView.swift */; };
 		NBLD000000000000000000023 /* CognitiveBiasDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */; };
 		NBLD000000000000000000024 /* cognitive_biases.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000024 /* cognitive_biases.json */; };
+		NBLD000000000000000000025 /* CognitiveBiasDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000025 /* CognitiveBiasDiagramView.swift */; };
+		NBLD000000000000000000026 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000026 /* ConfettiView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,6 +104,8 @@
 		NFIL000000000000000000022 /* CognitiveBiasListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasListView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000024 /* cognitive_biases.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cognitive_biases.json; sourceTree = "<group>"; };
+		NFIL000000000000000000025 /* CognitiveBiasDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasDiagramView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000026 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -252,6 +256,7 @@
 				20000000000000000000000A /* MultipleChoiceView.swift */,
 				20000000000000000000000B /* FreeTextView.swift */,
 				200000000000000000000006 /* QuizViewModel.swift */,
+				NFIL000000000000000000026 /* ConfettiView.swift */,
 			);
 			path = Questions;
 			sourceTree = "<group>";
@@ -289,6 +294,7 @@
 				NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */,
 				NFIL000000000000000000022 /* CognitiveBiasListView.swift */,
 				NFIL000000000000000000023 /* CognitiveBiasDetailView.swift */,
+				NFIL000000000000000000025 /* CognitiveBiasDiagramView.swift */,
 			);
 			path = Dictionary;
 			sourceTree = "<group>";
@@ -467,6 +473,8 @@
 				NBLD000000000000000000021 /* CognitiveBiasService.swift in Sources */,
 				NBLD000000000000000000022 /* CognitiveBiasListView.swift in Sources */,
 				NBLD000000000000000000023 /* CognitiveBiasDetailView.swift in Sources */,
+				NBLD000000000000000000025 /* CognitiveBiasDiagramView.swift in Sources */,
+				NBLD000000000000000000026 /* ConfettiView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

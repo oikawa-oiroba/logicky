@@ -48,7 +48,8 @@ final class QuizViewModel: ObservableObject {
         let all = QuestionService.shared.questions(for: unitId)
         switch mode {
         case .training:
-            self.questions = all.filter { $0.type == .multipleChoice }
+            let mcQuestions = all.filter { $0.type == .multipleChoice }
+            self.questions = Self.selectTrainingQuestions(mcQuestions, unitId: unitId)
         case .master:
             self.questions = all.filter { $0.type == .freeText }
         }
@@ -56,6 +57,20 @@ final class QuizViewModel: ObservableObject {
         self.currentIndex = 0
         self.isCompleted = false
         self.quizResult = nil
+    }
+
+    private static func selectTrainingQuestions(_ all: [Question], unitId: String) -> [Question] {
+        let sessionSize = 5
+        let mcIds = Set(all.map { $0.id })
+        let answeredIds = AttemptService.shared.answeredMCQuestionIds(for: unitId, mcIds: mcIds)
+        let unanswered = all.filter { !answeredIds.contains($0.id) }
+        if unanswered.count >= sessionSize {
+            return Array(unanswered.shuffled().prefix(sessionSize))
+        }
+        let answered = all.filter { answeredIds.contains($0.id) }
+        let needed = sessionSize - unanswered.count
+        let fill = Array(answered.shuffled().prefix(needed))
+        return (unanswered + fill).shuffled()
     }
 
     func reset() {
