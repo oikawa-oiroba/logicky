@@ -1,6 +1,8 @@
 import Foundation
 
-struct DiagnosticResult: Identifiable, Codable {
+struct DiagnosticResult: Identifiable, Codable, Hashable {
+    static func == (lhs: DiagnosticResult, rhs: DiagnosticResult) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
     let id: UUID
     let date: Date
     let totalScore: Int
@@ -10,7 +12,7 @@ struct DiagnosticResult: Identifiable, Codable {
     var profile: DiagnosticProfile
 }
 
-struct DiagnosticProfile: Codable {
+struct DiagnosticProfile: Codable, Hashable {
     var gender: String = "未回答"
     var ageGroup: String = "未回答"
     var position: String = "未回答"

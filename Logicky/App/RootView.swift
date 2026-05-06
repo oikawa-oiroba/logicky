@@ -15,6 +15,7 @@ enum AppRoute: Hashable {
     case history
     case dictionaryList
     case dictionaryDetail(methodId: String)
+    case diagnosticDetail(result: DiagnosticResult)
 }
 
 struct RootView: View {
@@ -66,6 +67,8 @@ struct MainNavigationView: View {
                         DictionaryListView(navigationPath: $navigationPath)
                     case .dictionaryDetail(let methodId):
                         DictionaryDetailView(methodId: methodId, navigationPath: $navigationPath)
+                    case .diagnosticDetail(let result):
+                        DiagnosticHistoryDetailView(result: result, navigationPath: $navigationPath)
                     }
                 }
         }

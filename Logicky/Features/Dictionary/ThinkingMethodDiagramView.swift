@@ -16,8 +16,12 @@ struct ThinkingMethodDiagramView: View {
             case "causality":         CausalityDiagram()
             case "critical":          CriticalDiagram()
             case "pyramid_principle": PyramidDiagram()
+            case "pyramid":           PyramidPrincipleDiagram()
+            case "so_what":           SoWhatDiagram()
             case "4p":                FourPDiagram()
             case "matrix":            MatrixDiagram()
+            case "profit_tree":       ProfitTreeDiagram()
+            case "sanity_check":      SanityCheckDiagram()
             default:                  EmptyView()
             }
         }
@@ -532,5 +536,227 @@ private struct MatrixDiagram: View {
         .frame(maxWidth: .infinity)
         .background(bold ? Color.tiffany : (muted ? Color.appBg : Color.tiffany.opacity(0.08)))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+// MARK: - ピラミッド原則（単元版）
+
+private struct PyramidPrincipleDiagram: View {
+    var body: some View {
+        VStack(spacing: 6) {
+            // 頂点: 結論
+            pyramidTier(texts: ["結論"], style: .top)
+            Image(systemName: "arrow.down").font(.caption2).foregroundStyle(Color.appGray)
+            // 中段: 理由
+            pyramidTier(texts: ["理由 A", "理由 B"], style: .mid)
+            Image(systemName: "arrow.down").font(.caption2).foregroundStyle(Color.appGray)
+            // 下段: 根拠
+            pyramidTier(texts: ["根拠1", "根拠2", "根拠3"], style: .base)
+            Text("上から「結論 → 理由 → 根拠」の順")
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+                .padding(.top, 4)
+        }
+    }
+
+    private enum TierStyle { case top, mid, base }
+
+    private func pyramidTier(texts: [String], style: TierStyle) -> some View {
+        HStack(spacing: 4) {
+            ForEach(texts, id: \.self) { text in
+                Text(text)
+                    .font(.system(size: style == .top ? 12 : 10, weight: style == .top ? .bold : .regular))
+                    .foregroundStyle(style == .top ? .white : (style == .mid ? Color.tiffany : Color.appSub))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, style == .top ? 8 : 6)
+                    .background(
+                        style == .top ? Color.tiffany :
+                        style == .mid ? Color.tiffany.opacity(0.12) :
+                        Color.appBg
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 6)
+                            .stroke(style == .base ? Color.cardBorder : Color.clear, lineWidth: 1)
+                    )
+            }
+        }
+    }
+}
+
+// MARK: - So What?
+
+private struct SoWhatDiagram: View {
+    var body: some View {
+        HStack(spacing: 10) {
+            // 左: 事実ボックス
+            VStack(spacing: 5) {
+                factBox("満足度 高い")
+                factBox("リピート率 高い")
+                factBox("クリック率 高い")
+            }
+            .frame(maxWidth: .infinity)
+
+            // 中央: 矢印
+            VStack(spacing: 4) {
+                Image(systemName: "arrow.right.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.tiffany)
+                Text("So\nWhat?")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.tiffany)
+                    .multilineTextAlignment(.center)
+            }
+
+            // 右: 示唆
+            Text("施策は\n有効。\n継続すべき")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .padding(10)
+                .frame(maxWidth: .infinity)
+                .background(Color.tiffany)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+    }
+
+    private func factBox(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 9))
+            .foregroundStyle(Color.appText)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 5)
+            .frame(maxWidth: .infinity)
+            .background(Color.appBg)
+            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Color.cardBorder, lineWidth: 1))
+    }
+}
+
+// MARK: - 利益ツリー
+
+private struct ProfitTreeDiagram: View {
+    var body: some View {
+        HStack(alignment: .center, spacing: 0) {
+            // 根: 利益
+            rootNode("利益")
+            branchSection
+            // 中段
+            VStack(spacing: 6) {
+                midGroup(root: "売上", leaves: ["客数", "客単価"])
+                midGroup(root: "コスト", leaves: ["固定費", "変動費"])
+            }
+        }
+    }
+
+    private func rootNode(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 12, weight: .bold))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 8)
+            .background(Color.tiffany)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+
+    private var branchSection: some View {
+        VStack(spacing: 0) {
+            Rectangle().fill(Color.cardBorder).frame(width: 1, height: 24)
+            Rectangle().fill(Color.cardBorder).frame(width: 20, height: 1)
+            Rectangle().fill(Color.cardBorder).frame(width: 1, height: 24)
+        }
+        .frame(width: 20)
+    }
+
+    private func midGroup(root: String, leaves: [String]) -> some View {
+        HStack(spacing: 0) {
+            Text(root)
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(Color.tiffany)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 5)
+                .background(Color.tiffany.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 6))
+
+            // Connector lines
+            Rectangle().fill(Color.cardBorder).frame(width: 14, height: 1)
+
+            VStack(spacing: 4) {
+                ForEach(leaves, id: \.self) { leaf in
+                    Text(leaf)
+                        .font(.system(size: 9))
+                        .foregroundStyle(Color.appSub)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 4)
+                        .background(Color.appBg)
+                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                        .overlay(RoundedRectangle(cornerRadius: 5).stroke(Color.cardBorder, lineWidth: 1))
+                }
+            }
+        }
+    }
+}
+
+// MARK: - サニティチェック
+
+private struct SanityCheckDiagram: View {
+    var body: some View {
+        VStack(spacing: 10) {
+            // 推定値（警告色）
+            VStack(spacing: 3) {
+                Text("推定値")
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(Color.appGray)
+                Text("市場規模 100兆円")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundStyle(Color.appText)
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.appGray.opacity(0.5), lineWidth: 1.5))
+
+            HStack(spacing: 6) {
+                Image(systemName: "arrow.down")
+                    .font(.caption)
+                    .foregroundStyle(Color.appGray)
+                Text("比べてみると…")
+                    .font(.system(size: 9))
+                    .foregroundStyle(Color.appSub)
+            }
+
+            // 比較対象
+            HStack(spacing: 8) {
+                compareBox(label: "日本 GDP", value: "約550兆円")
+                compareBox(label: "トヨタ売上", value: "約45兆円")
+            }
+
+            // 結論
+            Text("明らかに過大 → 仮定を見直す")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Color.tiffany)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .frame(maxWidth: .infinity)
+                .background(Color.tiffany.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+    }
+
+    private func compareBox(label: String, value: String) -> some View {
+        VStack(spacing: 3) {
+            Text(label)
+                .font(.system(size: 9))
+                .foregroundStyle(Color.appSub)
+            Text(value)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(Color.appText)
+        }
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity)
+        .background(Color.appBg)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.cardBorder, lineWidth: 1))
     }
 }

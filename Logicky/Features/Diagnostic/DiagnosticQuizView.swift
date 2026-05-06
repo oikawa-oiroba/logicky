@@ -2,6 +2,12 @@ import SwiftUI
 
 struct DiagnosticQuizView: View {
     @ObservedObject var vm: DiagnosticViewModel
+    @State private var showHint = false
+
+    private func hintMethod(for question: Question) -> ThinkingMethod? {
+        guard let unitId = question.unit else { return nil }
+        return ThinkingMethodService.shared.all.first { $0.unitId == unitId }
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -14,6 +20,13 @@ struct DiagnosticQuizView: View {
         }
         .background(Color.appBg)
         .navigationBarHidden(true)
+        .sheet(isPresented: $showHint) {
+            if let q = vm.currentQuestion, let method = hintMethod(for: q) {
+                HintSheetView(method: method)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+            }
+        }
     }
 
     // MARK: - Progress Header
@@ -61,6 +74,24 @@ struct DiagnosticQuizView: View {
                     .foregroundStyle(Color.appText)
                     .lineSpacing(5)
                     .fixedSize(horizontal: false, vertical: true)
+                if hintMethod(for: q) != nil {
+                    Button {
+                        showHint = true
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: "lightbulb.fill")
+                                .font(.caption)
+                            Text("ヒント：この考え方とは？")
+                                .font(.caption.weight(.semibold))
+                        }
+                        .foregroundStyle(Color.tiffany)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(Color.tiffany.opacity(0.08))
+                        .clipShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding(18)
             .frame(maxWidth: .infinity, alignment: .leading)

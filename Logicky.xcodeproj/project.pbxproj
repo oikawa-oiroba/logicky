@@ -46,6 +46,7 @@
 		NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */; };
 		LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = LSREF00000000000000000001 /* LaunchScreen.storyboard */; };
 		NBLD000000000000000000017 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000017 /* Color+App.swift */; };
+		NBLD000000000000000000018 /* DiagnosticHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +86,7 @@
 		NFIL000000000000000000012 /* DiagnosticStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticStartView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000013 /* DiagnosticQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticQuizView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000014 /* DiagnosticResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResultView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000017 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 				NFIL000000000000000000012 /* DiagnosticStartView.swift */,
 				NFIL000000000000000000013 /* DiagnosticQuizView.swift */,
 				NFIL000000000000000000014 /* DiagnosticResultView.swift */,
+				NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */,
 			);
 			path = Diagnostic;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				NBLD000000000000000000012 /* DiagnosticStartView.swift in Sources */,
 				NBLD000000000000000000013 /* DiagnosticQuizView.swift in Sources */,
 				NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */,
+				NBLD000000000000000000018 /* DiagnosticHistoryDetailView.swift in Sources */,
 				NBLD000000000000000000015 /* ResultReviewView.swift in Sources */,
 				NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */,
 				NBLD000000000000000000017 /* Color+App.swift in Sources */,

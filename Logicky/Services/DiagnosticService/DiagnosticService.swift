@@ -6,17 +6,29 @@ final class DiagnosticService {
 
     private let storageKey = "logicky_diagnostic_results_v1"
 
-    // MARK: - Question Selection (15 questions: 1 per unit across all 5×3 units)
+    // MARK: - Question Selection (10 questions: L1×3〜4, L2×3〜4, L3×2〜3, randomized)
 
     func selectQuestions() -> [Question] {
-        let allUnits = [
-            "mece", "deduction", "fact_opinion", "pyramid", "so_what",
-            "logic_tree", "3c", "5w2h", "4p", "matrix",
-            "fermi", "causality", "critical", "profit_tree", "sanity_check"
-        ]
-        return allUnits.compactMap { unitId in
-            QuestionService.shared.trainingQuestions(for: unitId).first
+        let l1Units = ["mece", "deduction", "fact_opinion", "pyramid", "so_what"]
+        let l2Units = ["logic_tree", "3c", "5w2h", "4p", "matrix"]
+        let l3Units = ["fermi", "causality", "critical", "profit_tree", "sanity_check"]
+
+        func pickRandom(_ unitIds: [String], count: Int) -> [Question] {
+            let shuffled = unitIds.shuffled()
+            var picked: [Question] = []
+            for unitId in shuffled {
+                guard picked.count < count else { break }
+                let qs = QuestionService.shared.trainingQuestions(for: unitId).shuffled()
+                if let q = qs.first { picked.append(q) }
+            }
+            return picked
         }
+
+        let l1 = pickRandom(l1Units, count: 4)
+        let l2 = pickRandom(l2Units, count: 3)
+        let l3 = pickRandom(l3Units, count: 3)
+
+        return (l1 + l2 + l3).shuffled()
     }
 
     // MARK: - Scoring

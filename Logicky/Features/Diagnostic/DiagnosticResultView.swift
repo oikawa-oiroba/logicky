@@ -280,7 +280,7 @@ struct DiagnosticResultView: View {
 
 // MARK: - Share Card View
 
-private struct ShareCardView: View {
+struct ShareCardView: View {
     let score: Int
     let rank: String
     let rankDesc: String

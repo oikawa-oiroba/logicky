@@ -31,57 +31,79 @@ struct HomeView: View {
 
     private var diagnosticBanner: some View {
         let latest = DiagnosticService.shared.latestResult
-        return Button {
-            showDiagnostic = true
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "target")
-                    .font(.system(size: 22))
-                    .foregroundStyle(Color.tiffany)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("ロジッキー診断")
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(Color.appText)
-                    if let result = latest {
-                        HStack(spacing: 6) {
-                            Text("前回 \(result.totalScore)点")
-                                .font(.caption.weight(.semibold))
-                                .foregroundStyle(Color.tiffany)
-                            Text("·")
-                                .foregroundStyle(Color.appGray)
-                            Text(formattedDate(result.date))
+        return VStack(spacing: 0) {
+            Button {
+                showDiagnostic = true
+            } label: {
+                HStack(spacing: 14) {
+                    Image(systemName: "target")
+                        .font(.system(size: 22))
+                        .foregroundStyle(Color.tiffany)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("ロジッキー診断")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(Color.appText)
+                        if let result = latest {
+                            HStack(spacing: 6) {
+                                Text("前回 \(result.totalScore)点")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(Color.tiffany)
+                                Text("·")
+                                    .foregroundStyle(Color.appGray)
+                                Text(formattedDate(result.date))
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appSub)
+                            }
+                        } else {
+                            Text("まだ診断を受けていません")
                                 .font(.caption)
                                 .foregroundStyle(Color.appSub)
                         }
-                    } else {
-                        Text("まだ診断を受けていません")
-                            .font(.caption)
-                            .foregroundStyle(Color.appSub)
                     }
+                    Spacer()
+                    Image(systemName: "arrow.clockwise")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(Color.tiffany)
+                    Text("再診断")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Color.tiffany)
                 }
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(Color.appGray)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 14)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
-            .background(Color.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.cardBorder, lineWidth: 1)
-            )
-            .overlay(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 2)
-                    .fill(Color.tiffany)
-                    .frame(width: 3)
-                    .padding(.vertical, 8)
-                    .offset(x: 0)
+            .buttonStyle(.plain)
+
+            if let result = latest {
+                Divider().padding(.horizontal, 16)
+                Button {
+                    navigationPath.append(AppRoute.diagnosticDetail(result: result))
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "clock.arrow.circlepath")
+                            .font(.caption)
+                        Text("前回結果を見る（\(result.totalScore)点）")
+                            .font(.caption.weight(.semibold))
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 9, weight: .bold))
+                    }
+                    .foregroundStyle(Color.tiffany)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                }
+                .buttonStyle(.plain)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
-        .buttonStyle(.plain)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+        .overlay(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 2)
+                .fill(Color.tiffany)
+                .frame(width: 3)
+                .padding(.vertical, 8)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private func formattedDate(_ date: Date) -> String {

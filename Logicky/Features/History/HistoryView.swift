@@ -68,7 +68,12 @@ struct HistoryView: View {
                             scoreChartCard
                         }
                         ForEach(Array(diagnosticResults.enumerated()), id: \.element.id) { index, result in
-                            DiagnosticResultRow(result: result, prevResult: diagnosticResults.indices.contains(index + 1) ? diagnosticResults[index + 1] : nil)
+                            Button {
+                                navigationPath.append(AppRoute.diagnosticDetail(result: result))
+                            } label: {
+                                DiagnosticResultRow(result: result, prevResult: diagnosticResults.indices.contains(index + 1) ? diagnosticResults[index + 1] : nil)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(16)
