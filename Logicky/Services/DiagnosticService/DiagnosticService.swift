@@ -6,51 +6,45 @@ final class DiagnosticService {
 
     private let storageKey = "logicky_diagnostic_results_v1"
 
-    // MARK: - Question Selection (10 questions: basic×3, L1×3, L2×2, L3×2, randomized)
+    // organizeScore units
+    private let organizeUnits = ["grouping", "comparison", "abstraction", "whole_part", "sequencing"]
+    // reasonScore units
+    private let reasonUnits   = ["syllogism", "induction", "why_deep", "hypothesis", "analogy"]
+    // judgeScore units
+    private let judgeUnits    = ["fact_opinion", "pyramid", "so_what", "5w2h"]
+
+    // MARK: - Question Selection (1 per each of 14 basic units)
 
     func selectQuestions() -> [Question] {
-        let basicUnits = ["grouping", "why_deep", "syllogism", "induction", "analogy",
-                          "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
-                          "fact_opinion", "pyramid", "so_what", "5w2h"]
-        let l1Units = ["mece", "logic_tree", "matrix"]
-        let l2Units = ["3c", "4p", "profit_tree"]
-        let l3Units = ["fermi", "causation", "critical", "sanity_check"]
-
-        func pickRandom(_ unitIds: [String], count: Int) -> [Question] {
-            let shuffled = unitIds.shuffled()
-            var picked: [Question] = []
-            for unitId in shuffled {
-                guard picked.count < count else { break }
-                let qs = QuestionService.shared.trainingQuestions(for: unitId).shuffled()
-                if let q = qs.first { picked.append(q) }
-            }
-            return picked
-        }
-
-        let basic = pickRandom(basicUnits, count: 3)
-        let l1 = pickRandom(l1Units, count: 3)
-        let l2 = pickRandom(l2Units, count: 2)
-        let l3 = pickRandom(l3Units, count: 2)
-
-        return (basic + l1 + l2 + l3).shuffled()
+        let basicUnitIds = ["grouping", "why_deep", "syllogism", "induction", "analogy",
+                            "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
+                            "fact_opinion", "pyramid", "so_what", "5w2h"]
+        return basicUnitIds.compactMap { unitId in
+            QuestionService.shared.trainingQuestions(for: unitId).shuffled().first
+        }.shuffled()
     }
 
     // MARK: - Scoring
 
     func buildResult(questions: [Question], answers: [String?]) -> DiagnosticResult {
-        var l1Correct = 0, l1Total = 0
-        var l2Correct = 0, l2Total = 0
-        var l3Correct = 0, l3Total = 0
+        var organizeCorrect = 0, organizeTotal = 0
+        var reasonCorrect = 0,   reasonTotal = 0
+        var judgeCorrect = 0,    judgeTotal = 0
         var totalCorrect = 0
+        var unitResults: [String: Bool] = [:]
 
         for (q, answer) in zip(questions, answers) {
             let isCorrect = answer != nil && answer == q.correctChoiceId
             if isCorrect { totalCorrect += 1 }
-            switch q.level {
-            case 1: l1Total += 1; if isCorrect { l1Correct += 1 }
-            case 2: l2Total += 1; if isCorrect { l2Correct += 1 }
-            case 3: l3Total += 1; if isCorrect { l3Correct += 1 }
-            default: break
+            if let uid = q.unit {
+                unitResults[uid] = isCorrect
+                if organizeUnits.contains(uid) {
+                    organizeTotal += 1; if isCorrect { organizeCorrect += 1 }
+                } else if reasonUnits.contains(uid) {
+                    reasonTotal += 1; if isCorrect { reasonCorrect += 1 }
+                } else if judgeUnits.contains(uid) {
+                    judgeTotal += 1; if isCorrect { judgeCorrect += 1 }
+                }
             }
         }
 
@@ -60,9 +54,10 @@ final class DiagnosticService {
             id: UUID(),
             date: Date(),
             totalScore: questions.isEmpty ? 0 : totalCorrect * 100 / questions.count,
-            organizeScore: pct(l1Correct, l1Total),
-            reasonScore: pct(l2Correct, l2Total),
-            judgeScore: pct(l3Correct, l3Total),
+            organizeScore: pct(organizeCorrect, organizeTotal),
+            reasonScore:   pct(reasonCorrect, reasonTotal),
+            judgeScore:    pct(judgeCorrect, judgeTotal),
+            unitResults:   unitResults,
             profile: DiagnosticProfile()
         )
     }

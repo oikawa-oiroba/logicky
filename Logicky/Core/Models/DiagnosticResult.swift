@@ -9,6 +9,7 @@ struct DiagnosticResult: Identifiable, Codable, Hashable {
     let organizeScore: Int  // Level1 整理力
     let reasonScore: Int    // Level2 推論力
     let judgeScore: Int     // Level3 判断力
+    var unitResults: [String: Bool]?
     var profile: DiagnosticProfile
 }
 

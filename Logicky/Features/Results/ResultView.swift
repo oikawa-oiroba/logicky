@@ -28,6 +28,11 @@ struct ResultView: View {
         .background(Color.appBg)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .sheet(item: $viewModel.newlyAcquiredBadge) { unit in
+            BadgeAcquisitionSheet(unit: unit) {
+                viewModel.newlyAcquiredBadge = nil
+            }
+        }
     }
 
     // MARK: - Title
@@ -443,6 +448,55 @@ private struct RubricRow: View {
                 .foregroundStyle(Color.appSub)
                 .lineSpacing(3)
         }
+    }
+}
+
+// MARK: - Badge Acquisition Sheet
+
+struct BadgeAcquisitionSheet: View {
+    let unit: UnitModel
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Spacer()
+            ZStack {
+                Circle()
+                    .fill(Color.tiffany.opacity(0.12))
+                    .frame(width: 120, height: 120)
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 54))
+                    .foregroundStyle(Color.tiffany)
+            }
+            VStack(spacing: 8) {
+                Text("スキル習得！")
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.appText)
+                Text("\(unit.displayName)")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Color.tiffany)
+                Text("正答率80%以上を達成しました")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
+                    .padding(.top, 4)
+            }
+            .multilineTextAlignment(.center)
+            Button {
+                onDismiss()
+            } label: {
+                Text("続ける")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.tiffany)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .padding(.horizontal, 32)
+            Spacer()
+        }
+        .background(Color.appBg)
+        .presentationDetents([.medium])
     }
 }
 

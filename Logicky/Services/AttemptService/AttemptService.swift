@@ -37,6 +37,17 @@ final class AttemptService: ObservableObject {
         return Set(allResults.filter { !$0.isSkipped && mcIds.contains($0.questionId) }.map { $0.questionId })
     }
 
+    func mcCorrectRate(for unitId: String, mcIds: Set<String>) -> Double? {
+        let allResults = attempts(for: unitId)
+            .sorted { $0.date < $1.date }
+            .flatMap { $0.questionResults }
+            .filter { !$0.isSkipped && mcIds.contains($0.questionId) && $0.isCorrect != nil }
+        let recent = Array(allResults.suffix(10))
+        guard !recent.isEmpty else { return nil }
+        let correct = recent.filter { $0.isCorrect == true }.count
+        return Double(correct) / Double(recent.count)
+    }
+
     var totalAnsweredCount: Int {
         attempts.reduce(0) { $0 + $1.questionResults.filter { !$0.isSkipped }.count }
     }

@@ -121,6 +121,40 @@ final class HomeViewModel: ObservableObject {
         return Double(completed) / Double(total)
     }
 
+    // MARK: - Skill Status
+
+    struct UnitSkillInfo: Identifiable {
+        let unit: UnitModel
+        let badge: SkillBadge?
+        var id: String { unit.id }
+        var correctRate: Double { badge?.correctRate ?? 0 }
+    }
+
+    func basicUnitSkillInfos() -> [UnitSkillInfo] {
+        UnitModel.basic.map { UnitSkillInfo(unit: $0, badge: SkillBadgeService.shared.badge(for: $0)) }
+    }
+
+    func topStrengthSkills() -> [UnitSkillInfo] {
+        Array(basicUnitSkillInfos()
+            .filter { $0.badge != nil }
+            .sorted { $0.correctRate > $1.correctRate }
+            .prefix(3))
+    }
+
+    func weakSkills() -> [UnitSkillInfo] {
+        Array(basicUnitSkillInfos()
+            .filter { info in
+                guard let badge = info.badge else { return false }
+                return badge.level == .learning
+            }
+            .sorted { $0.correctRate < $1.correctRate }
+            .prefix(3))
+    }
+
+    func untriedSkills() -> [UnitSkillInfo] {
+        basicUnitSkillInfos().filter { $0.badge == nil }
+    }
+
     // MARK: - Legacy aliases
 
     func answeredCount(for unit: UnitModel) -> Int { mcAnsweredCount(for: unit) }

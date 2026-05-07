@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct DiagnosticStartView: View {
+    var onStartTraining: ((String) -> Void)? = nil
     @StateObject private var vm = DiagnosticViewModel()
     @Environment(\.dismiss) private var dismiss
 
@@ -9,7 +10,7 @@ struct DiagnosticStartView: View {
             switch vm.phase {
             case .start:  startContent
             case .quiz:   DiagnosticQuizView(vm: vm)
-            case .result: DiagnosticResultView(vm: vm, onClose: { dismiss() })
+            case .result: DiagnosticResultView(vm: vm, onClose: { dismiss() }, onStartTraining: onStartTraining)
             }
         }
         .animation(.easeInOut(duration: 0.25), value: vm.phase)
@@ -35,14 +36,14 @@ struct DiagnosticStartView: View {
                 .frame(maxWidth: .infinity)
 
                 infoCard(icon: "list.bullet.clipboard",
-                         title: "10問の選択問題",
-                         body: "Level 1〜3 からバランスよく出題")
+                         title: "14問の選択問題",
+                         body: "基礎14単元からそれぞれ1問出題・約7分")
                 infoCard(icon: "chart.bar.fill",
                          title: "3軸で診断",
                          body: "整理力・推論力・判断力を数値化")
                 infoCard(icon: "star.fill",
-                         title: "ランク判定",
-                         body: "S〜D の 6 段階でスコアを評価")
+                         title: "得意・苦手を可視化",
+                         body: "単元ごとの正誤から強み・弱みを表示")
 
                 if let prev = DiagnosticService.shared.latestResult {
                     previousResultCard(prev)

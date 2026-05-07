@@ -13,6 +13,7 @@ final class QuizViewModel: ObservableObject {
     @Published private(set) var quizResult: QuizResult?
     @Published private(set) var unitId: String = ""
     @Published private(set) var mode: QuizMode = .training
+    @Published var newlyAcquiredBadge: UnitModel? = nil
 
     // MARK: - Computed
 
@@ -81,6 +82,7 @@ final class QuizViewModel: ObservableObject {
         quizResult = nil
         unitId = ""
         mode = .training
+        newlyAcquiredBadge = nil
     }
 
     // MARK: - Answer Input
@@ -156,6 +158,14 @@ final class QuizViewModel: ObservableObject {
             totalScore: result.totalScore
         )
         AttemptService.shared.save(attempt)
+
+        if mode == .training {
+            let mcIds = Set(questions.map { $0.id })
+            if let rate = AttemptService.shared.mcCorrectRate(for: unitId, mcIds: mcIds),
+               SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: rate) {
+                newlyAcquiredBadge = UnitModel.all.first { $0.id == unitId }
+            }
+        }
 
         isCompleted = true
     }

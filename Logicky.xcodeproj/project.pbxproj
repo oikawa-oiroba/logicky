@@ -55,6 +55,8 @@
 		NBLD000000000000000000024 /* cognitive_biases.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000024 /* cognitive_biases.json */; };
 		NBLD000000000000000000025 /* CognitiveBiasDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000025 /* CognitiveBiasDiagramView.swift */; };
 		NBLD000000000000000000026 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000026 /* ConfettiView.swift */; };
+		NBLD000000000000000000027 /* SkillBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000027 /* SkillBadge.swift */; };
+		NBLD000000000000000000028 /* SkillBadgeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000028 /* SkillBadgeService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +108,8 @@
 		NFIL000000000000000000024 /* cognitive_biases.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = cognitive_biases.json; sourceTree = "<group>"; };
 		NFIL000000000000000000025 /* CognitiveBiasDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasDiagramView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000026 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000027 /* SkillBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillBadge.swift; sourceTree = "<group>"; };
+		NFIL000000000000000000028 /* SkillBadgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillBadgeService.swift; sourceTree = "<group>"; };
 		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +164,7 @@
 				NGRP000000000000000000002 /* ThinkingMethodService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
 				NGRP000000000000000000006 /* CognitiveBiasService */,
+				NGRP000000000000000000007 /* SkillBadgeService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -201,6 +206,7 @@
 				NFIL000000000000000000004 /* ThinkingMethod.swift */,
 				NFIL000000000000000000009 /* DiagnosticResult.swift */,
 				NFIL000000000000000000020 /* CognitiveBias.swift */,
+				NFIL000000000000000000027 /* SkillBadge.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -305,6 +311,14 @@
 				NFIL000000000000000000021 /* CognitiveBiasService.swift */,
 			);
 			path = CognitiveBiasService;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000007 /* SkillBadgeService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000028 /* SkillBadgeService.swift */,
+			);
+			path = SkillBadgeService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000002 /* ThinkingMethodService */ = {
@@ -475,6 +489,8 @@
 				NBLD000000000000000000023 /* CognitiveBiasDetailView.swift in Sources */,
 				NBLD000000000000000000025 /* CognitiveBiasDiagramView.swift in Sources */,
 				NBLD000000000000000000026 /* ConfettiView.swift in Sources */,
+				NBLD000000000000000000027 /* SkillBadge.swift in Sources */,
+				NBLD000000000000000000028 /* SkillBadgeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

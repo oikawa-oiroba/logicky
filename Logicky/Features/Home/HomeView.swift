@@ -5,12 +5,14 @@ struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
 
     @State private var showDiagnostic = false
+    @State private var skillTab: Int = 0
 
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 logoHeader
                 statusBar
+                skillStatusSection
                 diagnosticBanner
                 todayCard
                 quickActionsSection
@@ -23,7 +25,138 @@ struct HomeView: View {
         .background(Color.appBg)
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDiagnostic) {
-            DiagnosticStartView()
+            DiagnosticStartView { unitId in
+                navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+            }
+        }
+    }
+
+    // MARK: - Skill Status Section
+
+    private var skillStatusSection: some View {
+        let strengths = viewModel.topStrengthSkills()
+        let weak = viewModel.weakSkills()
+        let untried = viewModel.untriedSkills()
+        let hasAnyAttempt = !strengths.isEmpty || !weak.isEmpty
+
+        if !hasAnyAttempt {
+            return AnyView(
+                Button {
+                    showDiagnostic = true
+                } label: {
+                    HStack(spacing: 14) {
+                        Image(systemName: "wand.and.stars")
+                            .font(.system(size: 24))
+                            .foregroundStyle(Color.tiffany)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("まずは診断を受けよう")
+                                .font(.subheadline.weight(.bold))
+                                .foregroundStyle(Color.appText)
+                            Text("得意・苦手スキルを発見できます")
+                                .font(.caption)
+                                .foregroundStyle(Color.appSub)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(Color.tiffany)
+                    }
+                    .padding(16)
+                    .background(Color.tiffany.opacity(0.06))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.tiffany.opacity(0.2), lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+            )
+        }
+
+        return AnyView(
+            VStack(alignment: .leading, spacing: 12) {
+                Text("スキル状況")
+                    .font(.headline)
+                    .foregroundStyle(Color.appText)
+
+                Picker("タブ", selection: $skillTab) {
+                    Text("得意（\(strengths.count)）").tag(0)
+                    Text("苦手（\(weak.count)）").tag(1)
+                    Text("未習得（\(untried.count)）").tag(2)
+                }
+                .pickerStyle(.segmented)
+
+                if skillTab == 0 {
+                    skillList(strengths, emptyMessage: "まだ得意スキルはありません", showRate: true)
+                } else if skillTab == 1 {
+                    skillList(weak, emptyMessage: "苦手スキルはありません！", showRate: true)
+                } else {
+                    skillList(untried, emptyMessage: "全単元に挑戦済みです！", showRate: false)
+                }
+            }
+            .padding(16)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+        )
+    }
+
+    private func skillList(_ infos: [HomeViewModel.UnitSkillInfo], emptyMessage: String, showRate: Bool) -> some View {
+        Group {
+            if infos.isEmpty {
+                Text(emptyMessage)
+                    .font(.caption)
+                    .foregroundStyle(Color.appSub)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 12)
+            } else {
+                VStack(spacing: 6) {
+                    ForEach(infos) { info in
+                        Button {
+                            navigationPath.append(AppRoute.quiz(unitId: info.unit.id, mode: .training))
+                        } label: {
+                            HStack(spacing: 10) {
+                                Image(systemName: badgeIcon(for: info.badge?.level))
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(badgeColor(for: info.badge?.level))
+                                    .frame(width: 20)
+                                Text(info.unit.displayName)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.appText)
+                                Spacer()
+                                if showRate, let badge = info.badge {
+                                    Text("\(Int(badge.correctRate * 100))%")
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(badgeColor(for: badge.level))
+                                }
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 10, weight: .bold))
+                                    .foregroundStyle(Color.appGray)
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 10)
+                            .background(Color.appBg)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+        }
+    }
+
+    private func badgeIcon(for level: BadgeLevel?) -> String {
+        switch level {
+        case .master:   return "star.fill"
+        case .acquired: return "checkmark.seal.fill"
+        case .learning: return "circle.dotted"
+        case nil:       return "circle"
+        }
+    }
+
+    private func badgeColor(for level: BadgeLevel?) -> Color {
+        switch level {
+        case .master:   return Color(red: 0.83, green: 0.69, blue: 0.22)
+        case .acquired: return Color.tiffany
+        case .learning: return Color.appSub
+        case nil:       return Color.appGray
         }
     }
 

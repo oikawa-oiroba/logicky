@@ -3,6 +3,7 @@ import SwiftUI
 struct DiagnosticResultView: View {
     @ObservedObject var vm: DiagnosticViewModel
     let onClose: () -> Void
+    var onStartTraining: ((String) -> Void)? = nil
 
     @State private var showProfileInput = false
     @State private var showShareSheet = false
@@ -17,6 +18,11 @@ struct DiagnosticResultView: View {
                     deltaLabel(delta: delta)
                 }
                 axisSection
+                if let unitResults = vm.result?.unitResults, !unitResults.isEmpty {
+                    unitScoreMapSection(unitResults)
+                    strengthSection(unitResults)
+                    weakSection(unitResults)
+                }
                 profileSection
                 actionButtons
             }
@@ -146,6 +152,146 @@ struct DiagnosticResultView: View {
             }
             .frame(height: 10)
         }
+    }
+
+    // MARK: - Unit Score Map
+
+    private func unitScoreMapSection(_ unitResults: [String: Bool]) -> some View {
+        let ordered = ["grouping", "why_deep", "syllogism", "induction", "analogy",
+                       "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
+                       "fact_opinion", "pyramid", "so_what", "5w2h"]
+        let columns = [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
+
+        return VStack(alignment: .leading, spacing: 12) {
+            Text("単元別スコア")
+                .font(.headline)
+                .foregroundStyle(Color.appText)
+            LazyVGrid(columns: columns, spacing: 8) {
+                ForEach(ordered, id: \.self) { unitId in
+                    if let isCorrect = unitResults[unitId],
+                       let unit = UnitModel.basic.first(where: { $0.id == unitId }) {
+                        unitScoreCell(unit: unit, isCorrect: isCorrect)
+                    }
+                }
+            }
+        }
+        .padding(16)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+    }
+
+    private func unitScoreCell(unit: UnitModel, isCorrect: Bool) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                .font(.system(size: 14))
+                .foregroundStyle(isCorrect ? Color.tiffany : Color.appGray)
+            Text(unit.displayName)
+                .font(.caption)
+                .foregroundStyle(Color.appText)
+                .lineLimit(1)
+            Spacer()
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(isCorrect ? Color.tiffany.opacity(0.06) : Color.appBg)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(RoundedRectangle(cornerRadius: 8).stroke(
+            isCorrect ? Color.tiffany.opacity(0.2) : Color.cardBorder, lineWidth: 1))
+    }
+
+    // MARK: - Strength Section
+
+    private func strengthSection(_ unitResults: [String: Bool]) -> some View {
+        let topUnits = unitResults.filter { $0.value }
+            .compactMap { pair in UnitModel.basic.first(where: { $0.id == pair.key }) }
+            .prefix(3)
+
+        guard !topUnits.isEmpty else { return AnyView(EmptyView()) }
+
+        return AnyView(
+            VStack(alignment: .leading, spacing: 12) {
+                Label("あなたの得意スキル", systemImage: "star.fill")
+                    .font(.headline)
+                    .foregroundStyle(Color.appText)
+                HStack(spacing: 8) {
+                    ForEach(topUnits, id: \.id) { unit in
+                        VStack(spacing: 4) {
+                            Image(systemName: "checkmark.seal.fill")
+                                .font(.system(size: 22))
+                                .foregroundStyle(Color.tiffany)
+                            Text(unit.displayName)
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(Color.appText)
+                                .multilineTextAlignment(.center)
+                                .lineLimit(2)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color.tiffany.opacity(0.08))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.tiffany.opacity(0.25), lineWidth: 1))
+                    }
+                }
+            }
+            .padding(16)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+        )
+    }
+
+    // MARK: - Weak Skills Section
+
+    private func weakSection(_ unitResults: [String: Bool]) -> some View {
+        let weakUnits = unitResults
+            .filter { !$0.value }
+            .compactMap { pair in UnitModel.basic.first(where: { $0.id == pair.key }) }
+            .prefix(3)
+
+        guard !weakUnits.isEmpty else { return AnyView(EmptyView()) }
+
+        return AnyView(
+            VStack(alignment: .leading, spacing: 12) {
+                Label("苦手スキル — 克服しよう", systemImage: "bolt.fill")
+                    .font(.headline)
+                    .foregroundStyle(Color.appText)
+                VStack(spacing: 8) {
+                    ForEach(weakUnits, id: \.id) { unit in
+                        Button {
+                            onClose()
+                            onStartTraining?(unit.id)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.system(size: 16))
+                                    .foregroundStyle(Color.appGray)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(unit.displayName)
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(Color.appText)
+                                    Text("今すぐトレーニング")
+                                        .font(.caption)
+                                        .foregroundStyle(Color.tiffany)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.appGray)
+                            }
+                            .padding(12)
+                            .background(Color.appBg)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            .padding(16)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+        )
     }
 
     // MARK: - Profile Section
