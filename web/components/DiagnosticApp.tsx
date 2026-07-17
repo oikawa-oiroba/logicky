@@ -2,6 +2,22 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import questionsRaw from "../data/questions.json";
+import {
+  BrainIcon,
+  ClockIcon,
+  ChartIcon,
+  TrendingUpIcon,
+  SmartphoneIcon,
+  AwardIcon,
+  TargetIcon,
+  CheckIcon,
+  XMarkIcon,
+  CopyIcon,
+  XBrandIcon,
+  FacebookIcon,
+  SlackIcon,
+  DiscordIcon,
+} from "./icons";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -95,6 +111,8 @@ const STORAGE_KEY = "logicky_web_diagnostic_last";
 // TODO: App Store公開後に実際のApp IDへ差し替える
 const APP_STORE_URL = "https://apps.apple.com/jp/app/logicky/id0000000000";
 
+const SITE_URL = "https://logicky.vercel.app";
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function pickOne<T>(arr: T[]): T {
@@ -134,6 +152,13 @@ function calcScores(unitResults: UnitResult[]) {
     reasonScore: correct(REASON_UNITS),
     judgeScore: correct(JUDGE_UNITS),
   };
+}
+
+function buildShareText(result: DiagnosticResult): string {
+  return `ロジッキー診断の結果：${result.totalScore}点（${rankLabel(result.totalScore)}ランク）
+整理力${result.organizeScore}% / 推論力${result.reasonScore}% / 判断力${result.judgeScore}%
+#ロジッキー #論理的思考力
+${SITE_URL}`;
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -200,9 +225,9 @@ function StartScreen({
   onStart: () => void;
 }) {
   const chips = [
-    { icon: "🧠", text: "14問・約5分" },
-    { icon: "📊", text: "3軸で評価" },
-    { icon: "📈", text: "スキル可視化" },
+    { icon: <ClockIcon size={15} />, text: "14問・約5分" },
+    { icon: <ChartIcon size={15} />, text: "3軸で評価" },
+    { icon: <TrendingUpIcon size={15} />, text: "スキル可視化" },
   ];
 
   return (
@@ -210,7 +235,9 @@ function StartScreen({
       <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-5 py-8">
         {/* Logo */}
         <div className="flex items-center gap-2 mb-8">
-          <span className="text-2xl">🧠</span>
+          <span className="flex items-center justify-center w-8 h-8 bg-tiffany rounded-lg text-white">
+            <BrainIcon size={20} />
+          </span>
           <span className="text-xl font-bold text-app-text">Logicky</span>
         </div>
 
@@ -232,7 +259,7 @@ function StartScreen({
               key={c.text}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-card-border text-sm text-app-sub"
             >
-              <span>{c.icon}</span>
+              <span className="text-tiffany">{c.icon}</span>
               <span>{c.text}</span>
             </div>
           ))}
@@ -385,6 +412,70 @@ function QuizScreen({
   );
 }
 
+function ShareSection({ result }: { result: DiagnosticResult }) {
+  const [copiedFor, setCopiedFor] = useState<string | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    };
+  }, []);
+
+  const text = buildShareText(result);
+
+  const copyFor = (service: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedFor(service);
+      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+      copyTimerRef.current = setTimeout(() => setCopiedFor(null), 2500);
+    });
+  };
+
+  const openX = () => {
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const openFacebook = () => {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
+  const btnClass =
+    "flex flex-col items-center gap-1.5 py-3 bg-white border border-card-border rounded-xl text-xs font-medium text-app-sub active:opacity-80 transition-opacity";
+
+  return (
+    <div className="space-y-2">
+      <h2 className="font-bold text-app-text text-sm">結果をシェア</h2>
+      <div className="grid grid-cols-4 gap-2">
+        <button onClick={openX} className={btnClass} aria-label="Xでシェア">
+          <XBrandIcon size={20} className="text-app-text" />
+          <span>X</span>
+        </button>
+        <button onClick={openFacebook} className={btnClass} aria-label="Facebookでシェア">
+          <FacebookIcon size={20} className="text-[#0866FF]" />
+          <span>Facebook</span>
+        </button>
+        <button onClick={() => copyFor("Slack")} className={btnClass} aria-label="Slack用にコピー">
+          <SlackIcon size={20} className="text-[#4A154B]" />
+          <span>Slack</span>
+        </button>
+        <button onClick={() => copyFor("Discord")} className={btnClass} aria-label="Discord用にコピー">
+          <DiscordIcon size={20} className="text-[#5865F2]" />
+          <span>Discord</span>
+        </button>
+      </div>
+      {copiedFor && (
+        <div className="flex items-center gap-1.5 justify-center text-xs text-tiffany py-1 animate-fade-up">
+          <CopyIcon size={13} />
+          <span>結果をコピーしました。{copiedFor}に貼り付けてシェアできます</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ResultScreen({
   result,
   onRetry,
@@ -421,7 +512,9 @@ function ResultScreen({
       <div className="max-w-md mx-auto px-5 py-8 space-y-6">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <span className="text-xl">🧠</span>
+          <span className="flex items-center justify-center w-7 h-7 bg-tiffany rounded-lg text-white">
+            <BrainIcon size={17} />
+          </span>
           <span className="text-base font-bold text-app-text">Logicky</span>
         </div>
 
@@ -455,7 +548,9 @@ function ResultScreen({
                     : "bg-gray-50 text-app-gray"
                 }`}
               >
-                <span>{r.correct ? "✓" : "✗"}</span>
+                <span className="shrink-0">
+                  {r.correct ? <CheckIcon size={14} /> : <XMarkIcon size={14} />}
+                </span>
                 <span className="truncate">{UNIT_DISPLAY[r.unit]}</span>
               </div>
             ))}
@@ -469,7 +564,7 @@ function ResultScreen({
             <div className="space-y-2">
               {strengths.map((r) => (
                 <div key={r.unit} className="flex items-center gap-2 text-sm text-tiffany">
-                  <span>🏅</span>
+                  <AwardIcon size={16} className="shrink-0" />
                   <span>{UNIT_DISPLAY[r.unit]}</span>
                   <span className="text-xs text-app-gray ml-auto">{UNIT_NAME[r.unit]}</span>
                 </div>
@@ -485,7 +580,7 @@ function ResultScreen({
             <div className="space-y-2">
               {weaknesses.map((r) => (
                 <div key={r.unit} className="flex items-center gap-2 text-sm text-app-sub">
-                  <span>📌</span>
+                  <TargetIcon size={16} className="shrink-0 text-tiffany" />
                   <span>{UNIT_DISPLAY[r.unit]}</span>
                   <span className="text-xs text-app-gray ml-auto">{UNIT_NAME[r.unit]}</span>
                 </div>
@@ -496,7 +591,9 @@ function ResultScreen({
 
         {/* App CTA */}
         <div className="bg-tiffany rounded-2xl p-6 text-white text-center space-y-4">
-          <div className="text-2xl">📱</div>
+          <div className="flex justify-center">
+            <SmartphoneIcon size={28} />
+          </div>
           <div>
             <h2 className="text-lg font-bold mb-1">毎日5問で論理力を鍛えよう</h2>
             <p className="text-sm opacity-90">
@@ -516,19 +613,7 @@ function ResultScreen({
         </div>
 
         {/* Share */}
-        <button
-          onClick={() => {
-            const text = `ロジッキー診断の結果：${result.totalScore}点（${rank}ランク）\n整理力${result.organizeScore}% / 推論力${result.reasonScore}% / 判断力${result.judgeScore}%\n#ロジッキー #論理的思考力`;
-            if (navigator.share) {
-              navigator.share({ title: "ロジッキー診断結果", text });
-            } else {
-              navigator.clipboard.writeText(text).then(() => alert("結果をコピーしました！"));
-            }
-          }}
-          className="w-full py-3.5 bg-white border border-tiffany text-tiffany font-semibold rounded-xl text-sm"
-        >
-          結果をシェアする
-        </button>
+        <ShareSection result={result} />
 
         {/* Retry */}
         <button
