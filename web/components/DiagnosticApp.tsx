@@ -13,11 +13,15 @@ import {
   CheckIcon,
   XMarkIcon,
   CopyIcon,
+  DownloadIcon,
+  UserIcon,
   XBrandIcon,
   FacebookIcon,
+  LineIcon,
   SlackIcon,
   DiscordIcon,
 } from "./icons";
+import { rankLabel, rankDescription } from "../lib/rank";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -119,24 +123,6 @@ function pickOne<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function rankLabel(score: number): string {
-  if (score >= 90) return "S";
-  if (score >= 80) return "A";
-  if (score >= 70) return "B+";
-  if (score >= 60) return "B";
-  if (score >= 50) return "C";
-  return "D";
-}
-
-function rankDescription(score: number): string {
-  if (score >= 90) return "論理思考のエキスパート";
-  if (score >= 80) return "実践レベルの思考力";
-  if (score >= 70) return "応用力が身についている";
-  if (score >= 60) return "基礎は習得できている";
-  if (score >= 50) return "もう少しで基礎レベル";
-  return "基礎から鍛え直そう";
-}
-
 function calcScores(unitResults: UnitResult[]) {
   const correct = (units: string[]) => {
     const relevant = unitResults.filter((r) => units.includes(r.unit));
@@ -154,11 +140,27 @@ function calcScores(unitResults: UnitResult[]) {
   };
 }
 
-function buildShareText(result: DiagnosticResult): string {
-  return `ロジッキー診断の結果：${result.totalScore}点（${rankLabel(result.totalScore)}ランク）
+function buildShareQuery(result: DiagnosticResult, nickname: string): string {
+  const q = new URLSearchParams({
+    t: String(result.totalScore),
+    o: String(result.organizeScore),
+    r: String(result.reasonScore),
+    j: String(result.judgeScore),
+  });
+  if (nickname) q.set("n", nickname);
+  return q.toString();
+}
+
+function buildShareUrl(result: DiagnosticResult, nickname: string): string {
+  return `${SITE_URL}/r?${buildShareQuery(result, nickname)}`;
+}
+
+function buildShareText(result: DiagnosticResult, nickname: string): string {
+  const who = nickname ? `${nickname}さんの` : "";
+  return `${who}ロジッキー診断結果：${result.totalScore}点（${rankLabel(result.totalScore)}ランク）
 整理力${result.organizeScore}% / 推論力${result.reasonScore}% / 判断力${result.judgeScore}%
 #ロジッキー #論理的思考力
-${SITE_URL}`;
+${buildShareUrl(result, nickname)}`;
 }
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -412,9 +414,35 @@ function QuizScreen({
   );
 }
 
+const NICKNAME_KEY = "logicky_web_nickname";
+
 function ShareSection({ result }: { result: DiagnosticResult }) {
+  const [nickname, setNickname] = useState("");
+  const [previewNickname, setPreviewNickname] = useState("");
   const [copiedFor, setCopiedFor] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(NICKNAME_KEY);
+      if (saved) {
+        setNickname(saved);
+        setPreviewNickname(saved);
+      }
+    } catch {}
+  }, []);
+
+  // 入力が落ち着いてからプレビュー画像を更新（600msデバウンス）
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setPreviewNickname(nickname);
+      try {
+        localStorage.setItem(NICKNAME_KEY, nickname);
+      } catch {}
+    }, 600);
+    return () => clearTimeout(t);
+  }, [nickname]);
 
   useEffect(() => {
     return () => {
@@ -422,7 +450,10 @@ function ShareSection({ result }: { result: DiagnosticResult }) {
     };
   }, []);
 
-  const text = buildShareText(result);
+  const trimmed = previewNickname.trim().slice(0, 20);
+  const text = buildShareText(result, trimmed);
+  const shareUrl = buildShareUrl(result, trimmed);
+  const cardUrl = `/api/og?${buildShareQuery(result, trimmed)}`;
 
   const copyFor = (service: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -432,26 +463,75 @@ function ShareSection({ result }: { result: DiagnosticResult }) {
     });
   };
 
-  const openX = () => {
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  const openWindow = (url: string) =>
     window.open(url, "_blank", "noopener,noreferrer");
-  };
 
-  const openFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SITE_URL)}&quote=${encodeURIComponent(text)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+  const openX = () =>
+    openWindow(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`);
+
+  const openLine = () =>
+    openWindow(`https://line.me/R/share?text=${encodeURIComponent(text)}`);
+
+  const openFacebook = () =>
+    openWindow(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+
+  const saveImage = async () => {
+    setSaving(true);
+    try {
+      const blob = await (await fetch(cardUrl)).blob();
+      const file = new File([blob], "logicky_result.png", { type: "image/png" });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text });
+      } else {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "logicky_result.png";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+    } catch {
+    } finally {
+      setSaving(false);
+    }
   };
 
   const btnClass =
-    "flex flex-col items-center gap-1.5 py-3 bg-white border border-card-border rounded-xl text-xs font-medium text-app-sub active:opacity-80 transition-opacity";
+    "flex flex-col items-center gap-1.5 py-3 bg-white border border-card-border rounded-xl text-[11px] font-medium text-app-sub active:opacity-80 transition-opacity";
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <h2 className="font-bold text-app-text text-sm">結果をシェア</h2>
-      <div className="grid grid-cols-4 gap-2">
+
+      {/* Nickname */}
+      <div className="flex items-center gap-2 px-3.5 py-2.5 bg-white border border-card-border rounded-xl">
+        <UserIcon size={16} className="text-app-gray shrink-0" />
+        <input
+          type="text"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          maxLength={20}
+          placeholder="ニックネーム・Xの名前（任意）"
+          className="flex-1 text-sm text-app-text placeholder:text-app-gray outline-none bg-transparent"
+        />
+      </div>
+
+      {/* Card preview */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        key={cardUrl}
+        src={cardUrl}
+        alt="シェアされる結果カードのプレビュー"
+        className="w-full rounded-xl border border-card-border"
+      />
+
+      <div className="grid grid-cols-5 gap-2">
         <button onClick={openX} className={btnClass} aria-label="Xでシェア">
           <XBrandIcon size={20} className="text-app-text" />
           <span>X</span>
+        </button>
+        <button onClick={openLine} className={btnClass} aria-label="LINEでシェア">
+          <LineIcon size={20} className="text-[#06C755]" />
+          <span>LINE</span>
         </button>
         <button onClick={openFacebook} className={btnClass} aria-label="Facebookでシェア">
           <FacebookIcon size={20} className="text-[#0866FF]" />
@@ -466,10 +546,20 @@ function ShareSection({ result }: { result: DiagnosticResult }) {
           <span>Discord</span>
         </button>
       </div>
+
+      <button
+        onClick={saveImage}
+        disabled={saving}
+        className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-tiffany text-tiffany font-semibold rounded-xl text-sm active:opacity-80 disabled:opacity-50"
+      >
+        <DownloadIcon size={16} />
+        {saving ? "画像を生成中…" : "結果カードを画像で保存"}
+      </button>
+
       {copiedFor && (
         <div className="flex items-center gap-1.5 justify-center text-xs text-tiffany py-1 animate-fade-up">
           <CopyIcon size={13} />
-          <span>結果をコピーしました。{copiedFor}に貼り付けてシェアできます</span>
+          <span>結果をコピーしました。{copiedFor}に貼り付けると結果カードが表示されます</span>
         </div>
       )}
     </div>
