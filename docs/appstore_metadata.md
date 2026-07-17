@@ -92,11 +92,10 @@ SNSでシェアして友達と比べてみよう！
 © 2026 Logicky
 
 ## サポートURL
-https://github.com/oikawa-oiroba/logicky
-（Webアプリデプロイ後はそのURLへの差し替えを推奨）
+https://logicky.vercel.app
 
 ## プライバシーポリシーURL
-（Webアプリデプロイ後のURL + /privacy）
+https://logicky.vercel.app/privacy
 
 ## データ収集の開示（App Store Connect）
 - データ収集: なし
