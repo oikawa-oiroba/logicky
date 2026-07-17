@@ -92,10 +92,10 @@ SNSでシェアして友達と比べてみよう！
 © 2026 Logicky
 
 ## サポートURL
-https://logicky.vercel.app
+https://logicky.app
 
 ## プライバシーポリシーURL
-https://logicky.vercel.app/privacy
+https://logicky.app/privacy
 
 ## データ収集の開示（App Store Connect）
 - データ収集: なし

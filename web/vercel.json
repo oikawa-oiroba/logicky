@@ -1,3 +1,11 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "logicky.vercel.app" }],
+      "destination": "https://logicky.app/:path*",
+      "permanent": true
+    }
+  ]
 }

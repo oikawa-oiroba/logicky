@@ -16,6 +16,20 @@ export function rankDescription(score: number): string {
   return "基礎から鍛え直そう";
 }
 
+// 3軸のバランスから表示用のタイプ名を導く（採点ロジックには影響しない・表示のみ）
+export function deriveTypeName(
+  organize: number,
+  reason: number,
+  judge: number
+): string {
+  const max = Math.max(organize, reason, judge);
+  const min = Math.min(organize, reason, judge);
+  if (max - min <= 10) return "バランス型";
+  if (max === reason) return "じっくり推論型";
+  if (max === organize) return "コツコツ整理型";
+  return "ズバッと判断型";
+}
+
 export interface SharedScores {
   total: number;
   organize: number;

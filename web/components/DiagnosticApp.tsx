@@ -5,8 +5,7 @@ import questionsRaw from "../data/questions.json";
 import {
   BrainIcon,
   ClockIcon,
-  ChartIcon,
-  TrendingUpIcon,
+  ZapIcon,
   SmartphoneIcon,
   AwardIcon,
   TargetIcon,
@@ -24,8 +23,9 @@ import {
   ChevronDownIcon,
   MessageSquareIcon,
 } from "./icons";
-import { rankLabel, rankDescription } from "../lib/rank";
+import { rankLabel, rankDescription, deriveTypeName } from "../lib/rank";
 import { findGlossaryEntries } from "../lib/glossary";
+import { track, captureUtm } from "../lib/analytics";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -123,10 +123,11 @@ const JUDGE_UNITS = ["fact_opinion", "pyramid", "so_what", "5w2h"];
 
 const STORAGE_KEY = "logicky_web_diagnostic_last";
 
-// TODO: App Store公開後に実際のApp IDへ差し替える
-const APP_STORE_URL = "https://apps.apple.com/jp/app/logicky/id0000000000";
+// App Store公開後にVercelの環境変数 NEXT_PUBLIC_APP_STORE_URL を設定して再デプロイする。
+// 未設定の間はCTA押下時に「準備中」の案内を表示する。
+const APP_STORE_URL = process.env.NEXT_PUBLIC_APP_STORE_URL ?? "";
 
-const SITE_URL = "https://logicky.vercel.app";
+const SITE_URL = "https://logicky.app";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -230,6 +231,61 @@ function AxisBar({ label, score, delay }: { label: string; score: number; delay:
 
 // ─── Screens ─────────────────────────────────────────────────────────────────
 
+function PreviewAxisBar({ label, score }: { label: string; score: number }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span className="w-12 shrink-0 text-xs text-app-sub">{label}</span>
+      <div className="flex-1 h-2 bg-card-border rounded-full overflow-hidden">
+        <div
+          className="h-full bg-tiffany rounded-full"
+          style={{ width: `${score}%` }}
+        />
+      </div>
+      <span className="w-7 shrink-0 text-right text-xs font-semibold text-tiffany">{score}</span>
+    </div>
+  );
+}
+
+// ファーストビューの結果プレビュー。再訪ユーザーには前回の実結果を表示する
+function ResultPreviewCard({ previous }: { previous: StoredResult | null }) {
+  const sample = { total: 74, organize: 72, reason: 88, judge: 61 };
+  const s = previous
+    ? {
+        total: previous.totalScore,
+        organize: previous.organizeScore,
+        reason: previous.reasonScore,
+        judge: previous.judgeScore,
+      }
+    : sample;
+  const typeName = deriveTypeName(s.organize, s.reason, s.judge);
+
+  return (
+    <div className="p-5 bg-white rounded-2xl border border-card-border">
+      <div className="flex items-center justify-between mb-3.5">
+        <span className="text-xs font-semibold text-app-gray tracking-wide">
+          {previous ? "前回のあなたの結果" : "診断結果イメージ（サンプル）"}
+        </span>
+        <span className="px-2.5 py-1 bg-tiffany-light text-tiffany text-xs font-semibold rounded-full">
+          {typeName}
+        </span>
+      </div>
+      <div className="flex items-center gap-5">
+        <div className="shrink-0 flex flex-col items-center justify-center w-[88px] h-[88px] rounded-full border-4 border-tiffany">
+          <span className="text-2xl font-bold text-app-text leading-none">{s.total}</span>
+          <span className="text-xs font-bold text-tiffany mt-1">
+            {rankLabel(s.total)}
+          </span>
+        </div>
+        <div className="flex-1 space-y-2.5">
+          <PreviewAxisBar label="整理力" score={s.organize} />
+          <PreviewAxisBar label="推論力" score={s.reason} />
+          <PreviewAxisBar label="判断力" score={s.judge} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function StartScreen({
   previous,
   onStart,
@@ -237,40 +293,47 @@ function StartScreen({
   previous: StoredResult | null;
   onStart: () => void;
 }) {
+  useEffect(() => {
+    track("fv_view");
+  }, []);
+
   const chips = [
-    { icon: <ClockIcon size={15} />, text: "14問・約5分" },
-    { icon: <ChartIcon size={15} />, text: "3軸で評価" },
-    { icon: <TrendingUpIcon size={15} />, text: "スキル可視化" },
+    { icon: <ClockIcon size={14} />, text: "14問・約5分" },
+    { icon: <UserIcon size={14} />, text: "登録不要" },
+    { icon: <ZapIcon size={14} />, text: "結果はすぐに表示" },
   ];
 
   return (
     <div className="min-h-screen bg-app-bg flex flex-col">
-      <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-5 py-8">
-        {/* Logo */}
-        <div className="flex items-center gap-2 mb-8">
+      <div className="flex-1 flex flex-col max-w-md mx-auto w-full px-5 pt-6 pb-6">
+        {/* 1. Logo */}
+        <div className="flex items-center gap-2 mb-6">
           <span className="flex items-center justify-center w-8 h-8 bg-tiffany rounded-lg text-white">
             <BrainIcon size={20} />
           </span>
           <span className="text-xl font-bold text-app-text">Logicky</span>
         </div>
 
-        {/* Hero */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-app-text mb-3 leading-tight">
-            ロジッキー<br />診断
-          </h1>
-          <p className="text-app-sub text-base leading-relaxed">
-            論理的思考力を14問で測定。整理・推論・判断の3軸で、
-            あなたの得意と苦手を見える化します。
-          </p>
-        </div>
+        {/* 2. Headline */}
+        <h1 className="text-[26px] font-bold text-app-text mb-2.5 leading-snug">
+          あなたは、本当に論理的？
+        </h1>
 
-        {/* Feature chips */}
-        <div className="flex gap-2 flex-wrap mb-8">
+        {/* 3. Description */}
+        <p className="text-app-sub text-[15px] leading-relaxed mb-5">
+          14問で、考える力を「整理・推論・判断」の3軸で測定。
+          あなたの強みと、つまずきやすい思考パターンが分かります。
+        </p>
+
+        {/* 4. Result preview */}
+        <ResultPreviewCard previous={previous} />
+
+        {/* 5. Supplementary chips */}
+        <div className="flex gap-1.5 flex-wrap mt-4">
           {chips.map((c) => (
             <div
               key={c.text}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full border border-card-border text-sm text-app-sub"
+              className="flex items-center gap-1 px-2.5 py-1 bg-white rounded-full border border-card-border text-xs text-app-sub"
             >
               <span className="text-tiffany">{c.icon}</span>
               <span>{c.text}</span>
@@ -278,42 +341,21 @@ function StartScreen({
           ))}
         </div>
 
-        {/* Previous result */}
-        {previous && (
-          <div className="mb-6 p-4 bg-white rounded-xl border border-card-border">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs text-app-sub">前回の結果</span>
-              <span className="text-xs text-app-sub">
-                {new Date(previous.date).toLocaleDateString("ja-JP", { month: "long", day: "numeric" })}
-              </span>
-            </div>
-            <div className="flex items-center gap-4">
-              <div>
-                <span className="text-3xl font-bold text-tiffany">{previous.totalScore}</span>
-                <span className="text-app-sub text-sm ml-1">点</span>
-              </div>
-              <div className="text-2xl font-bold text-app-sub">
-                {rankLabel(previous.totalScore)}
-              </div>
-              <div className="flex-1 text-right">
-                <div className="text-xs text-app-sub">整理 {previous.organizeScore}% / 推論 {previous.reasonScore}% / 判断 {previous.judgeScore}%</div>
-              </div>
-            </div>
-          </div>
-        )}
+        <div className="flex-1 min-h-5" />
 
-        <div className="flex-1" />
-
-        {/* CTA */}
+        {/* 6. CTA */}
         <button
-          onClick={onStart}
+          onClick={() => {
+            track("cta_click");
+            onStart();
+          }}
           className="w-full py-4 bg-tiffany text-white font-bold text-lg rounded-xl shadow-sm active:opacity-90 transition-opacity"
         >
-          {previous ? "再診断する" : "診断を始める"}
+          {previous ? "もう一度、無料で診断する" : "無料で診断する"}
         </button>
 
-        <p className="text-center text-xs text-app-gray mt-3">
-          無料 · 登録不要 · 約5分
+        <p className="text-center text-xs text-app-gray mt-2.5">
+          登録不要・約5分・結果はすぐに表示
         </p>
       </div>
     </div>
@@ -340,6 +382,7 @@ function QuizScreen({
   useEffect(() => {
     setSelected(null);
     setShowFeedback(false);
+    track("question_view", { index: currentIndex + 1 });
   }, [currentIndex]);
 
   useEffect(() => {
@@ -467,6 +510,9 @@ function FeedbackForm({ answer }: { answer: AnswerRecord }) {
         }),
       });
       setStatus(res.ok ? "done" : "error");
+      if (res.ok) {
+        track("feedback_submit", { question_id: answer.question.id, category });
+      }
     } catch {
       setStatus("error");
     }
@@ -605,6 +651,68 @@ function ReviewSection({ answers }: { answers: AnswerRecord[] }) {
   );
 }
 
+// 診断結果に基づき、最も伸びしろのある軸に合わせてアプリへ誘導する
+function AppFunnelSection({ result }: { result: DiagnosticResult }) {
+  const [showPreparing, setShowPreparing] = useState(false);
+
+  useEffect(() => {
+    track("app_cta_view");
+  }, []);
+
+  const axes = [
+    { name: "整理力", score: result.organizeScore },
+    { name: "推論力", score: result.reasonScore },
+    { name: "判断力", score: result.judgeScore },
+  ];
+  const strongest = axes.reduce((a, b) => (b.score > a.score ? b : a));
+  const weakest = axes.reduce((a, b) => (b.score < a.score ? b : a));
+  const balanced = strongest.score - weakest.score <= 10;
+
+  const message = balanced
+    ? "3つの力がバランスよく育っています。次は全体の底上げに挑戦しましょう。"
+    : `あなたは「${strongest.name}」が強い一方で、「${weakest.name}」には伸びしろがあります。`;
+  const subMessage = balanced
+    ? "ロジッキーアプリでは、毎日3分の問題で3つの力をまんべんなくトレーニングできます。"
+    : `ロジッキーアプリでは、毎日3分の問題で「${weakest.name}」を重点的にトレーニングできます。`;
+  const ctaLabel = balanced ? "アプリでトレーニングを始める" : "苦手分野をアプリで鍛える";
+
+  const onCtaClick = () => {
+    track("app_cta_click", { weakest_axis: weakest.name, has_store_url: !!APP_STORE_URL });
+    if (APP_STORE_URL) {
+      window.open(APP_STORE_URL, "_blank", "noopener,noreferrer");
+    } else {
+      setShowPreparing(true);
+    }
+  };
+
+  return (
+    <div className="bg-white rounded-2xl border border-card-border p-5 space-y-3.5">
+      <div className="flex items-center gap-1.5 text-xs font-semibold text-app-gray tracking-wide">
+        <SmartphoneIcon size={14} className="text-tiffany" />
+        <span>次のステップ</span>
+      </div>
+      <p className="text-app-text text-base font-bold leading-relaxed">{message}</p>
+      <p className="text-app-sub text-sm leading-relaxed">{subMessage}</p>
+      <button
+        onClick={onCtaClick}
+        className="w-full py-3.5 bg-tiffany text-white font-bold rounded-xl text-sm active:opacity-90 transition-opacity"
+      >
+        {ctaLabel}
+      </button>
+      {showPreparing ? (
+        <p className="text-center text-xs text-app-sub animate-fade-up">
+          アプリは現在準備中です。公開までもう少しお待ちください。
+          それまではWeb診断の「回答のふりかえり」で復習できます。
+        </p>
+      ) : (
+        <p className="text-center text-xs text-app-gray">
+          毎日のトレーニング・成長の記録・再診断はアプリで
+        </p>
+      )}
+    </div>
+  );
+}
+
 const NICKNAME_KEY = "logicky_web_nickname";
 
 function ShareSection({ result }: { result: DiagnosticResult }) {
@@ -647,6 +755,7 @@ function ShareSection({ result }: { result: DiagnosticResult }) {
   const cardUrl = `/api/og?${buildShareQuery(result, trimmed)}`;
 
   const copyFor = (service: string) => {
+    track("share_click", { service: service.toLowerCase() });
     navigator.clipboard.writeText(text).then(() => {
       setCopiedFor(service);
       if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
@@ -657,16 +766,23 @@ function ShareSection({ result }: { result: DiagnosticResult }) {
   const openWindow = (url: string) =>
     window.open(url, "_blank", "noopener,noreferrer");
 
-  const openX = () =>
+  const openX = () => {
+    track("share_click", { service: "x" });
     openWindow(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`);
+  };
 
-  const openLine = () =>
+  const openLine = () => {
+    track("share_click", { service: "line" });
     openWindow(`https://line.me/R/share?text=${encodeURIComponent(text)}`);
+  };
 
-  const openFacebook = () =>
+  const openFacebook = () => {
+    track("share_click", { service: "facebook" });
     openWindow(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+  };
 
   const saveImage = async () => {
+    track("share_click", { service: "image_save" });
     setSaving(true);
     try {
       const blob = await (await fetch(cardUrl)).blob();
@@ -768,6 +884,15 @@ function ResultScreen({
   const [circleReady, setCircleReady] = useState(false);
   const rank = rankLabel(result.totalScore);
   const desc = rankDescription(result.totalScore);
+  const typeName = deriveTypeName(
+    result.organizeScore,
+    result.reasonScore,
+    result.judgeScore
+  );
+
+  useEffect(() => {
+    track("result_view");
+  }, []);
 
   // Animate score counter
   useEffect(() => {
@@ -805,6 +930,9 @@ function ResultScreen({
           <div>
             <div className="text-4xl font-black text-tiffany">{rank}</div>
             <div className="text-sm text-app-sub mt-1">{desc}</div>
+            <span className="inline-block mt-2 px-3 py-1 bg-tiffany-light text-tiffany text-xs font-semibold rounded-full">
+              {typeName}
+            </span>
           </div>
         </div>
 
@@ -873,28 +1001,8 @@ function ResultScreen({
           </div>
         )}
 
-        {/* App CTA */}
-        <div className="bg-tiffany rounded-2xl p-6 text-white text-center space-y-4">
-          <div className="flex justify-center">
-            <SmartphoneIcon size={28} />
-          </div>
-          <div>
-            <h2 className="text-lg font-bold mb-1">毎日5問で論理力を鍛えよう</h2>
-            <p className="text-sm opacity-90">
-              アプリでは単元別トレーニング・成長記録・思考法辞典など
-              フル機能が使えます。
-            </p>
-          </div>
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full py-3.5 bg-white text-tiffany font-bold rounded-xl text-sm active:opacity-90"
-          >
-            App Store でダウンロード（無料）
-          </a>
-          <p className="text-xs opacity-70">iOS / iPadOS 対応</p>
-        </div>
+        {/* App funnel */}
+        <AppFunnelSection result={result} />
 
         {/* Share */}
         <ShareSection result={result} />
@@ -928,6 +1036,7 @@ export default function DiagnosticApp() {
   const [previous, setPrevious] = useState<StoredResult | null>(null);
 
   useEffect(() => {
+    captureUtm();
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setPrevious(JSON.parse(raw));
@@ -947,6 +1056,7 @@ export default function DiagnosticApp() {
     setAnswers([]);
     setResult(null);
     setPhase("quiz");
+    track("quiz_start");
   }, []);
 
   const handleAnswer = useCallback(
@@ -984,6 +1094,7 @@ export default function DiagnosticApp() {
           setPrevious(toStore);
         } catch {}
 
+        track("quiz_complete", { total_score: scores.totalScore });
         setPhase("result");
       }
     },

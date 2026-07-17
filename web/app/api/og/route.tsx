@@ -65,7 +65,7 @@ export async function GET(request: Request) {
     : "ロジッキー診断結果";
 
   const allText =
-    `${title}${rank}${desc}点数整理力推論力判断力ロジッキー診断あなたも無料で診断するlogicky.vercel.appLogicky0123456789%SABCD+` +
+    `${title}${rank}${desc}点数整理力推論力判断力ロジッキー診断あなたも無料で診断するlogicky.appLogicky0123456789%SABCD+` +
     "エキスパート実践レベルの思考力応用が身についている基礎は習得できているもう少しで基礎レベルから鍛え直そう論理";
 
   const [bold, regular] = await Promise.all([
@@ -218,7 +218,7 @@ export async function GET(request: Request) {
             あなたも無料で診断する
           </div>
           <div style={{ display: "flex", fontSize: 26, fontWeight: 700, color: TIFFANY }}>
-            logicky.vercel.app
+            logicky.app
           </div>
         </div>
       </div>
