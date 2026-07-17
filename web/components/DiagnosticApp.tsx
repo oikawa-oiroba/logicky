@@ -20,8 +20,12 @@ import {
   LineIcon,
   SlackIcon,
   DiscordIcon,
+  LightbulbIcon,
+  ChevronDownIcon,
+  MessageSquareIcon,
 } from "./icons";
 import { rankLabel, rankDescription } from "../lib/rank";
+import { findGlossaryEntries } from "../lib/glossary";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -45,12 +49,19 @@ interface UnitResult {
   correct: boolean;
 }
 
+interface AnswerRecord {
+  question: Question;
+  selectedChoiceId: string;
+  correct: boolean;
+}
+
 interface DiagnosticResult {
   totalScore: number;
   organizeScore: number;
   reasonScore: number;
   judgeScore: number;
   unitResults: UnitResult[];
+  answers: AnswerRecord[];
   date: Date;
 }
 
@@ -324,6 +335,7 @@ function QuizScreen({
 
   const q = questions[currentIndex];
   const progress = ((currentIndex + 1) / questions.length) * 100;
+  const glossary = findGlossaryEntries([q.body, ...q.choices.map((c) => c.text)]);
 
   useEffect(() => {
     setSelected(null);
@@ -379,9 +391,26 @@ function QuizScreen({
           <div className="text-xs font-semibold text-tiffany mb-2 uppercase tracking-wide">
             {UNIT_DISPLAY[q.unit]}
           </div>
-          <p className="text-app-text text-base font-medium leading-relaxed mb-6">
+          <p className="text-app-text text-base font-medium leading-relaxed mb-4">
             {q.body}
           </p>
+
+          {/* ことばのヒント */}
+          {glossary.length > 0 && (
+            <div className="mb-5 p-3.5 bg-amber-50 border border-amber-200 rounded-xl space-y-1.5">
+              <div className="flex items-center gap-1.5 text-amber-600 text-xs font-bold">
+                <LightbulbIcon size={14} />
+                <span>ことばのヒント</span>
+              </div>
+              {glossary.map((g) => (
+                <p key={g.label} className="text-xs text-amber-800 leading-relaxed">
+                  <span className="font-semibold">{g.label}</span>
+                  <span className="mx-1">…</span>
+                  {g.description}
+                </p>
+              ))}
+            </div>
+          )}
 
           {/* Choices */}
           <div className="space-y-3">
@@ -409,6 +438,168 @@ function QuizScreen({
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+const FEEDBACK_CATEGORIES = ["わかりづらい", "答えが違うと思う", "誤字・脱字", "その他"];
+
+function FeedbackForm({ answer }: { answer: AnswerRecord }) {
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState<string | null>(null);
+  const [comment, setComment] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
+
+  const submit = async () => {
+    if (!category || status === "sending") return;
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          questionId: answer.question.id,
+          unit: answer.question.unit,
+          category,
+          comment,
+          selectedChoiceId: answer.selectedChoiceId,
+        }),
+      });
+      setStatus(res.ok ? "done" : "error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  if (status === "done") {
+    return (
+      <p className="text-xs text-tiffany py-1.5">
+        フィードバックを送信しました。改善に活用します。ありがとうございます！
+      </p>
+    );
+  }
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-1.5 text-xs text-app-gray underline underline-offset-2 py-1"
+      >
+        <MessageSquareIcon size={13} />
+        この問題について意見を送る（わかりづらい・答えが違う 等）
+      </button>
+    );
+  }
+
+  return (
+    <div className="space-y-2 p-3 bg-gray-50 rounded-lg">
+      <div className="flex flex-wrap gap-1.5">
+        {FEEDBACK_CATEGORIES.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCategory(c)}
+            className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${
+              category === c
+                ? "bg-tiffany text-white border-tiffany"
+                : "bg-white text-app-sub border-card-border"
+            }`}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+      <textarea
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
+        maxLength={500}
+        rows={2}
+        placeholder="詳しく教えてもらえると助かります（任意）"
+        className="w-full text-xs text-app-text placeholder:text-app-gray p-2.5 bg-white border border-card-border rounded-lg outline-none resize-none"
+      />
+      <div className="flex items-center gap-2">
+        <button
+          onClick={submit}
+          disabled={!category || status === "sending"}
+          className="px-4 py-1.5 bg-tiffany text-white text-xs font-semibold rounded-lg disabled:opacity-40"
+        >
+          {status === "sending" ? "送信中…" : "送信する"}
+        </button>
+        <button
+          onClick={() => setOpen(false)}
+          className="px-3 py-1.5 text-xs text-app-gray"
+        >
+          閉じる
+        </button>
+        {status === "error" && (
+          <span className="text-xs text-red-500">送信に失敗しました。もう一度お試しください</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ReviewItem({ answer, index }: { answer: AnswerRecord; index: number }) {
+  const [open, setOpen] = useState(false);
+  const q = answer.question;
+  const selectedText = q.choices.find((c) => c.id === answer.selectedChoiceId)?.text ?? "";
+  const correctText = q.choices.find((c) => c.id === q.correctChoiceId)?.text ?? "";
+
+  return (
+    <div className="border border-card-border rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center gap-2.5 p-3 bg-white text-left"
+      >
+        <span
+          className={`shrink-0 flex items-center justify-center w-6 h-6 rounded-full ${
+            answer.correct ? "bg-tiffany-light text-tiffany" : "bg-red-50 text-red-400"
+          }`}
+        >
+          {answer.correct ? <CheckIcon size={13} /> : <XMarkIcon size={13} />}
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="block text-xs text-app-gray">Q{index + 1} · {UNIT_DISPLAY[q.unit]}</span>
+          <span className="block text-sm text-app-text truncate">{q.body}</span>
+        </span>
+        <ChevronDownIcon
+          size={16}
+          className={`shrink-0 text-app-gray transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="px-3 pb-3 pt-1 bg-white space-y-2.5">
+          <p className="text-sm text-app-text leading-relaxed">{q.body}</p>
+          {!answer.correct && (
+            <div className="text-xs p-2.5 bg-red-50 rounded-lg text-red-500 leading-relaxed">
+              あなたの回答：{selectedText}
+            </div>
+          )}
+          <div className="text-xs p-2.5 bg-tiffany-light rounded-lg text-tiffany leading-relaxed">
+            正解：{correctText}
+          </div>
+          {q.explanation && (
+            <p className="text-xs text-app-sub leading-relaxed">{q.explanation}</p>
+          )}
+          <FeedbackForm answer={answer} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReviewSection({ answers }: { answers: AnswerRecord[] }) {
+  return (
+    <div className="bg-white rounded-2xl border border-card-border p-5">
+      <h2 className="font-bold text-app-text mb-1">回答のふりかえり</h2>
+      <p className="text-xs text-app-gray mb-4">
+        タップすると解説が見られます。「わかりづらい」等の意見も送れます。
+      </p>
+      <div className="space-y-2">
+        {answers.map((a, i) => (
+          <ReviewItem key={a.question.id} answer={a} index={i} />
+        ))}
       </div>
     </div>
   );
@@ -647,6 +838,9 @@ function ResultScreen({
           </div>
         </div>
 
+        {/* Review & feedback */}
+        <ReviewSection answers={result.answers} />
+
         {/* Strengths */}
         {strengths.length > 0 && (
           <div className="bg-white rounded-2xl border border-card-border p-5">
@@ -729,6 +923,7 @@ export default function DiagnosticApp() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [unitResults, setUnitResults] = useState<UnitResult[]>([]);
+  const [answers, setAnswers] = useState<AnswerRecord[]>([]);
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [previous, setPrevious] = useState<StoredResult | null>(null);
 
@@ -749,6 +944,7 @@ export default function DiagnosticApp() {
     setQuestions(selected);
     setCurrentIndex(0);
     setUnitResults([]);
+    setAnswers([]);
     setResult(null);
     setPhase("quiz");
   }, []);
@@ -758,7 +954,9 @@ export default function DiagnosticApp() {
       const q = questions[currentIndex];
       const correct = choiceId === q.correctChoiceId;
       const newResults = [...unitResults, { unit: q.unit, correct }];
+      const newAnswers = [...answers, { question: q, selectedChoiceId: choiceId, correct }];
       setUnitResults(newResults);
+      setAnswers(newAnswers);
 
       if (currentIndex + 1 < questions.length) {
         setCurrentIndex((i) => i + 1);
@@ -768,6 +966,7 @@ export default function DiagnosticApp() {
         const finalResult: DiagnosticResult = {
           ...scores,
           unitResults: newResults,
+          answers: newAnswers,
           date: new Date(),
         };
         setResult(finalResult);
@@ -788,7 +987,7 @@ export default function DiagnosticApp() {
         setPhase("result");
       }
     },
-    [questions, currentIndex, unitResults]
+    [questions, currentIndex, unitResults, answers]
   );
 
   const handleRetry = useCallback(() => {
