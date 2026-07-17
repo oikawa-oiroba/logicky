@@ -9,7 +9,7 @@ DEVICE_NAME="iPhone 17 Pro Max"
 SCHEME="Logicky"
 PROJECT="Logicky.xcodeproj"
 OUTPUT_DIR="$(dirname "$0")/output"
-APP_BUNDLE_ID="co.jp.oiroba.logicky"
+APP_BUNDLE_ID="app.logicky"
 
 mkdir -p "$OUTPUT_DIR"
 
