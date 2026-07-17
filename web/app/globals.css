@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #F8F9FA;
+    color: #1A1A1A;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  }
+}
+
+@keyframes scoreCount {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes progressFill {
+  from { width: 0%; }
+}
+
+.animate-score { animation: scoreCount 0.4s ease-out; }
+.animate-fade-up { animation: fadeInUp 0.4s ease-out; }
+.animate-progress { animation: progressFill 0.8s ease-out; }
+
+.choice-btn {
+  @apply w-full text-left px-4 py-3.5 rounded-xl border transition-all duration-200 text-sm leading-relaxed;
+}
+
+.choice-default {
+  @apply bg-white border-card-border text-app-text hover:border-tiffany hover:bg-tiffany-light active:scale-[0.99];
+}
+
+.choice-correct {
+  @apply bg-tiffany border-tiffany text-white;
+}
+
+.choice-wrong {
+  @apply bg-gray-100 border-gray-200 text-app-sub line-through;
+}
+
+.choice-correct-reveal {
+  @apply bg-tiffany-light border-tiffany text-tiffany;
+}
