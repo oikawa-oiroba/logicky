@@ -92,7 +92,8 @@ SNSでシェアして友達と比べてみよう！
 © 2026 Logicky
 
 ## サポートURL
-https://github.com/yohei/logicky
+https://github.com/oikawa-oiroba/logicky
+（Webアプリデプロイ後はそのURLへの差し替えを推奨）
 
 ## プライバシーポリシーURL
 （Webアプリデプロイ後のURL + /privacy）

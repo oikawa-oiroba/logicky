@@ -9,7 +9,7 @@ DEVICE_NAME="iPhone 17 Pro Max"
 SCHEME="Logicky"
 PROJECT="Logicky.xcodeproj"
 OUTPUT_DIR="$(dirname "$0")/output"
-APP_BUNDLE_ID="com.yohei.Logicky"
+APP_BUNDLE_ID="co.jp.oiroba.logicky"
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -54,10 +54,10 @@ take_screenshot "01_home" 3
 
 echo ""
 echo "Manual steps required for remaining screenshots:"
-echo "  02_dictionary_detail  — Open a thinking method (e.g., MECE) in the dictionary"
-echo "  03_quiz               — Start a quiz and show a question"
-echo "  04_result             — Complete a quiz and show the result screen"
-echo "  05_diagnostic_result  — Complete the Logicky diagnostic and show rank result"
+echo "  02_diagnostic_quiz    — Start the Logicky diagnostic and show a question with feedback"
+echo "  03_diagnostic_result  — Complete the diagnostic and show rank / 3-axis result"
+echo "  04_dictionary_detail  — Open a thinking method (e.g., 三段論法) in the dictionary"
+echo "  05_unit_quiz          — Start a unit quiz and show a 4-choice question"
 echo ""
 echo "After manually navigating to each screen, run:"
 echo "  xcrun simctl io $UDID screenshot screenshots/output/<name>.png"
