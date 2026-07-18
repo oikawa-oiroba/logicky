@@ -40,8 +40,8 @@ struct UnitSelectionView: View {
     }
 
     private func isMCCompleted(for unit: UnitModel) -> Bool {
-        // クリア判定＝正答率80%以上のセッション達成
-        return SkillBadgeService.shared.clearedUnitIds.contains(unit.id)
+        // トレーニング完了＝単元の全問題を正解済み
+        return SkillBadgeService.shared.isUnitCompleted(unit.id)
     }
 
     private func hasMasterQuestions(for unit: UnitModel) -> Bool {

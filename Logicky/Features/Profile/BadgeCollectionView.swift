@@ -49,7 +49,7 @@ struct BadgeCollectionView: View {
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(Color.appSub)
             }
-            Text("正答率80%以上で単元クリア。全問正解で「習得」バッジ獲得")
+            Text("セッション正答率80%でクリア。単元の全問題に正解で「習得」バッジ獲得")
                 .font(.caption2)
                 .foregroundStyle(Color.appGray)
 

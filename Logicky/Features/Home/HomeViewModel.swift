@@ -30,9 +30,9 @@ final class HomeViewModel: ObservableObject {
         return 0
     }
 
-    // クリア判定＝正答率80%以上のセッションを達成したか（SkillBadgeServiceのクリア記録）
+    // トレーニング完了＝単元の全問題を正解済み
     func isMCCompleted(for unit: UnitModel) -> Bool {
-        SkillBadgeService.shared.clearedUnitIds.contains(unit.id)
+        SkillBadgeService.shared.isUnitCompleted(unit.id)
     }
 
     func hasMasterMode(for unit: UnitModel) -> Bool {

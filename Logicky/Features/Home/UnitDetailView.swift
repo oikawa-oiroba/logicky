@@ -11,9 +11,9 @@ struct UnitDetailView: View {
     private var unit: UnitModel? { UnitModel.all.first { $0.id == unitId } }
 
     private var mcCompleted: Bool {
-        // クリア判定＝正答率80%以上のセッション達成
+        // トレーニング完了＝単元の全問題を正解済み
         guard let unit else { return false }
-        return SkillBadgeService.shared.clearedUnitIds.contains(unit.id)
+        return SkillBadgeService.shared.isUnitCompleted(unit.id)
     }
 
     private var hasMasterMode: Bool {

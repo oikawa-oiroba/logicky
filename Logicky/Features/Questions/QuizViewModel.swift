@@ -206,14 +206,14 @@ final class QuizViewModel: ObservableObject {
             }.count
             let sessionRate = mcTotal > 0 ? Double(mcCorrect) / Double(mcTotal) : 0
 
-            if sessionRate >= 1.0,
-               SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: sessionRate) {
-                // 全問正解：バッジ獲得
+            // バッジ獲得＝単元の「全問題」を正解済みにしたとき（このセッション分も保存済み）
+            if SkillBadgeService.shared.isUnitCompleted(unitId),
+               SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: 1.0) {
                 _ = SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId)
                 newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: true)
             } else if sessionRate >= 0.8,
                       SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId) {
-                // 80%以上：単元クリア
+                // セッション80%以上：単元クリア（中間達成）
                 newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: false)
             }
         }

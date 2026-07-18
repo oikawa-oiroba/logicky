@@ -599,7 +599,7 @@ struct BadgeAcquisitionSheet: View {
                 Text("\(unit.displayName)")
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.tiffany)
-                Text(isAcquired ? "全問正解を達成しました！" : "正答率80%以上を達成しました")
+                Text(isAcquired ? "単元の全問題を正解しました！" : "正答率80%以上を達成しました")
                     .font(.subheadline)
                     .foregroundStyle(Color.appSub)
                     .padding(.top, 4)
