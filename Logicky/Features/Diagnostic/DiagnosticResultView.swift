@@ -122,7 +122,7 @@ struct DiagnosticResultView: View {
             HStack(spacing: 8) {
                 Text(label)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(Color.tiffany)
+                    .foregroundStyle(Color.appSub)
                     .frame(width: 38, alignment: .leading)
                 if let delta {
                     HStack(spacing: 2) {
@@ -140,13 +140,13 @@ struct DiagnosticResultView: View {
                 Spacer()
                 Text("\(score)%")
                     .font(.caption.weight(.bold))
-                    .foregroundStyle(Color.tiffany)
+                    .foregroundStyle(Color.scoreColor(score))
             }
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4).fill(Color.cardBorder).frame(height: 10)
                     RoundedRectangle(cornerRadius: 4)
-                        .fill(Color.tiffany)
+                        .fill(Color.scoreRingStyle(score))
                         .frame(width: geo.size.width * CGFloat(score) / 100, height: 10)
                         .animation(.easeOut(duration: 0.8), value: score)
                 }
@@ -616,8 +616,13 @@ struct ShareCardView: View {
             HStack(spacing: 18) {
                 ZStack {
                     Circle()
-                        .stroke(Color.scoreRingStyle(score), lineWidth: 7)
+                        .stroke(Color.cardBorder, lineWidth: 7)
                         .frame(width: 108, height: 108)
+                    Circle()
+                        .trim(from: 0, to: CGFloat(score) / 100)
+                        .stroke(Color.scoreRingStyle(score), style: StrokeStyle(lineWidth: 7, lineCap: .round))
+                        .frame(width: 108, height: 108)
+                        .rotationEffect(.degrees(-90))
                     VStack(spacing: 0) {
                         HStack(alignment: .firstTextBaseline, spacing: 2) {
                             Text("\(score)")
@@ -686,14 +691,14 @@ struct ShareCardView: View {
                     Capsule()
                         .fill(Color.cardBorder)
                     Capsule()
-                        .fill(Color.tiffany)
+                        .fill(Color.scoreRingStyle(score))
                         .frame(width: geo.size.width * CGFloat(max(score, 4)) / 100)
                 }
             }
             .frame(height: 7)
             Text("\(score)%")
                 .font(.system(size: 12, weight: .bold))
-                .foregroundStyle(Color.tiffany)
+                .foregroundStyle(Color.scoreColor(score))
                 .frame(width: 38, alignment: .trailing)
         }
     }

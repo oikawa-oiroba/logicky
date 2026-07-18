@@ -234,16 +234,21 @@ function AxisBar({ label, score, delay }: { label: string; score: number; delay:
     return () => clearTimeout(t);
   }, [delay]);
 
+  const barStyle =
+    score >= 100
+      ? { backgroundImage: `linear-gradient(90deg, ${RAINBOW_COLORS.join(", ")})` }
+      : { backgroundColor: scoreColor(score) };
+
   return (
     <div className="space-y-1.5">
       <div className="flex justify-between text-sm">
         <span className="text-app-sub">{label}</span>
-        <span className="font-semibold text-tiffany">{score}%</span>
+        <span className="font-semibold" style={{ color: scoreColor(score) }}>{score}%</span>
       </div>
       <div className="h-2 bg-card-border rounded-full overflow-hidden">
         <div
-          className="h-full bg-tiffany rounded-full transition-all duration-700 ease-out"
-          style={{ width: filled ? `${score}%` : "0%" }}
+          className="h-full rounded-full transition-all duration-700 ease-out"
+          style={{ width: filled ? `${score}%` : "0%", ...barStyle }}
         />
       </div>
     </div>

@@ -20,6 +20,7 @@ enum AppRoute: Hashable {
     case cognitiveBiasDetail(biasId: String)
     case diagnosticDetail(result: DiagnosticResult)
     case profile
+    case badges
 }
 
 struct RootView: View {
@@ -82,6 +83,8 @@ struct MainNavigationView: View {
                         DiagnosticHistoryDetailView(result: result, navigationPath: $navigationPath)
                     case .profile:
                         ProfileView(navigationPath: $navigationPath)
+                    case .badges:
+                        BadgeCollectionView(navigationPath: $navigationPath)
                     }
                 }
         }

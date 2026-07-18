@@ -19,6 +19,11 @@ final class SkillBadgeService {
 
     private let clearedKey = "logicky_cleared_badges_v1"
 
+    /// クリア済み単元のID一覧（バッジ画面用）
+    var clearedUnitIds: Set<String> {
+        Set(UserDefaults.standard.stringArray(forKey: clearedKey) ?? [])
+    }
+
     /// 単元を初めてクリア（セッション完了）したらtrue。クリアバッジの演出用
     func checkAndMarkNewlyCleared(for unitId: String) -> Bool {
         var set = Set(UserDefaults.standard.stringArray(forKey: clearedKey) ?? [])

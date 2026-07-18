@@ -125,7 +125,12 @@ struct ProfileView: View {
         return LazyVGrid(columns: columns, spacing: 12) {
             statCell(icon: "checkmark.circle.fill", value: "\(totalAnswered)", label: "累計回答数")
             statCell(icon: "calendar", value: "\(studyDays)日", label: "学習日数")
-            statCell(icon: "rosette", value: "\(badgeCount)個", label: "獲得バッジ")
+            Button {
+                navigationPath.append(AppRoute.badges)
+            } label: {
+                statCell(icon: "rosette", value: "\(badgeCount)個", label: "獲得バッジ →")
+            }
+            .buttonStyle(.plain)
             statCell(icon: "flame.fill", value: "\(streakDays)日", label: "連続学習")
         }
     }
@@ -175,11 +180,17 @@ struct ProfileView: View {
                     .font(.system(size: 20))
                     .foregroundStyle(premiumService.isPremium ? Color.tiffany : .white)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(premiumService.isPremium ? "プレミアム有効" : "プレミアムにアップグレード")
+                    Text(premiumService.isPremium
+                         ? "プレミアム有効"
+                         : PremiumService.freePromotionActive
+                            ? "プレミアム機能・現在無料開放中"
+                            : "プレミアムにアップグレード")
                         .font(.subheadline.weight(.bold))
                     Text(premiumService.isPremium
                          ? "ご利用ありがとうございます"
-                         : "トレーニングやり放題・月額980円（初月無料）")
+                         : PremiumService.freePromotionActive
+                            ? "正式版では月額980円（初月無料）の予定"
+                            : "トレーニングやり放題・月額980円（初月無料）")
                         .font(.caption)
                         .opacity(0.85)
                 }

@@ -11,6 +11,10 @@ final class PremiumService: ObservableObject {
     /// App Store Connect で登録するサブスクリプションのプロダクトID
     static let monthlyProductId = "app.logicky.premium.monthly"
 
+    /// 期間限定の全機能無料開放フラグ。課金を開始するタイミングで false にする。
+    /// true の間は無料プランの制限がかからず、ペイウォールは「無料開放中」の告知になる。
+    static let freePromotionActive = true
+
     // MARK: - Published
 
     @Published private(set) var isPremium: Bool = false
@@ -186,7 +190,9 @@ final class PremiumService: ObservableObject {
     }
 
     /// 無料プラン: トレーニングは1日1セッションまで（診断・辞典・ふりかえりは無制限）
+    /// 無料開放中はすべて許可
     func canStartTrainingSession(attemptService: AttemptService) -> Bool {
+        if Self.freePromotionActive { return true }
         if isPremium { return true }
         let calendar = Calendar.current
         let todayCount = attemptService.attempts.filter { calendar.isDateInToday($0.date) }.count

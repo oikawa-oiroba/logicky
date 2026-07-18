@@ -19,6 +19,9 @@ struct PaywallView: View {
                     header
                     if premiumService.isPremium {
                         premiumActiveCard
+                    } else if PremiumService.freePromotionActive {
+                        freePromotionCard
+                        featureList
                     } else {
                         featureList
                         purchaseSection
@@ -80,6 +83,24 @@ struct PaywallView: View {
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.tiffany.opacity(0.4), lineWidth: 1))
+    }
+
+    private var freePromotionCard: some View {
+        VStack(spacing: 8) {
+            Text("🎉 現在、全機能を無料開放中")
+                .font(.headline)
+                .foregroundStyle(Color.appText)
+            Text("正式リリース後、プレミアム機能は月額980円（初月無料）になる予定です。今のうちにすべての機能をお試しください。")
+                .font(.caption)
+                .foregroundStyle(Color.appSub)
+                .multilineTextAlignment(.center)
+                .lineSpacing(3)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(18)
+        .background(Color.tiffany.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.tiffany.opacity(0.35), lineWidth: 1))
     }
 
     private var featureList: some View {

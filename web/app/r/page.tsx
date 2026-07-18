@@ -96,12 +96,19 @@ export default function SharedResultPage({ searchParams }: Props) {
             <div key={a.label} className="space-y-1.5">
               <div className="flex justify-between text-sm">
                 <span className="text-app-sub">{a.label}</span>
-                <span className="font-semibold text-tiffany">{a.score}%</span>
+                <span className="font-semibold" style={{ color: scoreColor(a.score) }}>
+                  {a.score}%
+                </span>
               </div>
               <div className="h-2 bg-card-border rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-tiffany rounded-full"
-                  style={{ width: `${a.score}%` }}
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${a.score}%`,
+                    ...(a.score >= 100
+                      ? { backgroundImage: `linear-gradient(90deg, ${RAINBOW_COLORS.join(", ")})` }
+                      : { backgroundColor: scoreColor(a.score) }),
+                  }}
                 />
               </div>
             </div>

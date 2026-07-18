@@ -22,6 +22,10 @@ async function loadGoogleFont(text: string, weight: number): Promise<ArrayBuffer
 }
 
 function AxisRow({ label, score }: { label: string; score: number }) {
+  const barStyle =
+    score >= 100
+      ? { backgroundImage: `linear-gradient(90deg, ${RAINBOW_COLORS.join(", ")})` }
+      : { backgroundColor: scoreColor(score) };
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
       <div style={{ display: "flex", width: 110, fontSize: 26, color: "#5A6472" }}>
@@ -41,8 +45,8 @@ function AxisRow({ label, score }: { label: string; score: number }) {
             display: "flex",
             width: `${Math.max(score, 4)}%`,
             height: 22,
-            backgroundColor: TIFFANY,
             borderRadius: 11,
+            ...barStyle,
           }}
         />
       </div>
@@ -51,7 +55,7 @@ function AxisRow({ label, score }: { label: string; score: number }) {
           display: "flex",
           width: 90,
           fontSize: 28,
-          color: TIFFANY,
+          color: scoreColor(score),
           justifyContent: "flex-end",
         }}
       >
@@ -155,32 +159,55 @@ export async function GET(request: Request) {
             gap: 64,
           }}
         >
-          {/* Score（スコア帯で色が変わる。満点はレインボーリング） */}
+          {/* Score（点数ぶんだけ円弧を描画。色はスコア帯、満点はレインボー） */}
           <div
             style={{
               display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              position: "relative",
               width: 250,
               height: 250,
-              borderRadius: 125,
-              padding: 14,
-              background:
-                scores.total >= 100
-                  ? `linear-gradient(135deg, ${RAINBOW_COLORS.join(", ")})`
-                  : scoreColor(scores.total),
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
+            <svg
+              width="250"
+              height="250"
+              viewBox="0 0 250 250"
+              style={{ position: "absolute", top: 0, left: 0 }}
+            >
+              {scores.total >= 100 && (
+                <defs>
+                  <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    {RAINBOW_COLORS.map((c, i) => (
+                      <stop
+                        key={i}
+                        offset={`${(i / (RAINBOW_COLORS.length - 1)) * 100}%`}
+                        stopColor={c}
+                      />
+                    ))}
+                  </linearGradient>
+                </defs>
+              )}
+              <circle cx="125" cy="125" r="105" fill="none" stroke="#E8ECEF" strokeWidth="16" />
+              <circle
+                cx="125"
+                cy="125"
+                r="105"
+                fill="none"
+                stroke={scores.total >= 100 ? "url(#ringGrad)" : scoreColor(scores.total)}
+                strokeWidth="16"
+                strokeLinecap="round"
+                strokeDasharray={2 * Math.PI * 105}
+                strokeDashoffset={2 * Math.PI * 105 * (1 - Math.max(scores.total, 2) / 100)}
+                transform="rotate(-90 125 125)"
+              />
+            </svg>
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: "100%",
-                height: "100%",
-                borderRadius: 125,
-                backgroundColor: "#FFFFFF",
                 flexDirection: "column",
+                alignItems: "center",
               }}
             >
               <div style={{ display: "flex", alignItems: "flex-end" }}>

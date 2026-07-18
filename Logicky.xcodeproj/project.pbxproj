@@ -36,6 +36,7 @@
 		NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000005 /* ThinkingMethodService.swift */; };
 		NBLD0000000000000000000FB /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FB /* FeedbackService.swift */; };
 		NBLD0000000000000000000FE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FE /* ProfileView.swift */; };
+		NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FF /* BadgeCollectionView.swift */; };
 		NBLD0000000000000000000FD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FD /* PaywallView.swift */; };
 		NBLD0000000000000000000FC /* PremiumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FC /* PremiumService.swift */; };
 		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
@@ -94,6 +95,7 @@
 		NFIL000000000000000000005 /* ThinkingMethodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FB /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		NFIL0000000000000000000FF /* BadgeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCollectionView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FD /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FC /* PremiumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumService.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				NFIL0000000000000000000FE /* ProfileView.swift */,
+				NFIL0000000000000000000FF /* BadgeCollectionView.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -516,6 +519,7 @@
 				NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */,
 				NBLD0000000000000000000FB /* FeedbackService.swift in Sources */,
 				NBLD0000000000000000000FE /* ProfileView.swift in Sources */,
+				NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */,
 				NBLD0000000000000000000FD /* PaywallView.swift in Sources */,
 				NBLD0000000000000000000FC /* PremiumService.swift in Sources */,
 				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,
