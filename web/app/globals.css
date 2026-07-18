@@ -41,7 +41,7 @@
 }
 
 .choice-wrong {
-  @apply bg-gray-100 border-gray-200 text-app-sub line-through;
+  @apply bg-red-50 border-red-400 text-red-600;
 }
 
 .choice-correct-reveal {

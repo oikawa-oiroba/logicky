@@ -341,7 +341,7 @@ function StartScreen({
           ))}
         </div>
 
-        <div className="flex-1 min-h-5" />
+        <div className="h-6" />
 
         {/* 6. CTA */}
         <button
@@ -373,11 +373,11 @@ function QuizScreen({
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const q = questions[currentIndex];
   const progress = ((currentIndex + 1) / questions.length) * 100;
   const glossary = findGlossaryEntries([q.body, ...q.choices.map((c) => c.text)]);
+  const isLast = currentIndex + 1 >= questions.length;
 
   useEffect(() => {
     setSelected(null);
@@ -385,17 +385,20 @@ function QuizScreen({
     track("question_view", { index: currentIndex + 1 });
   }, [currentIndex]);
 
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
   const handleSelect = (choiceId: string) => {
     if (selected !== null) return;
     setSelected(choiceId);
     setShowFeedback(true);
-    timerRef.current = setTimeout(() => onAnswer(choiceId), 900);
+  };
+
+  // 「次へ」で明示的に進む。ローカル状態を先にリセットしてから親に通知することで、
+  // 次の問題に前の選択状態が一瞬残る問題を防ぐ
+  const handleNext = () => {
+    if (selected === null) return;
+    const choiceId = selected;
+    setSelected(null);
+    setShowFeedback(false);
+    onAnswer(choiceId);
   };
 
   const choiceClass = (choiceId: string): string => {
@@ -474,10 +477,20 @@ function QuizScreen({
             ))}
           </div>
 
-          {/* Explanation */}
-          {showFeedback && q.explanation && (
-            <div className="mt-4 p-3.5 bg-tiffany-light border border-tiffany/30 rounded-xl animate-fade-up">
-              <p className="text-sm text-tiffany leading-relaxed">{q.explanation}</p>
+          {/* Explanation & next */}
+          {showFeedback && (
+            <div className="animate-fade-up">
+              {q.explanation && (
+                <div className="mt-4 p-3.5 bg-tiffany-light border border-tiffany/30 rounded-xl">
+                  <p className="text-sm text-tiffany leading-relaxed">{q.explanation}</p>
+                </div>
+              )}
+              <button
+                onClick={handleNext}
+                className="w-full mt-4 py-3.5 bg-tiffany text-white font-bold rounded-xl text-base active:opacity-90 transition-opacity"
+              >
+                {isLast ? "結果を見る" : "次の問題へ"}
+              </button>
             </div>
           )}
         </div>
