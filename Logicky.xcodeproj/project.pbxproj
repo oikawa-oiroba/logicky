@@ -28,6 +28,7 @@
 		BFIL000000000000000000004 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000004 /* HistoryView.swift */; };
 		BFIL000000000000000000005 /* AttemptService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000005 /* AttemptService.swift */; };
 		BFIL000000000000000000006 /* ScoringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FILE000000000000000000006 /* ScoringService.swift */; };
+		LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = LSREF00000000000000000001 /* LaunchScreen.storyboard */; };
 		NBLD000000000000000000001 /* LevelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000001 /* LevelSelectionView.swift */; };
 		NBLD000000000000000000002 /* UnitSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000002 /* UnitSelectionView.swift */; };
 		NBLD000000000000000000003 /* UnitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000003 /* UnitDetailView.swift */; };
@@ -44,7 +45,6 @@
 		NBLD000000000000000000014 /* DiagnosticResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000014 /* DiagnosticResultView.swift */; };
 		NBLD000000000000000000015 /* ResultReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000015 /* ResultReviewView.swift */; };
 		NBLD000000000000000000016 /* ThinkingMethodDiagramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */; };
-		LSBLD00000000000000000001 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = LSREF00000000000000000001 /* LaunchScreen.storyboard */; };
 		NBLD000000000000000000017 /* Color+App.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000017 /* Color+App.swift */; };
 		NBLD000000000000000000018 /* DiagnosticHistoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */; };
 		NBLD000000000000000000019 /* CategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000019 /* CategorySelectionView.swift */; };
@@ -82,6 +82,7 @@
 		FILE000000000000000000004 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		FILE000000000000000000005 /* AttemptService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttemptService.swift; sourceTree = "<group>"; };
 		FILE000000000000000000006 /* ScoringService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoringService.swift; sourceTree = "<group>"; };
+		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		NFIL000000000000000000001 /* LevelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelSelectionView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000002 /* UnitSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitSelectionView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000003 /* UnitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDetailView.swift; sourceTree = "<group>"; };
@@ -96,10 +97,10 @@
 		NFIL000000000000000000012 /* DiagnosticStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticStartView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000013 /* DiagnosticQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticQuizView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000014 /* DiagnosticResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticResultView.swift; sourceTree = "<group>"; };
-		NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000015 /* ResultReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultReviewView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000016 /* ThinkingMethodDiagramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodDiagramView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000017 /* Color+App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+App.swift"; sourceTree = "<group>"; };
+		NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiagnosticHistoryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000019 /* CategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectionView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000020 /* CognitiveBias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBias.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000021 /* CognitiveBiasService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CognitiveBiasService.swift; sourceTree = "<group>"; };
@@ -110,7 +111,6 @@
 		NFIL000000000000000000026 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000027 /* SkillBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillBadge.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000028 /* SkillBadgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkillBadgeService.swift; sourceTree = "<group>"; };
-		LSREF00000000000000000001 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,14 +186,6 @@
 				NGRP000000000000000000005 /* Extensions */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		NGRP000000000000000000005 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				NFIL000000000000000000017 /* Color+App.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		CORE000000000000000000002 /* Models */ = {
@@ -305,22 +297,6 @@
 			path = Dictionary;
 			sourceTree = "<group>";
 		};
-		NGRP000000000000000000006 /* CognitiveBiasService */ = {
-			isa = PBXGroup;
-			children = (
-				NFIL000000000000000000021 /* CognitiveBiasService.swift */,
-			);
-			path = CognitiveBiasService;
-			sourceTree = "<group>";
-		};
-		NGRP000000000000000000007 /* SkillBadgeService */ = {
-			isa = PBXGroup;
-			children = (
-				NFIL000000000000000000028 /* SkillBadgeService.swift */,
-			);
-			path = SkillBadgeService;
-			sourceTree = "<group>";
-		};
 		NGRP000000000000000000002 /* ThinkingMethodService */ = {
 			isa = PBXGroup;
 			children = (
@@ -347,6 +323,30 @@
 				NFIL000000000000000000018 /* DiagnosticHistoryDetailView.swift */,
 			);
 			path = Diagnostic;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000005 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000017 /* Color+App.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000006 /* CognitiveBiasService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000021 /* CognitiveBiasService.swift */,
+			);
+			path = CognitiveBiasService;
+			sourceTree = "<group>";
+		};
+		NGRP000000000000000000007 /* SkillBadgeService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL000000000000000000028 /* SkillBadgeService.swift */,
+			);
+			path = SkillBadgeService;
 			sourceTree = "<group>";
 		};
 		SVCG000000000000000000001 /* QuestionService */ = {
@@ -621,6 +621,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4FF3QLGHH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
@@ -648,6 +649,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K4FF3QLGHH;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
