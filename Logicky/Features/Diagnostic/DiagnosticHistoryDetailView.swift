@@ -71,7 +71,7 @@ struct DiagnosticHistoryDetailView: View {
             Circle().stroke(Color.cardBorder, lineWidth: 16).frame(width: 160, height: 160)
             Circle()
                 .trim(from: 0, to: CGFloat(result.totalScore) / 100)
-                .stroke(Color.tiffany, style: StrokeStyle(lineWidth: 16, lineCap: .round))
+                .stroke(Color.scoreRingStyle(result.totalScore), style: StrokeStyle(lineWidth: 16, lineCap: .round))
                 .frame(width: 160, height: 160)
                 .rotationEffect(.degrees(-90))
             VStack(spacing: 2) {

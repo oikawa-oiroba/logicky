@@ -35,6 +35,9 @@
 		NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000004 /* ThinkingMethod.swift */; };
 		NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000005 /* ThinkingMethodService.swift */; };
 		NBLD0000000000000000000FB /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FB /* FeedbackService.swift */; };
+		NBLD0000000000000000000FE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FE /* ProfileView.swift */; };
+		NBLD0000000000000000000FD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FD /* PaywallView.swift */; };
+		NBLD0000000000000000000FC /* PremiumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FC /* PremiumService.swift */; };
 		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
 		NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000007 /* DictionaryDetailView.swift */; };
 		NBLD000000000000000000008 /* thinking_methods.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000008 /* thinking_methods.json */; };
@@ -90,6 +93,9 @@
 		NFIL000000000000000000004 /* ThinkingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethod.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000005 /* ThinkingMethodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FB /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
+		NFIL0000000000000000000FE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		NFIL0000000000000000000FD /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		NFIL0000000000000000000FC /* PremiumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumService.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000007 /* DictionaryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000008 /* thinking_methods.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = thinking_methods.json; sourceTree = "<group>"; };
@@ -165,6 +171,7 @@
 				SVCG000000000000000000003 /* ScoringService */,
 				NGRP000000000000000000002 /* ThinkingMethodService */,
 				NGRP0000000000000000000FB /* FeedbackService */,
+				NGRP0000000000000000000FC /* PremiumService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
 				NGRP000000000000000000006 /* CognitiveBiasService */,
 				NGRP000000000000000000007 /* SkillBadgeService */,
@@ -217,6 +224,8 @@
 		FEAT000000000000000000001 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				NGRP0000000000000000000FD /* Premium */,
+				NGRP0000000000000000000FE /* Profile */,
 				FEAT000000000000000000002 /* Onboarding */,
 				FEAT000000000000000000003 /* Home */,
 				FEAT000000000000000000004 /* Questions */,
@@ -314,6 +323,30 @@
 				NFIL0000000000000000000FB /* FeedbackService.swift */,
 			);
 			path = FeedbackService;
+			sourceTree = "<group>";
+		};
+		NGRP0000000000000000000FE /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL0000000000000000000FE /* ProfileView.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		NGRP0000000000000000000FD /* Premium */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL0000000000000000000FD /* PaywallView.swift */,
+			);
+			path = Premium;
+			sourceTree = "<group>";
+		};
+		NGRP0000000000000000000FC /* PremiumService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL0000000000000000000FC /* PremiumService.swift */,
+			);
+			path = PremiumService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000003 /* DiagnosticService */ = {
@@ -482,6 +515,9 @@
 				NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */,
 				NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */,
 				NBLD0000000000000000000FB /* FeedbackService.swift in Sources */,
+				NBLD0000000000000000000FE /* ProfileView.swift in Sources */,
+				NBLD0000000000000000000FD /* PaywallView.swift in Sources */,
+				NBLD0000000000000000000FC /* PremiumService.swift in Sources */,
 				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,
 				NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */,
 				NBLD000000000000000000009 /* DiagnosticResult.swift in Sources */,

@@ -19,6 +19,7 @@ enum AppRoute: Hashable {
     case cognitiveBiasList
     case cognitiveBiasDetail(biasId: String)
     case diagnosticDetail(result: DiagnosticResult)
+    case profile
 }
 
 struct RootView: View {
@@ -45,6 +46,7 @@ struct RootView: View {
 struct MainNavigationView: View {
     @StateObject private var quizViewModel = QuizViewModel()
     @StateObject private var attemptService = AttemptService.shared
+    @StateObject private var premiumService = PremiumService.shared
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
@@ -78,10 +80,13 @@ struct MainNavigationView: View {
                         CognitiveBiasDetailView(biasId: biasId, navigationPath: $navigationPath)
                     case .diagnosticDetail(let result):
                         DiagnosticHistoryDetailView(result: result, navigationPath: $navigationPath)
+                    case .profile:
+                        ProfileView(navigationPath: $navigationPath)
                     }
                 }
         }
         .environmentObject(quizViewModel)
         .environmentObject(attemptService)
+        .environmentObject(premiumService)
     }
 }

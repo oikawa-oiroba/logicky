@@ -1,5 +1,11 @@
 import { ImageResponse } from "next/og";
-import { rankLabel, rankDescription, parseSharedScores } from "../../../lib/rank";
+import {
+  rankLabel,
+  rankDescription,
+  parseSharedScores,
+  scoreColor,
+  RAINBOW_COLORS,
+} from "../../../lib/rank";
 
 export const runtime = "edge";
 
@@ -149,13 +155,20 @@ export async function GET(request: Request) {
             gap: 64,
           }}
         >
-          {/* Score */}
+          {/* Score（スコア帯で色が変わる。満点はレインボーリング） */}
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
-              gap: 4,
+              justifyContent: "center",
+              width: 250,
+              height: 250,
+              borderRadius: 125,
+              padding: 14,
+              background:
+                scores.total >= 100
+                  ? `linear-gradient(135deg, ${RAINBOW_COLORS.join(", ")})`
+                  : scoreColor(scores.total),
             }}
           >
             <div
@@ -163,10 +176,10 @@ export async function GET(request: Request) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 250,
-                height: 250,
+                width: "100%",
+                height: "100%",
                 borderRadius: 125,
-                border: `14px solid ${TIFFANY}`,
+                backgroundColor: "#FFFFFF",
                 flexDirection: "column",
               }}
             >
@@ -178,7 +191,7 @@ export async function GET(request: Request) {
                   点
                 </div>
               </div>
-              <div style={{ display: "flex", fontSize: 44, fontWeight: 700, color: TIFFANY, lineHeight: 1.2 }}>
+              <div style={{ display: "flex", fontSize: 44, fontWeight: 700, color: scoreColor(scores.total), lineHeight: 1.2 }}>
                 {rank}
               </div>
             </div>

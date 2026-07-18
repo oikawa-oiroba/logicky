@@ -13,7 +13,13 @@ final class QuizViewModel: ObservableObject {
     @Published private(set) var quizResult: QuizResult?
     @Published private(set) var unitId: String = ""
     @Published private(set) var mode: QuizMode = .training
-    @Published var newlyAcquiredBadge: UnitModel? = nil
+    @Published var newlyAcquiredBadge: BadgeCelebration? = nil
+
+    struct BadgeCelebration: Identifiable {
+        let unit: UnitModel
+        let isAcquired: Bool // true=習得(80%+) / false=クリア
+        var id: String { unit.id }
+    }
 
     // MARK: - Computed
 
@@ -172,11 +178,16 @@ final class QuizViewModel: ObservableObject {
         )
         AttemptService.shared.save(attempt)
 
-        if mode == .training {
+        if mode == .training, let unit = UnitModel.all.first(where: { $0.id == unitId }) {
             let mcIds = Set(questions.map { $0.id })
             if let rate = AttemptService.shared.mcCorrectRate(for: unitId, mcIds: mcIds),
                SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: rate) {
-                newlyAcquiredBadge = UnitModel.all.first { $0.id == unitId }
+                // 80%以上：習得バッジ
+                _ = SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId)
+                newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: true)
+            } else if SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId) {
+                // 初クリア：クリアバッジ
+                newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: false)
             }
         }
 

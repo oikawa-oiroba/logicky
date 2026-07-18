@@ -17,6 +17,17 @@ final class SkillBadgeService {
         return SkillBadge(unitCode: unit.id, level: level, acquiredDate: date, correctRate: rate)
     }
 
+    private let clearedKey = "logicky_cleared_badges_v1"
+
+    /// 単元を初めてクリア（セッション完了）したらtrue。クリアバッジの演出用
+    func checkAndMarkNewlyCleared(for unitId: String) -> Bool {
+        var set = Set(UserDefaults.standard.stringArray(forKey: clearedKey) ?? [])
+        guard !set.contains(unitId) else { return false }
+        set.insert(unitId)
+        UserDefaults.standard.set(Array(set), forKey: clearedKey)
+        return true
+    }
+
     /// Returns true if this unit just reached 'acquired' for the first time.
     func checkAndMarkNewlyAcquired(for unitId: String, rate: Double) -> Bool {
         guard rate >= 0.8 else { return false }

@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { rankLabel, rankDescription, parseSharedScores } from "../../lib/rank";
+import {
+  rankLabel,
+  rankDescription,
+  parseSharedScores,
+  scoreColor,
+  RAINBOW_COLORS,
+} from "../../lib/rank";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -63,12 +69,23 @@ export default function SharedResultPage({ searchParams }: Props) {
 
         {/* Score card */}
         <div className="bg-white rounded-2xl border border-card-border p-6 text-center space-y-3">
-          <div className="flex items-center justify-center w-40 h-40 mx-auto rounded-full border-8 border-tiffany flex-col">
-            <div>
-              <span className="text-4xl font-bold text-app-text">{s.total}</span>
-              <span className="text-sm text-app-sub ml-1">点</span>
+          <div
+            className="flex items-center justify-center w-40 h-40 mx-auto rounded-full p-2"
+            style={
+              s.total >= 100
+                ? { background: `conic-gradient(${RAINBOW_COLORS.join(", ")})` }
+                : { background: scoreColor(s.total) }
+            }
+          >
+            <div className="flex flex-col items-center justify-center w-full h-full rounded-full bg-white">
+              <div>
+                <span className="text-4xl font-bold text-app-text">{s.total}</span>
+                <span className="text-sm text-app-sub ml-1">点</span>
+              </div>
+              <div className="text-2xl font-black" style={{ color: scoreColor(s.total) }}>
+                {rank}
+              </div>
             </div>
-            <div className="text-2xl font-black text-tiffany">{rank}</div>
           </div>
           <div className="text-sm text-app-sub">{desc}</div>
         </div>

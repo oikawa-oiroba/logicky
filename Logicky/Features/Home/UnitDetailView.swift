@@ -5,6 +5,8 @@ struct UnitDetailView: View {
     let levelId: Int
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var attemptService: AttemptService
+    @EnvironmentObject var premiumService: PremiumService
+    @State private var showPaywall = false
 
     private var unit: UnitModel? { UnitModel.all.first { $0.id == unitId } }
 
@@ -49,6 +51,9 @@ struct UnitDetailView: View {
         .navigationTitle(unit?.displayName ?? "")
         .navigationBarTitleDisplayMode(.large)
         .background(Color(.systemGroupedBackground))
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+        }
     }
 
     // MARK: - Mode Info
@@ -87,7 +92,11 @@ struct UnitDetailView: View {
             Divider()
             VStack(spacing: 12) {
                 Button {
-                    navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+                    if premiumService.canStartTrainingSession(attemptService: attemptService) {
+                        navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+                    } else {
+                        showPaywall = true
+                    }
                 } label: {
                     Text(mcCompleted ? "もう一度トレーニング" : "トレーニング開始")
                         .font(.headline)

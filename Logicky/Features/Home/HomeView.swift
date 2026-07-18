@@ -3,13 +3,14 @@ import SwiftUI
 struct HomeView: View {
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = HomeViewModel()
+    @EnvironmentObject var attemptService: AttemptService
+    @EnvironmentObject var premiumService: PremiumService
 
     @State private var showDiagnostic = false
     @State private var skillTab: Int = 0
+    @State private var showPaywall = false
 
     @AppStorage("logicky_nickname") private var nickname: String = ""
-    @State private var showNicknameInput = false
-    @State private var nicknameDraft = ""
 
     var body: some View {
         ScrollView {
@@ -30,17 +31,20 @@ struct HomeView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showDiagnostic) {
             DiagnosticStartView { unitId in
-                navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+                startTraining(unitId: unitId)
             }
         }
-        .alert("ニックネーム", isPresented: $showNicknameInput) {
-            TextField("例：ようへい", text: $nicknameDraft)
-            Button("保存") {
-                nickname = String(nicknameDraft.trimmingCharacters(in: .whitespacesAndNewlines).prefix(12))
-            }
-            Button("キャンセル", role: .cancel) {}
-        } message: {
-            Text("ホーム画面に「ようこそ！〇〇さん」と表示されます")
+        .sheet(isPresented: $showPaywall) {
+            PaywallView()
+        }
+    }
+
+    // 無料プランは1日1トレーニングまで。超過時はペイウォールを表示
+    private func startTraining(unitId: String) {
+        if premiumService.canStartTrainingSession(attemptService: attemptService) {
+            navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+        } else {
+            showPaywall = true
         }
     }
 
@@ -89,19 +93,20 @@ struct HomeView: View {
                     .font(.headline)
                     .foregroundStyle(Color.appText)
 
+                // 苦手を先頭にして、復習から入る導線にする
                 Picker("タブ", selection: $skillTab) {
-                    Text("得意（\(strengths.count)）").tag(0)
-                    Text("苦手（\(weak.count)）").tag(1)
-                    Text("未習得（\(untried.count)）").tag(2)
+                    Text("苦手（\(weak.count)）").tag(0)
+                    Text("未習得（\(untried.count)）").tag(1)
+                    Text("得意（\(strengths.count)）").tag(2)
                 }
                 .pickerStyle(.segmented)
 
                 if skillTab == 0 {
-                    skillList(strengths, emptyMessage: "まだ得意スキルはありません", showRate: true)
-                } else if skillTab == 1 {
                     skillList(weak, emptyMessage: "苦手スキルはありません！", showRate: true)
-                } else {
+                } else if skillTab == 1 {
                     skillList(untried, emptyMessage: "全単元に挑戦済みです！", showRate: false)
+                } else {
+                    skillList(strengths, emptyMessage: "まだ得意スキルはありません", showRate: true)
                 }
             }
             .padding(16)
@@ -123,7 +128,7 @@ struct HomeView: View {
                 VStack(spacing: 6) {
                     ForEach(infos) { info in
                         Button {
-                            navigationPath.append(AppRoute.quiz(unitId: info.unit.id, mode: .training))
+                            startTraining(unitId: info.unit.id)
                         } label: {
                             HStack(spacing: 10) {
                                 Image(systemName: badgeIcon(for: info.badge?.level))
@@ -274,8 +279,7 @@ struct HomeView: View {
                 }
                 Spacer()
                 Button {
-                    nicknameDraft = nickname
-                    showNicknameInput = true
+                    navigationPath.append(AppRoute.profile)
                 } label: {
                     Image(systemName: nickname.isEmpty ? "person.crop.circle.badge.plus" : "person.crop.circle")
                         .font(.system(size: 22))
@@ -375,7 +379,7 @@ struct HomeView: View {
             }
 
             Button {
-                navigationPath.append(AppRoute.quiz(unitId: unit.id, mode: .training))
+                startTraining(unitId: unit.id)
             } label: {
                 HStack(spacing: 6) {
                     Text(viewModel.isAllUnitsCompleted ? "再挑戦する" : "始める")

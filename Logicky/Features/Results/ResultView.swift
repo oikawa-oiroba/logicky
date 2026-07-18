@@ -29,8 +29,8 @@ struct ResultView: View {
         .background(Color.appBg)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(item: $viewModel.newlyAcquiredBadge) { unit in
-            BadgeAcquisitionSheet(unit: unit) {
+        .sheet(item: $viewModel.newlyAcquiredBadge) { celebration in
+            BadgeAcquisitionSheet(unit: celebration.unit, isAcquired: celebration.isAcquired) {
                 viewModel.newlyAcquiredBadge = nil
             }
         }
@@ -505,6 +505,7 @@ private struct RubricRow: View {
 
 struct BadgeAcquisitionSheet: View {
     let unit: UnitModel
+    var isAcquired: Bool = true
     let onDismiss: () -> Void
 
     var body: some View {
@@ -514,18 +515,18 @@ struct BadgeAcquisitionSheet: View {
                 Circle()
                     .fill(Color.tiffany.opacity(0.12))
                     .frame(width: 120, height: 120)
-                Image(systemName: "checkmark.seal.fill")
+                Image(systemName: isAcquired ? "checkmark.seal.fill" : "rosette")
                     .font(.system(size: 54))
                     .foregroundStyle(Color.tiffany)
             }
             VStack(spacing: 8) {
-                Text("スキル習得！")
+                Text(isAcquired ? "スキル習得！" : "単元クリア！")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.appText)
                 Text("\(unit.displayName)")
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.tiffany)
-                Text("正答率80%以上を達成しました")
+                Text(isAcquired ? "正答率80%以上を達成しました" : "クリアバッジを獲得しました")
                     .font(.subheadline)
                     .foregroundStyle(Color.appSub)
                     .padding(.top, 4)

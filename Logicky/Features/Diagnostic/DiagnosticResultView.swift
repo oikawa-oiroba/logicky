@@ -49,14 +49,14 @@ struct DiagnosticResultView: View {
                 .frame(width: 160, height: 160)
             Circle()
                 .trim(from: 0, to: CGFloat(vm.displayScore) / 100)
-                .stroke(Color.tiffany, style: StrokeStyle(lineWidth: 16, lineCap: .round))
+                .stroke(Color.scoreRingStyle(vm.displayScore), style: StrokeStyle(lineWidth: 16, lineCap: .round))
                 .frame(width: 160, height: 160)
                 .rotationEffect(.degrees(-90))
                 .animation(.easeOut(duration: 0.05), value: vm.displayScore)
             VStack(spacing: 2) {
                 Text("\(vm.displayScore)")
                     .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.tiffany)
+                    .foregroundStyle(Color.scoreColor(vm.displayScore))
                     .contentTransition(.numericText())
                 Text("点").font(.subheadline).foregroundStyle(Color.appSub)
             }
@@ -406,20 +406,22 @@ struct DiagnosticResultView: View {
                 }
             }
 
-            Button {
-                generateShareImage()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "square.and.arrow.up")
-                    Text("結果をシェアする")
-                        .fontWeight(.semibold)
+            HStack(spacing: 8) {
+                snsButton(label: "X", color: Color.appText) {
+                    openShareURL("https://twitter.com/intent/tweet?text=\(encoded(shareText))")
                 }
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(Color.tiffany)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                snsButton(label: "LINE", color: Color(red: 6/255, green: 199/255, blue: 85/255)) {
+                    openShareURL("https://line.me/R/share?text=\(encoded(shareText))")
+                }
+                snsButton(label: "Insta", color: Color(red: 225/255, green: 48/255, blue: 108/255)) {
+                    shareToInstagram()
+                }
+                snsButton(label: "FB", color: Color(red: 8/255, green: 102/255, blue: 255/255)) {
+                    openShareURL("https://www.facebook.com/sharer/sharer.php?u=\(encoded(shareUrl))")
+                }
+                snsButton(label: "その他", color: Color.appSub, systemIcon: "square.and.arrow.up") {
+                    generateShareImage()
+                }
             }
 
             Button {
@@ -495,6 +497,73 @@ struct DiagnosticResultView: View {
         shareImage = renderer.uiImage
         showShareSheet = true
     }
+
+    // MARK: - SNS Buttons
+
+    private func snsButton(
+        label: String,
+        color: Color,
+        systemIcon: String? = nil,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            VStack(spacing: 5) {
+                ZStack {
+                    Circle()
+                        .fill(color.opacity(0.1))
+                        .frame(width: 40, height: 40)
+                    if let systemIcon {
+                        Image(systemName: systemIcon)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundStyle(color)
+                    } else {
+                        Text(String(label.prefix(2)))
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(color)
+                    }
+                }
+                Text(label)
+                    .font(.caption2)
+                    .foregroundStyle(Color.appSub)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func encoded(_ text: String) -> String {
+        text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+    }
+
+    private func openShareURL(_ urlString: String) {
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    // Instagramストーリーへ共有（未インストール時は共有シートにフォールバック）
+    @MainActor
+    private func shareToInstagram() {
+        guard let result = vm.result else { return }
+        let renderer = ImageRenderer(content: shareCard(result).frame(width: 480))
+        renderer.scale = 2.5
+        guard let img = renderer.uiImage, let png = img.pngData() else { return }
+        let items: [[String: Any]] = [["com.instagram.sharedSticker.backgroundImage": png]]
+        UIPasteboard.general.setItems(items, options: [.expirationDate: Date().addingTimeInterval(300)])
+        if let url = URL(string: "instagram-stories://share?source_application=app.logicky") {
+            UIApplication.shared.open(url) { success in
+                if !success {
+                    Task { @MainActor in
+                        self.shareImage = img
+                        self.showShareSheet = true
+                    }
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Share Card View（Web版のOGカードと同じ横型レイアウト）
@@ -547,7 +616,7 @@ struct ShareCardView: View {
             HStack(spacing: 18) {
                 ZStack {
                     Circle()
-                        .stroke(Color.tiffany, lineWidth: 7)
+                        .stroke(Color.scoreRingStyle(score), lineWidth: 7)
                         .frame(width: 108, height: 108)
                     VStack(spacing: 0) {
                         HStack(alignment: .firstTextBaseline, spacing: 2) {

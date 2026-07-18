@@ -16,6 +16,18 @@ export function rankDescription(score: number): string {
   return "基礎から鍛え直そう";
 }
 
+// スコア帯の色（低いほど赤 → 黄 → 青 → ターコイズ、満点はレインボー扱い）
+export function scoreColor(score: number): string {
+  if (score < 40) return "#E74C3C";
+  if (score < 60) return "#F3B720";
+  if (score < 80) return "#3B82F6";
+  return "#0ABAB5";
+}
+
+export const RAINBOW_COLORS = [
+  "#E74C3C", "#F39C12", "#F3B720", "#2ECC71", "#0ABAB5", "#3B82F6", "#9B59B6", "#E74C3C",
+];
+
 // 3軸のバランスから表示用のタイプ名を導く（採点ロジックには影響しない・表示のみ）
 export function deriveTypeName(
   organize: number,

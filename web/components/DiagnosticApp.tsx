@@ -23,7 +23,13 @@ import {
   ChevronDownIcon,
   MessageSquareIcon,
 } from "./icons";
-import { rankLabel, rankDescription, deriveTypeName } from "../lib/rank";
+import {
+  rankLabel,
+  rankDescription,
+  deriveTypeName,
+  scoreColor,
+  RAINBOW_COLORS,
+} from "../lib/rank";
 import { findGlossaryEntries } from "../lib/glossary";
 import { track, captureUtm } from "../lib/analytics";
 
@@ -181,15 +187,30 @@ function ScoreCircle({ score, animate }: { score: number; animate: boolean }) {
   const radius = 52;
   const circumference = 2 * Math.PI * radius;
   const offset = animate ? circumference * (1 - score / 100) : circumference;
+  const isPerfect = score >= 100;
+  const strokeValue = isPerfect ? "url(#rainbowRing)" : scoreColor(score);
 
   return (
     <div className="relative flex items-center justify-center w-40 h-40 mx-auto">
       <svg className="absolute" width="160" height="160" viewBox="0 0 160 160">
+        {isPerfect && (
+          <defs>
+            <linearGradient id="rainbowRing" x1="0%" y1="0%" x2="100%" y2="100%">
+              {RAINBOW_COLORS.map((c, i) => (
+                <stop
+                  key={i}
+                  offset={`${(i / (RAINBOW_COLORS.length - 1)) * 100}%`}
+                  stopColor={c}
+                />
+              ))}
+            </linearGradient>
+          </defs>
+        )}
         <circle cx="80" cy="80" r={radius} fill="none" stroke="#E5E7EB" strokeWidth="10" />
         <circle
           cx="80" cy="80" r={radius}
           fill="none"
-          stroke="#0ABAB5"
+          stroke={strokeValue}
           strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={circumference}
