@@ -34,6 +34,7 @@
 		NBLD000000000000000000003 /* UnitDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000003 /* UnitDetailView.swift */; };
 		NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000004 /* ThinkingMethod.swift */; };
 		NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000005 /* ThinkingMethodService.swift */; };
+		NBLD0000000000000000000FB /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FB /* FeedbackService.swift */; };
 		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
 		NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000007 /* DictionaryDetailView.swift */; };
 		NBLD000000000000000000008 /* thinking_methods.json in Resources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000008 /* thinking_methods.json */; };
@@ -88,6 +89,7 @@
 		NFIL000000000000000000003 /* UnitDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000004 /* ThinkingMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethod.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000005 /* ThinkingMethodService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThinkingMethodService.swift; sourceTree = "<group>"; };
+		NFIL0000000000000000000FB /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000007 /* DictionaryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryDetailView.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000008 /* thinking_methods.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = thinking_methods.json; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				SVCG000000000000000000002 /* AttemptService */,
 				SVCG000000000000000000003 /* ScoringService */,
 				NGRP000000000000000000002 /* ThinkingMethodService */,
+				NGRP0000000000000000000FB /* FeedbackService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
 				NGRP000000000000000000006 /* CognitiveBiasService */,
 				NGRP000000000000000000007 /* SkillBadgeService */,
@@ -303,6 +306,14 @@
 				NFIL000000000000000000005 /* ThinkingMethodService.swift */,
 			);
 			path = ThinkingMethodService;
+			sourceTree = "<group>";
+		};
+		NGRP0000000000000000000FB /* FeedbackService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL0000000000000000000FB /* FeedbackService.swift */,
+			);
+			path = FeedbackService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000003 /* DiagnosticService */ = {
@@ -470,6 +481,7 @@
 				NBLD000000000000000000003 /* UnitDetailView.swift in Sources */,
 				NBLD000000000000000000004 /* ThinkingMethod.swift in Sources */,
 				NBLD000000000000000000005 /* ThinkingMethodService.swift in Sources */,
+				NBLD0000000000000000000FB /* FeedbackService.swift in Sources */,
 				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,
 				NBLD000000000000000000007 /* DictionaryDetailView.swift in Sources */,
 				NBLD000000000000000000009 /* DiagnosticResult.swift in Sources */,

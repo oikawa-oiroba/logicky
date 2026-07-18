@@ -208,6 +208,14 @@ struct MultipleChoiceView: View {
                     // Badges row
                     badgesRow(question)
 
+                    // Feedback（問題への意見）
+                    QuestionFeedbackForm(
+                        questionId: question.id,
+                        unit: question.unit ?? "",
+                        selectedChoiceId: answeredChoiceId
+                    )
+                    .id(question.id)
+
                     // Next button
                     Button {
                         viewModel.goNext()
@@ -260,6 +268,121 @@ struct MultipleChoiceView: View {
     private func hintMethod(for question: Question) -> ThinkingMethod? {
         guard let unitId = question.unit else { return nil }
         return ThinkingMethodService.shared.all.first { $0.unitId == unitId }
+    }
+}
+
+// MARK: - Question Feedback Form（結果画面からも利用）
+
+struct QuestionFeedbackForm: View {
+    let questionId: String
+    let unit: String
+    let selectedChoiceId: String?
+
+    private enum SendStatus { case idle, sending, done, error }
+
+    @State private var isOpen = false
+    @State private var category: String? = nil
+    @State private var comment = ""
+    @State private var status: SendStatus = .idle
+
+    var body: some View {
+        Group {
+            if status == .done {
+                Text("フィードバックを送信しました。改善に活用します。ありがとうございます！")
+                    .font(.caption)
+                    .foregroundStyle(Color.tiffany)
+            } else if !isOpen {
+                Button {
+                    withAnimation { isOpen = true }
+                } label: {
+                    HStack(spacing: 5) {
+                        Image(systemName: "bubble.left")
+                            .font(.caption2)
+                        Text("この問題について意見を送る（わかりづらい・答えが違う 等）")
+                            .font(.caption)
+                            .underline()
+                    }
+                    .foregroundStyle(Color.appGray)
+                }
+                .buttonStyle(.plain)
+            } else {
+                VStack(alignment: .leading, spacing: 10) {
+                    let columns = [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
+                    LazyVGrid(columns: columns, spacing: 8) {
+                        ForEach(FeedbackService.categories, id: \.self) { c in
+                            Button {
+                                category = c
+                            } label: {
+                                Text(c)
+                                    .font(.caption)
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 7)
+                                    .background(category == c ? Color.tiffany : Color.white)
+                                    .foregroundStyle(category == c ? .white : Color.appSub)
+                                    .clipShape(Capsule())
+                                    .overlay(Capsule().stroke(category == c ? Color.tiffany : Color.cardBorder, lineWidth: 1))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+
+                    TextField("詳しく教えてもらえると助かります（任意）", text: $comment, axis: .vertical)
+                        .font(.caption)
+                        .lineLimit(2...4)
+                        .padding(8)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.cardBorder, lineWidth: 1))
+
+                    HStack(spacing: 12) {
+                        Button {
+                            submit()
+                        } label: {
+                            Text(status == .sending ? "送信中…" : "送信する")
+                                .font(.caption.weight(.semibold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(category == nil ? Color.appGray : Color.tiffany)
+                                .clipShape(Capsule())
+                        }
+                        .disabled(category == nil || status == .sending)
+                        .buttonStyle(.plain)
+
+                        Button("閉じる") {
+                            withAnimation { isOpen = false }
+                        }
+                        .font(.caption)
+                        .foregroundStyle(Color.appGray)
+                        .buttonStyle(.plain)
+
+                        if status == .error {
+                            Text("送信に失敗しました")
+                                .font(.caption2)
+                                .foregroundStyle(.red)
+                        }
+                    }
+                }
+                .padding(10)
+                .background(Color.appBg)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+        }
+    }
+
+    private func submit() {
+        guard let category else { return }
+        status = .sending
+        Task {
+            let ok = await FeedbackService.shared.send(
+                questionId: questionId,
+                unit: unit,
+                category: category,
+                comment: comment,
+                selectedChoiceId: selectedChoiceId
+            )
+            status = ok ? .done : .error
+        }
     }
 }
 

@@ -349,6 +349,8 @@ struct DiagnosticHistoryDetailView: View {
     @MainActor
     private func generateShareImage() {
         let card = ShareCardView(
+            nickname: UserDefaults.standard.string(forKey: "logicky_nickname")?
+                .trimmingCharacters(in: .whitespacesAndNewlines) ?? "",
             score: result.totalScore,
             rank: vm.rankLabel(for: result.totalScore),
             rankDesc: vm.rankDescription(for: result.totalScore),
@@ -356,8 +358,8 @@ struct DiagnosticHistoryDetailView: View {
             reasonScore: result.reasonScore,
             judgeScore: result.judgeScore
         )
-        let renderer = ImageRenderer(content: card.frame(width: 360))
-        renderer.scale = UIScreen.main.scale
+        let renderer = ImageRenderer(content: card.frame(width: 480))
+        renderer.scale = 2.5
         shareImage = renderer.uiImage
         showShareSheet = true
     }

@@ -8,6 +8,7 @@ struct DiagnosticResultView: View {
     @State private var showProfileInput = false
     @State private var showShareSheet = false
     @State private var shareImage: UIImage? = nil
+    @AppStorage("logicky_nickname") private var nickname: String = ""
 
     var body: some View {
         ScrollView {
@@ -375,6 +376,36 @@ struct DiagnosticResultView: View {
 
     private var actionButtons: some View {
         VStack(spacing: 12) {
+            // シェアカードのプレビュー（Web版と同じ体験）
+            if let result = vm.result {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("結果をシェア")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(Color.appText)
+
+                    HStack(spacing: 8) {
+                        Image(systemName: "person.crop.circle")
+                            .foregroundStyle(Color.appGray)
+                        TextField("ニックネーム・Xの名前（任意）", text: $nickname)
+                            .font(.subheadline)
+                            .onChange(of: nickname) { _, newValue in
+                                if newValue.count > 12 {
+                                    nickname = String(newValue.prefix(12))
+                                }
+                            }
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.cardBorder, lineWidth: 1))
+
+                    shareCard(result)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.cardBorder, lineWidth: 1))
+                }
+            }
+
             Button {
                 generateShareImage()
             } label: {
@@ -411,16 +442,42 @@ struct DiagnosticResultView: View {
 
     // MARK: - Share
 
-    private var shareText: String {
-        let score = vm.result?.totalScore ?? 0
-        let rank = vm.rankLabel(for: score)
-        return "ロジッキー診断で\(score)点！ランク\(rank)でした #Logicky #論理的思考"
+    private var trimmedNickname: String {
+        nickname.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    @MainActor
-    private func generateShareImage() {
-        guard let result = vm.result else { return }
-        let card = ShareCardView(
+    // Web版と同じ /r 共有URL（貼り先で結果カードが展開される）
+    private var shareUrl: String {
+        guard let result = vm.result else { return "https://logicky.app" }
+        var components = URLComponents(string: "https://logicky.app/r")!
+        var items = [
+            URLQueryItem(name: "t", value: "\(result.totalScore)"),
+            URLQueryItem(name: "o", value: "\(result.organizeScore)"),
+            URLQueryItem(name: "r", value: "\(result.reasonScore)"),
+            URLQueryItem(name: "j", value: "\(result.judgeScore)"),
+        ]
+        if !trimmedNickname.isEmpty {
+            items.append(URLQueryItem(name: "n", value: trimmedNickname))
+        }
+        components.queryItems = items
+        return components.url?.absoluteString ?? "https://logicky.app"
+    }
+
+    private var shareText: String {
+        guard let result = vm.result else { return "" }
+        let who = trimmedNickname.isEmpty ? "" : "\(trimmedNickname)さんの"
+        let rank = vm.rankLabel(for: result.totalScore)
+        return """
+        \(who)ロジッキー診断結果：\(result.totalScore)点（\(rank)ランク）
+        整理力\(result.organizeScore)% / 推論力\(result.reasonScore)% / 判断力\(result.judgeScore)%
+        #ロジッキー #論理的思考力
+        \(shareUrl)
+        """
+    }
+
+    private func shareCard(_ result: DiagnosticResult) -> ShareCardView {
+        ShareCardView(
+            nickname: trimmedNickname,
             score: result.totalScore,
             rank: vm.rankLabel(for: result.totalScore),
             rankDesc: vm.rankDescription(for: result.totalScore),
@@ -428,16 +485,22 @@ struct DiagnosticResultView: View {
             reasonScore: result.reasonScore,
             judgeScore: result.judgeScore
         )
-        let renderer = ImageRenderer(content: card.frame(width: 360))
-        renderer.scale = UIScreen.main.scale
+    }
+
+    @MainActor
+    private func generateShareImage() {
+        guard let result = vm.result else { return }
+        let renderer = ImageRenderer(content: shareCard(result).frame(width: 480))
+        renderer.scale = 2.5
         shareImage = renderer.uiImage
         showShareSheet = true
     }
 }
 
-// MARK: - Share Card View
+// MARK: - Share Card View（Web版のOGカードと同じ横型レイアウト）
 
 struct ShareCardView: View {
+    let nickname: String
     let score: Int
     let rank: String
     let rankDesc: String
@@ -445,54 +508,124 @@ struct ShareCardView: View {
     let reasonScore: Int
     let judgeScore: Int
 
-    var body: some View {
-        VStack(spacing: 16) {
-            HStack(spacing: 6) {
-                Image(systemName: "brain.head.profile")
-                    .foregroundStyle(Color.tiffany)
-                Text("ロジッキー診断")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundStyle(Color.appText)
-            }
-            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                Text("\(score)")
-                    .font(.system(size: 56, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.tiffany)
-                Text("点")
-                    .font(.title3)
-                    .foregroundStyle(Color.appSub)
-            }
-            Text("ランク \(rank) — \(rankDesc)")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.tiffany)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 5)
-                .background(Color.tiffany.opacity(0.1))
-                .clipShape(Capsule())
-
-            HStack(spacing: 20) {
-                axisChip(label: "整理力", score: organizeScore)
-                axisChip(label: "推論力", score: reasonScore)
-                axisChip(label: "判断力", score: judgeScore)
-            }
-        }
-        .padding(24)
-        .background(Color.white)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.tiffany.opacity(0.3), lineWidth: 1.5)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+    private var title: String {
+        nickname.isEmpty ? "ロジッキー診断結果" : "\(nickname)さんの診断結果"
     }
 
-    private func axisChip(label: String, score: Int) -> some View {
-        VStack(spacing: 2) {
-            Text("\(score)%")
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.tiffany)
+    // Web版 deriveTypeName と同じルール
+    private var typeName: String {
+        let maxV = max(organizeScore, reasonScore, judgeScore)
+        let minV = min(organizeScore, reasonScore, judgeScore)
+        if maxV - minV <= 10 { return "バランス型" }
+        if maxV == reasonScore { return "じっくり推論型" }
+        if maxV == organizeScore { return "コツコツ整理型" }
+        return "ズバッと判断型"
+    }
+
+    var body: some View {
+        VStack(spacing: 14) {
+            // Header
+            HStack {
+                HStack(spacing: 6) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white)
+                        .frame(width: 26, height: 26)
+                        .background(Color.tiffany)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                    Text("Logicky")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(Color.appText)
+                }
+                Spacer()
+                Text("ロジッキー診断")
+                    .font(.caption)
+                    .foregroundStyle(Color.appGray)
+            }
+
+            // Body
+            HStack(spacing: 18) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.tiffany, lineWidth: 7)
+                        .frame(width: 108, height: 108)
+                    VStack(spacing: 0) {
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text("\(score)")
+                                .font(.system(size: 38, weight: .bold, design: .rounded))
+                                .foregroundStyle(Color.appText)
+                            Text("点")
+                                .font(.caption)
+                                .foregroundStyle(Color.appSub)
+                        }
+                        Text(rank)
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(Color.tiffany)
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack {
+                        Text(title)
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundStyle(Color.appText)
+                            .lineLimit(1)
+                        Spacer()
+                        Text(typeName)
+                            .font(.system(size: 10, weight: .semibold))
+                            .foregroundStyle(Color.tiffany)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 3)
+                            .background(Color.tiffany.opacity(0.1))
+                            .clipShape(Capsule())
+                    }
+                    Text(rankDesc)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.appSub)
+                    axisBar(label: "整理力", score: organizeScore)
+                    axisBar(label: "推論力", score: reasonScore)
+                    axisBar(label: "判断力", score: judgeScore)
+                }
+            }
+            .padding(14)
+            .background(Color.white)
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+
+            // Footer
+            HStack {
+                Text("あなたも無料で診断する")
+                    .font(.caption)
+                    .foregroundStyle(Color.appSub)
+                Spacer()
+                Text("logicky.app")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(Color.tiffany)
+            }
+        }
+        .padding(16)
+        .background(Color.appBg)
+    }
+
+    private func axisBar(label: String, score: Int) -> some View {
+        HStack(spacing: 8) {
             Text(label)
-                .font(.caption)
+                .font(.system(size: 11))
                 .foregroundStyle(Color.appSub)
+                .frame(width: 40, alignment: .leading)
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.cardBorder)
+                    Capsule()
+                        .fill(Color.tiffany)
+                        .frame(width: geo.size.width * CGFloat(max(score, 4)) / 100)
+                }
+            }
+            .frame(height: 7)
+            Text("\(score)%")
+                .font(.system(size: 12, weight: .bold))
+                .foregroundStyle(Color.tiffany)
+                .frame(width: 38, alignment: .trailing)
         }
     }
 }

@@ -7,6 +7,10 @@ struct HomeView: View {
     @State private var showDiagnostic = false
     @State private var skillTab: Int = 0
 
+    @AppStorage("logicky_nickname") private var nickname: String = ""
+    @State private var showNicknameInput = false
+    @State private var nicknameDraft = ""
+
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
@@ -28,6 +32,15 @@ struct HomeView: View {
             DiagnosticStartView { unitId in
                 navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
             }
+        }
+        .alert("ニックネーム", isPresented: $showNicknameInput) {
+            TextField("例：ようへい", text: $nicknameDraft)
+            Button("保存") {
+                nickname = String(nicknameDraft.trimmingCharacters(in: .whitespacesAndNewlines).prefix(12))
+            }
+            Button("キャンセル", role: .cancel) {}
+        } message: {
+            Text("ホーム画面に「ようこそ！〇〇さん」と表示されます")
         }
     }
 
@@ -249,16 +262,32 @@ struct HomeView: View {
     // MARK: - Logo
 
     private var logoHeader: some View {
-        HStack {
-            HStack(spacing: 8) {
-                Image(systemName: "brain.head.profile")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.tiffany)
-                Text("Logicky")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(Color.appText)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                HStack(spacing: 8) {
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 20))
+                        .foregroundStyle(Color.tiffany)
+                    Text("Logicky")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(Color.appText)
+                }
+                Spacer()
+                Button {
+                    nicknameDraft = nickname
+                    showNicknameInput = true
+                } label: {
+                    Image(systemName: nickname.isEmpty ? "person.crop.circle.badge.plus" : "person.crop.circle")
+                        .font(.system(size: 22))
+                        .foregroundStyle(nickname.isEmpty ? Color.appGray : Color.tiffany)
+                }
             }
-            Spacer()
+
+            if !nickname.isEmpty {
+                Text("ようこそ！\(nickname)さん")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.appSub)
+            }
         }
         .padding(.top, 4)
     }

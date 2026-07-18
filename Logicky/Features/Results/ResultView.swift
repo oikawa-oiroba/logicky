@@ -187,6 +187,13 @@ struct ResultView: View {
             } else {
                 ftFeedback(feedback)
             }
+
+            QuestionFeedbackForm(
+                questionId: feedback.question.id,
+                unit: feedback.question.unit ?? "",
+                selectedChoiceId: feedback.answer.selectedChoiceId
+            )
+            .id(feedback.question.id)
         }
         .padding(16)
         .background(Color.white)
