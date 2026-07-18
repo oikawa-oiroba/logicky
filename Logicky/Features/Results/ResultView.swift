@@ -3,6 +3,20 @@ import SwiftUI
 struct ResultView: View {
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var viewModel: QuizViewModel
+    @State private var showClearConfetti = false
+
+    // このセッションの正答率（4択のみ）。80%以上でクリア
+    private var sessionCorrectRate: Double {
+        guard let result = viewModel.quizResult else { return 0 }
+        let mc = result.feedbacks.filter { $0.question.type == .multipleChoice }
+        guard !mc.isEmpty else { return 0 }
+        let correct = mc.filter { $0.isCorrect == true }.count
+        return Double(correct) / Double(mc.count)
+    }
+
+    private var isCleared: Bool { sessionCorrectRate >= 0.8 }
+
+    private static let gold = Color(red: 212/255, green: 165/255, blue: 32/255)
 
     var body: some View {
         ScrollView {
@@ -30,6 +44,24 @@ struct ResultView: View {
         .background(Color.appBg)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .overlay {
+            if showClearConfetti {
+                // クリア時は正解時より豪華な花吹雪（ゴールド多め）
+                ConfettiView(
+                    particleCount: 130,
+                    maxLifetime: 2.6,
+                    fadeDelay: 1.4,
+                    palette: [Self.gold,
+                              Color(red: 1.0, green: 0.84, blue: 0.35),
+                              Color.tiffany, .white]
+                )
+            }
+        }
+        .onAppear {
+            if viewModel.mode == .training && isCleared {
+                showClearConfetti = true
+            }
+        }
         .sheet(item: $viewModel.newlyAcquiredBadge) { celebration in
             BadgeAcquisitionSheet(unit: celebration.unit, isAcquired: celebration.isAcquired) {
                 viewModel.newlyAcquiredBadge = nil
@@ -41,16 +73,30 @@ struct ResultView: View {
 
     private var titleHeader: some View {
         VStack(spacing: 8) {
-            Image(systemName: "checkmark.seal.fill")
-                .font(.system(size: 44))
-                .foregroundStyle(Color.tiffany)
-                .padding(.top, 28)
-            Text("単元クリア！")
-                .font(.title.bold())
-                .foregroundStyle(Color.appText)
-            Text("結果フィードバック")
-                .font(.subheadline)
-                .foregroundStyle(Color.appSub)
+            if viewModel.mode == .training && !isCleared {
+                // 正答率80%未満はクリア失敗（グレー表示）
+                Image(systemName: "xmark.seal.fill")
+                    .font(.system(size: 44))
+                    .foregroundStyle(Color.appGray)
+                    .padding(.top, 28)
+                Text("クリア失敗…")
+                    .font(.title.bold())
+                    .foregroundStyle(Color.appGray)
+                Text("正答率80%以上でクリア。もう一度挑戦しよう！")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
+            } else {
+                Image(systemName: "checkmark.seal.fill")
+                    .font(.system(size: 44))
+                    .foregroundStyle(Self.gold)
+                    .padding(.top, 28)
+                Text("単元クリア！")
+                    .font(.title.bold())
+                    .foregroundStyle(Self.gold)
+                Text("結果フィードバック")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
+            }
         }
     }
 
@@ -65,7 +111,7 @@ struct ResultView: View {
 
                 Circle()
                     .trim(from: 0, to: CGFloat(result.totalScore) / 100)
-                    .stroke(Color.tiffany, style: StrokeStyle(lineWidth: 14, lineCap: .round))
+                    .stroke(Color.scoreRingStyle(result.totalScore), style: StrokeStyle(lineWidth: 14, lineCap: .round))
                     .frame(width: 150, height: 150)
                     .rotationEffect(.degrees(-90))
                     .animation(.easeOut(duration: 1.0), value: result.totalScore)
@@ -73,7 +119,7 @@ struct ResultView: View {
                 VStack(spacing: 2) {
                     Text("\(result.totalScore)")
                         .font(.system(size: 48, weight: .bold, design: .rounded))
-                        .foregroundStyle(Color.tiffany)
+                        .foregroundStyle(Color.scoreColor(result.totalScore))
                     Text("点")
                         .font(.subheadline)
                         .foregroundStyle(Color.appSub)
@@ -82,10 +128,10 @@ struct ResultView: View {
 
             Text(rankLabel(result.totalScore))
                 .font(.headline)
-                .foregroundStyle(Color.tiffany)
+                .foregroundStyle(Color.scoreColor(result.totalScore))
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
-                .background(Color.tiffany.opacity(0.1))
+                .background(Color.scoreColor(result.totalScore).opacity(0.1))
                 .clipShape(Capsule())
         }
         .padding()
@@ -499,7 +545,7 @@ private struct ScoreChip: View {
     var body: some View {
         VStack(spacing: 4) {
             Text(title).font(.caption2.weight(.semibold)).foregroundStyle(Color.appSub)
-            Text("\(score)").font(.title3.bold()).foregroundStyle(Color.tiffany)
+            Text("\(score)").font(.title3.bold()).foregroundStyle(Color.scoreColor(score))
             Text("点").font(.caption2).foregroundStyle(Color.appSub)
         }
         .frame(maxWidth: .infinity)

@@ -1,6 +1,12 @@
 import SwiftUI
 
 struct ConfettiView: View {
+    /// 花吹雪の量・持続・色をカスタムできる（単元クリア時は豪華版を使う）
+    var particleCount: Int = 35
+    var maxLifetime: Double = 1.5
+    var fadeDelay: Double = 0.3
+    var palette: [Color]? = nil
+
     @State private var particles: [ConfettiParticle] = []
     @State private var opacity: Double = 1.0
 
@@ -42,16 +48,16 @@ struct ConfettiView: View {
         .ignoresSafeArea()
         .onAppear {
             spawnParticles()
-            withAnimation(.easeOut(duration: 1.2).delay(0.3)) {
+            withAnimation(.easeOut(duration: 1.2).delay(fadeDelay)) {
                 opacity = 0
             }
         }
     }
 
     private func spawnParticles() {
-        let colors: [Color] = [Color.tiffany, Color.white, Color(red: 0.83, green: 0.69, blue: 0.22)]
+        let colors: [Color] = palette ?? [Color.tiffany, Color.white, Color(red: 0.83, green: 0.69, blue: 0.22)]
         let now = Date.timeIntervalSinceReferenceDate
-        particles = (0..<35).map { _ in
+        particles = (0..<particleCount).map { _ in
             let angle = Double.random(in: 0...(2 * .pi))
             let speed = Double.random(in: 200...450)
             return ConfettiParticle(
@@ -61,7 +67,7 @@ struct ConfettiView: View {
                 size: Double.random(in: 6...12),
                 rotation: Double.random(in: 0...(2 * .pi)),
                 rotationSpeed: Double.random(in: -6...6),
-                lifetime: Double.random(in: 0.8...1.5),
+                lifetime: Double.random(in: 0.8...maxLifetime),
                 birthTime: now,
                 isCircle: Bool.random()
             )
