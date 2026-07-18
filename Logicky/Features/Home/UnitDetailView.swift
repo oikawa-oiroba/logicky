@@ -58,9 +58,9 @@ struct UnitDetailView: View {
             HStack {
                 Label("トレーニングモード", systemImage: "4.square.fill")
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.indigo)
+                    .foregroundStyle(Color.tiffany)
                 Spacer()
-                Text("4択 × \(unit.totalQuestions)問")
+                Text("4択・1回5問")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -68,28 +68,10 @@ struct UnitDetailView: View {
             if mcCompleted {
                 HStack(spacing: 6) {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.tiffany)
                     Text("トレーニング完了！")
                         .font(.subheadline)
-                        .foregroundStyle(.green)
-                }
-            }
-
-            if hasMasterMode {
-                Divider()
-                HStack {
-                    Label("マスターモード", systemImage: "pencil.line")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(mcCompleted ? .purple : .secondary)
-                    Spacer()
-                    Text("自由記述")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                if !mcCompleted {
-                    Text("トレーニングをクリアすると解放されます")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(Color.tiffany)
                 }
             }
         }
@@ -112,28 +94,8 @@ struct UnitDetailView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .background(
-                            LinearGradient(colors: [.indigo, .purple],
-                                           startPoint: .leading, endPoint: .trailing)
-                        )
+                        .background(Color.tiffany)
                         .clipShape(RoundedRectangle(cornerRadius: 14))
-                }
-
-                if mcCompleted && hasMasterMode {
-                    Button {
-                        navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .master))
-                    } label: {
-                        HStack(spacing: 8) {
-                            Image(systemName: "pencil.line")
-                            Text("マスターモードに挑戦")
-                        }
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.purple)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
-                        .background(Color.purple.opacity(0.1))
-                        .clipShape(RoundedRectangle(cornerRadius: 14))
-                    }
                 }
             }
             .padding(.horizontal, 24)

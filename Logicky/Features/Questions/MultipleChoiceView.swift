@@ -22,7 +22,7 @@ struct MultipleChoiceView: View {
                     VStack(spacing: 16) {
                         questionCard(question)
                         choicesList(question)
-                        Spacer(minLength: showExplanation ? 320 : 40)
+                        Spacer(minLength: showExplanation ? 480 : 40)
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)
@@ -228,12 +228,13 @@ struct MultipleChoiceView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 24)
             }
-            .frame(maxHeight: 320)
+            .frame(maxHeight: 420)
         }
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.1), radius: 20, y: -4)
-        .padding(.horizontal, 0)
+        // 下部の進捗バーと被らないように持ち上げる
+        .padding(.bottom, 44)
     }
 
     @ViewBuilder

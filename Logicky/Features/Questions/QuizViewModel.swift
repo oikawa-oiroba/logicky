@@ -43,6 +43,13 @@ final class QuizViewModel: ObservableObject {
 
     // MARK: - Session Management
 
+    // 結果画面の「間違えた問題にもう一度挑戦」用。次回のstartQuizで消費される
+    private var retryQuestionIds: [String]? = nil
+
+    func prepareRetry(questionIds: [String]) {
+        retryQuestionIds = questionIds
+    }
+
     func startQuiz(unitId: String, mode: QuizMode = .training) {
         self.unitId = unitId
         self.mode = mode
@@ -50,7 +57,12 @@ final class QuizViewModel: ObservableObject {
         switch mode {
         case .training:
             let mcQuestions = all.filter { $0.type == .multipleChoice }
-            self.questions = Self.selectTrainingQuestions(mcQuestions, unitId: unitId)
+            if let retryIds = retryQuestionIds {
+                self.questions = mcQuestions.filter { retryIds.contains($0.id) }.shuffled()
+                retryQuestionIds = nil
+            } else {
+                self.questions = Self.selectTrainingQuestions(mcQuestions, unitId: unitId)
+            }
         case .master:
             self.questions = all.filter { $0.type == .freeText }
         }
@@ -83,6 +95,7 @@ final class QuizViewModel: ObservableObject {
         unitId = ""
         mode = .training
         newlyAcquiredBadge = nil
+        retryQuestionIds = nil
     }
 
     // MARK: - Answer Input

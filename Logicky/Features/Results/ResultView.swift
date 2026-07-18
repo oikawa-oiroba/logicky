@@ -19,6 +19,7 @@ struct ResultView: View {
                         .padding()
                 }
 
+                retryWrongButton
                 reviewButton
                 homeButton
             }
@@ -170,6 +171,16 @@ struct ResultView: View {
                         .foregroundStyle(feedback.score >= 70 ? Color.tiffany : Color.appGray)
                 }
             }
+
+            // 問題文（これがないと振り返れない）
+            Text(feedback.question.body)
+                .font(.subheadline)
+                .foregroundStyle(Color.appText)
+                .lineSpacing(4)
+                .padding(12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.appBg)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
 
             if feedback.question.type == .multipleChoice {
                 mcFeedback(feedback)
@@ -377,6 +388,38 @@ struct ResultView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.tiffany, lineWidth: 1)
             )
+        }
+    }
+
+    // MARK: - Retry Wrong Questions
+
+    private var wrongQuestionIds: [String] {
+        viewModel.quizResult?.feedbacks
+            .filter { $0.question.type == .multipleChoice && $0.isCorrect == false }
+            .map { $0.question.id } ?? []
+    }
+
+    @ViewBuilder
+    private var retryWrongButton: some View {
+        let ids = wrongQuestionIds
+        if !ids.isEmpty {
+            Button {
+                let unitId = viewModel.unitId
+                viewModel.prepareRetry(questionIds: ids)
+                navigationPath.append(AppRoute.quiz(unitId: unitId, mode: .training))
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.counterclockwise")
+                    Text("間違えた\(ids.count)問にもう一度挑戦")
+                        .fontWeight(.semibold)
+                }
+                .font(.headline)
+                .foregroundStyle(Color.tiffany)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color.tiffany.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
         }
     }
 

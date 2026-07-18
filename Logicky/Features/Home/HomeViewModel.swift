@@ -94,12 +94,13 @@ final class HomeViewModel: ObservableObject {
 
     func todayUnitAnsweredCount() -> Int {
         guard let unit = todayUnit else { return 0 }
-        return mcAnsweredCount(for: unit)
+        return min(mcAnsweredCount(for: unit), todayUnitMCCount())
     }
 
+    // 「今日の5問」のセッションは5問なので、分母も単元の全問数ではなく5に揃える
     func todayUnitMCCount() -> Int {
         guard let unit = todayUnit else { return 0 }
-        return QuestionService.shared.trainingQuestions(for: unit.id).count
+        return min(5, QuestionService.shared.trainingQuestions(for: unit.id).count)
     }
 
     // MARK: - Growth / Level Progress
