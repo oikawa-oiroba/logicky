@@ -37,6 +37,8 @@
 		NBLD0000000000000000000FB /* FeedbackService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FB /* FeedbackService.swift */; };
 		NBLD0000000000000000000FE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FE /* ProfileView.swift */; };
 		NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FF /* BadgeCollectionView.swift */; };
+		NBLD00000000000000000102 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000102 /* OnboardingView.swift */; };
+		NBLD00000000000000000101 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000101 /* NotificationService.swift */; };
 		NBLD0000000000000000000FD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FD /* PaywallView.swift */; };
 		NBLD0000000000000000000FC /* PremiumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FC /* PremiumService.swift */; };
 		NBLD000000000000000000006 /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL000000000000000000006 /* DictionaryListView.swift */; };
@@ -96,6 +98,8 @@
 		NFIL0000000000000000000FB /* FeedbackService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FF /* BadgeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCollectionView.swift; sourceTree = "<group>"; };
+		NFIL00000000000000000102 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		NFIL00000000000000000101 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FD /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FC /* PremiumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumService.swift; sourceTree = "<group>"; };
 		NFIL000000000000000000006 /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
@@ -174,6 +178,7 @@
 				NGRP000000000000000000002 /* ThinkingMethodService */,
 				NGRP0000000000000000000FB /* FeedbackService */,
 				NGRP0000000000000000000FC /* PremiumService */,
+				NGRP00000000000000000101 /* NotificationService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
 				NGRP000000000000000000006 /* CognitiveBiasService */,
 				NGRP000000000000000000007 /* SkillBadgeService */,
@@ -243,6 +248,7 @@
 		FEAT000000000000000000002 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
+				NFIL00000000000000000102 /* OnboardingView.swift */,
 				200000000000000000000007 /* SplashView.swift */,
 			);
 			path = Onboarding;
@@ -350,6 +356,14 @@
 				NFIL0000000000000000000FC /* PremiumService.swift */,
 			);
 			path = PremiumService;
+			sourceTree = "<group>";
+		};
+		NGRP00000000000000000101 /* NotificationService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL00000000000000000101 /* NotificationService.swift */,
+			);
+			path = NotificationService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000003 /* DiagnosticService */ = {
@@ -520,6 +534,8 @@
 				NBLD0000000000000000000FB /* FeedbackService.swift in Sources */,
 				NBLD0000000000000000000FE /* ProfileView.swift in Sources */,
 				NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */,
+				NBLD00000000000000000102 /* OnboardingView.swift in Sources */,
+				NBLD00000000000000000101 /* NotificationService.swift in Sources */,
 				NBLD0000000000000000000FD /* PaywallView.swift in Sources */,
 				NBLD0000000000000000000FC /* PremiumService.swift in Sources */,
 				NBLD000000000000000000006 /* DictionaryListView.swift in Sources */,

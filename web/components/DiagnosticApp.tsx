@@ -258,16 +258,22 @@ function AxisBar({ label, score, delay }: { label: string; score: number; delay:
 // ─── Screens ─────────────────────────────────────────────────────────────────
 
 function PreviewAxisBar({ label, score }: { label: string; score: number }) {
+  const barStyle =
+    score >= 100
+      ? { backgroundImage: `linear-gradient(90deg, ${RAINBOW_COLORS.join(", ")})` }
+      : { backgroundColor: scoreColor(score) };
   return (
     <div className="flex items-center gap-2.5">
       <span className="w-12 shrink-0 text-xs text-app-sub">{label}</span>
       <div className="flex-1 h-2 bg-card-border rounded-full overflow-hidden">
-        <div
-          className="h-full bg-tiffany rounded-full"
-          style={{ width: `${score}%` }}
-        />
+        <div className="h-full rounded-full" style={{ width: `${score}%`, ...barStyle }} />
       </div>
-      <span className="w-7 shrink-0 text-right text-xs font-semibold text-tiffany">{score}</span>
+      <span
+        className="w-7 shrink-0 text-right text-xs font-semibold"
+        style={{ color: scoreColor(score) }}
+      >
+        {score}
+      </span>
     </div>
   );
 }
@@ -296,11 +302,20 @@ function ResultPreviewCard({ previous }: { previous: StoredResult | null }) {
         </span>
       </div>
       <div className="flex items-center gap-5">
-        <div className="shrink-0 flex flex-col items-center justify-center w-[88px] h-[88px] rounded-full border-4 border-tiffany">
-          <span className="text-2xl font-bold text-app-text leading-none">{s.total}</span>
-          <span className="text-xs font-bold text-tiffany mt-1">
-            {rankLabel(s.total)}
-          </span>
+        <div
+          className="shrink-0 flex items-center justify-center w-[88px] h-[88px] rounded-full p-1"
+          style={
+            s.total >= 100
+              ? { background: `conic-gradient(${RAINBOW_COLORS.join(", ")})` }
+              : { background: scoreColor(s.total) }
+          }
+        >
+          <div className="flex flex-col items-center justify-center w-full h-full rounded-full bg-white">
+            <span className="text-2xl font-bold text-app-text leading-none">{s.total}</span>
+            <span className="text-xs font-bold mt-1" style={{ color: scoreColor(s.total) }}>
+              {rankLabel(s.total)}
+            </span>
+          </div>
         </div>
         <div className="flex-1 space-y-2.5">
           <PreviewAxisBar label="整理力" score={s.organize} />
@@ -967,7 +982,20 @@ function ResultScreen({
         <div className="bg-white rounded-2xl border border-card-border p-6 text-center space-y-3">
           <ScoreCircle score={displayScore} animate={circleReady} />
           <div>
-            <div className="text-4xl font-black text-tiffany">{rank}</div>
+            <div
+              className="text-4xl font-black"
+              style={
+                result.totalScore >= 100
+                  ? {
+                      backgroundImage: `linear-gradient(90deg, ${RAINBOW_COLORS.join(", ")})`,
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                    }
+                  : { color: scoreColor(result.totalScore) }
+              }
+            >
+              {rank}
+            </div>
             <div className="text-sm text-app-sub mt-1">{desc}</div>
             <span className="inline-block mt-2 px-3 py-1 bg-tiffany-light text-tiffany text-xs font-semibold rounded-full">
               {typeName}

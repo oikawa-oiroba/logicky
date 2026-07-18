@@ -19,6 +19,7 @@ struct ResultView: View {
                         .padding()
                 }
 
+                nextSessionButton
                 retryWrongButton
                 reviewButton
                 homeButton
@@ -398,6 +399,32 @@ struct ResultView: View {
         }
     }
 
+    // MARK: - Next Session（今日の5問→次の5問とどんどん進める）
+
+    @ViewBuilder
+    private var nextSessionButton: some View {
+        if viewModel.mode == .training, let nextUnitId = viewModel.nextTrainingUnitId() {
+            let sameUnit = nextUnitId == viewModel.unitId
+            let unitName = UnitModel.all.first { $0.id == nextUnitId }?.displayName ?? ""
+            Button {
+                navigationPath.append(AppRoute.quiz(unitId: nextUnitId, mode: .training))
+            } label: {
+                HStack {
+                    Image(systemName: "arrow.right.circle.fill")
+                    Text(sameUnit ? "次の5問に進む（\(unitName)）" : "次の単元へ（\(unitName)）")
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                }
+                .font(.headline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .background(Color.tiffany)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+        }
+    }
+
     // MARK: - Retry Wrong Questions
 
     private var wrongQuestionIds: [String] {
@@ -520,13 +547,13 @@ struct BadgeAcquisitionSheet: View {
                     .foregroundStyle(Color.tiffany)
             }
             VStack(spacing: 8) {
-                Text(isAcquired ? "スキル習得！" : "単元クリア！")
+                Text(isAcquired ? "バッジ獲得！" : "単元クリア！")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.appText)
                 Text("\(unit.displayName)")
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.tiffany)
-                Text(isAcquired ? "正答率80%以上を達成しました" : "クリアバッジを獲得しました")
+                Text(isAcquired ? "全問正解を達成しました！" : "正答率80%以上を達成しました")
                     .font(.subheadline)
                     .foregroundStyle(Color.appSub)
                     .padding(.top, 4)

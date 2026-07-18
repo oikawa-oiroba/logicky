@@ -25,11 +25,18 @@ enum AppRoute: Hashable {
 
 struct RootView: View {
     @State private var showSplash = true
+    @AppStorage("logicky_onboarding_done") private var onboardingDone = false
 
     var body: some View {
         Group {
             if showSplash {
                 SplashView()
+            } else if !onboardingDone {
+                OnboardingView {
+                    withAnimation(.easeInOut(duration: 0.4)) {
+                        onboardingDone = true
+                    }
+                }
             } else {
                 MainNavigationView()
             }

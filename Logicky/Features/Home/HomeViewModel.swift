@@ -30,12 +30,9 @@ final class HomeViewModel: ObservableObject {
         return 0
     }
 
+    // クリア判定＝正答率80%以上のセッションを達成したか（SkillBadgeServiceのクリア記録）
     func isMCCompleted(for unit: UnitModel) -> Bool {
-        let mcQuestions = QuestionService.shared.questions(for: unit.id).filter { $0.type == .multipleChoice }
-        guard !mcQuestions.isEmpty else { return false }
-        let mcIds = Set(mcQuestions.map { $0.id })
-        let answered = attemptService.answeredMCQuestionIds(for: unit.id, mcIds: mcIds)
-        return answered.count >= min(5, mcQuestions.count)
+        SkillBadgeService.shared.clearedUnitIds.contains(unit.id)
     }
 
     func hasMasterMode(for unit: UnitModel) -> Bool {

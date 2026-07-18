@@ -70,10 +70,10 @@ struct DiagnosticResultView: View {
         return VStack(spacing: 6) {
             Text(vm.rankLabel(for: score))
                 .font(.system(size: 36, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.tiffany)
+                .foregroundStyle(Color.scoreRingStyle(score))
                 .padding(.horizontal, 24)
                 .padding(.vertical, 8)
-                .background(Color.tiffany.opacity(0.1))
+                .background(Color.scoreColor(score).opacity(0.1))
                 .clipShape(Capsule())
             Text(vm.rankDescription(for: score))
                 .font(.subheadline)

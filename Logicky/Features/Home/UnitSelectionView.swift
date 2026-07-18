@@ -40,15 +40,8 @@ struct UnitSelectionView: View {
     }
 
     private func isMCCompleted(for unit: UnitModel) -> Bool {
-        let mcQuestions = QuestionService.shared.questions(for: unit.id).filter { $0.type == .multipleChoice }
-        guard !mcQuestions.isEmpty else { return false }
-        let mcIds = Set(mcQuestions.map { $0.id })
-        return attemptService.attempts(for: unit.id).contains { attempt in
-            let answeredIds = Set(attempt.questionResults
-                .filter { !$0.isSkipped && mcIds.contains($0.questionId) }
-                .map { $0.questionId })
-            return answeredIds.count >= mcQuestions.count
-        }
+        // クリア判定＝正答率80%以上のセッション達成
+        return SkillBadgeService.shared.clearedUnitIds.contains(unit.id)
     }
 
     private func hasMasterQuestions(for unit: UnitModel) -> Bool {

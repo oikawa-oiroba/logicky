@@ -12,7 +12,8 @@ final class SkillBadgeService {
         guard !answeredIds.isEmpty else { return nil }
 
         let rate = AttemptService.shared.mcCorrectRate(for: unit.id, mcIds: mcIds) ?? 0
-        let level: BadgeLevel = rate >= 0.8 ? .acquired : .learning
+        // バッジ（習得）は全問正解が条件
+        let level: BadgeLevel = rate >= 1.0 ? .acquired : .learning
         let date = level == .acquired ? acquiredDates[unit.id] : nil
         return SkillBadge(unitCode: unit.id, level: level, acquiredDate: date, correctRate: rate)
     }
@@ -34,8 +35,9 @@ final class SkillBadgeService {
     }
 
     /// Returns true if this unit just reached 'acquired' for the first time.
+    /// バッジ獲得条件はセッション全問正解
     func checkAndMarkNewlyAcquired(for unitId: String, rate: Double) -> Bool {
-        guard rate >= 0.8 else { return false }
+        guard rate >= 1.0 else { return false }
         var set = acquiredSet
         guard !set.contains(unitId) else { return false }
         set.insert(unitId)

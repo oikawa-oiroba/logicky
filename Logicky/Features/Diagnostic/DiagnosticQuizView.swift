@@ -12,9 +12,13 @@ struct DiagnosticQuizView: View {
     var body: some View {
         VStack(spacing: 0) {
             progressHeader
-            Spacer(minLength: 0)
+            // 問題は上揃え（長文でもスクロールで読める）
             if let q = vm.currentQuestion {
-                questionBody(q)
+                ScrollView {
+                    questionBody(q)
+                        .padding(.top, 8)
+                        .padding(.bottom, 32)
+                }
             }
             Spacer(minLength: 0)
         }

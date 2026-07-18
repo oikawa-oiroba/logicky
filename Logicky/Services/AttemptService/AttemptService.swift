@@ -37,6 +37,17 @@ final class AttemptService: ObservableObject {
         return Set(allResults.filter { !$0.isSkipped && mcIds.contains($0.questionId) }.map { $0.questionId })
     }
 
+    /// 単元内の各問題について、最新の回答が正解だったかを返す（未回答の問題は含まれない）
+    func latestCorrectness(for unitId: String) -> [String: Bool] {
+        var map: [String: Bool] = [:]
+        for attempt in attempts(for: unitId).sorted(by: { $0.date < $1.date }) {
+            for r in attempt.questionResults where !r.isSkipped {
+                if let c = r.isCorrect { map[r.questionId] = c }
+            }
+        }
+        return map
+    }
+
     func mcCorrectRate(for unitId: String, mcIds: Set<String>) -> Double? {
         let allResults = attempts(for: unitId)
             .sorted { $0.date < $1.date }

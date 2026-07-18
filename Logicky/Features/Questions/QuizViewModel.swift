@@ -78,18 +78,37 @@ final class QuizViewModel: ObservableObject {
         self.quizResult = nil
     }
 
+    // 優先度: 未挑戦 → 不正解 → 正解済み の順で5問を選ぶ
     private static func selectTrainingQuestions(_ all: [Question], unitId: String) -> [Question] {
         let sessionSize = 5
-        let mcIds = Set(all.map { $0.id })
-        let answeredIds = AttemptService.shared.answeredMCQuestionIds(for: unitId, mcIds: mcIds)
-        let unanswered = all.filter { !answeredIds.contains($0.id) }
-        if unanswered.count >= sessionSize {
-            return Array(unanswered.shuffled().prefix(sessionSize))
+        let correctness = AttemptService.shared.latestCorrectness(for: unitId)
+
+        let unanswered = all.filter { correctness[$0.id] == nil }
+        let wrong = all.filter { correctness[$0.id] == false }
+        let correct = all.filter { correctness[$0.id] == true }
+
+        var pool: [Question] = []
+        pool += unanswered.shuffled()
+        pool += wrong.shuffled()
+        pool += correct.shuffled()
+        return Array(pool.prefix(sessionSize)).shuffled()
+    }
+
+    /// 「次の5問」で進む単元。今の単元に未挑戦/不正解が残っていれば同じ単元、
+    /// なければ未クリアの次の単元、全クリアなら最初の単元
+    func nextTrainingUnitId() -> String? {
+        let current = unitId
+        if !current.isEmpty {
+            let mc = QuestionService.shared.trainingQuestions(for: current)
+            let correctness = AttemptService.shared.latestCorrectness(for: current)
+            let remaining = mc.contains { correctness[$0.id] != true }
+            if remaining { return current }
         }
-        let answered = all.filter { answeredIds.contains($0.id) }
-        let needed = sessionSize - unanswered.count
-        let fill = Array(answered.shuffled().prefix(needed))
-        return (unanswered + fill).shuffled()
+        let cleared = SkillBadgeService.shared.clearedUnitIds
+        if let next = UnitModel.all.first(where: { $0.id != current && !cleared.contains($0.id) }) {
+            return next.id
+        }
+        return UnitModel.all.first?.id
     }
 
     func reset() {
@@ -179,14 +198,22 @@ final class QuizViewModel: ObservableObject {
         AttemptService.shared.save(attempt)
 
         if mode == .training, let unit = UnitModel.all.first(where: { $0.id == unitId }) {
-            let mcIds = Set(questions.map { $0.id })
-            if let rate = AttemptService.shared.mcCorrectRate(for: unitId, mcIds: mcIds),
-               SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: rate) {
-                // 80%以上：習得バッジ
+            // このセッションの正答率で判定（クリア=80%以上、バッジ=全問正解）
+            let mcPairs = zip(questions, sessionAnswers).filter { q, _ in q.type == .multipleChoice }
+            let mcTotal = mcPairs.count
+            let mcCorrect = mcPairs.filter { q, a in
+                !a.isSkipped && a.selectedChoiceId == q.correctChoiceId
+            }.count
+            let sessionRate = mcTotal > 0 ? Double(mcCorrect) / Double(mcTotal) : 0
+
+            if sessionRate >= 1.0,
+               SkillBadgeService.shared.checkAndMarkNewlyAcquired(for: unitId, rate: sessionRate) {
+                // 全問正解：バッジ獲得
                 _ = SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId)
                 newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: true)
-            } else if SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId) {
-                // 初クリア：クリアバッジ
+            } else if sessionRate >= 0.8,
+                      SkillBadgeService.shared.checkAndMarkNewlyCleared(for: unitId) {
+                // 80%以上：単元クリア
                 newlyAcquiredBadge = BadgeCelebration(unit: unit, isAcquired: false)
             }
         }
