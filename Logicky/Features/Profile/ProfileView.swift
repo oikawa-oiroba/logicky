@@ -10,9 +10,10 @@ struct ProfileView: View {
     @State private var editingNickname = false
     @State private var showPaywall = false
 
-    // 総合ロジカルスコア：全トレーニングのスコア累計
+    // 総合ロジカルスコア：全トレーニングのスコア累計 + ログインボーナス
     private var totalLogicalScore: Int {
         attemptService.attempts.reduce(0) { $0 + $1.totalScore }
+            + UserDefaults.standard.integer(forKey: "logicky_bonus_points")
     }
 
     private var totalAnswered: Int {

@@ -28,15 +28,12 @@ struct UnitSelectionView: View {
         .background(Color.appBg)
     }
 
+    // 進捗＝単元の全問題のうち正解済みの数（最新回答ベース）
     private func mcAnsweredCount(for unit: UnitModel) -> Int {
-        let mcIds = Set(QuestionService.shared.questions(for: unit.id)
-            .filter { $0.type == .multipleChoice }
-            .map { $0.id })
-        for attempt in attemptService.attempts(for: unit.id).sorted(by: { $0.date > $1.date }) {
-            let answered = attempt.questionResults.filter { !$0.isSkipped && mcIds.contains($0.questionId) }
-            if !answered.isEmpty { return answered.count }
-        }
-        return 0
+        let correctness = attemptService.latestCorrectness(for: unit.id)
+        return QuestionService.shared.trainingQuestions(for: unit.id)
+            .filter { correctness[$0.id] == true }
+            .count
     }
 
     private func isMCCompleted(for unit: UnitModel) -> Bool {
@@ -100,7 +97,7 @@ private struct UnitProgressCard: View {
                     }
                     .frame(height: 6)
 
-                    Text(mcCompleted ? "トレーニング完了" : "トレーニング \(mcAnswered)/\(unit.totalQuestions)")
+                    Text(mcCompleted ? "トレーニング完了" : "正解 \(mcAnswered)/\(unit.totalQuestions)問")
                         .font(.caption)
                         .foregroundStyle(mcCompleted ? Color.tiffany : Color.appSub)
                 }

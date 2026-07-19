@@ -15,13 +15,29 @@ final class DiagnosticService {
 
     // MARK: - Question Selection (1 per each of 14 basic units)
 
+    private let recentQuestionsKey = "logicky_diagnostic_recent_qids"
+
     func selectQuestions() -> [Question] {
         let basicUnitIds = ["grouping", "why_deep", "syllogism", "induction", "analogy",
                             "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
                             "fact_opinion", "pyramid", "so_what", "5w2h"]
-        return basicUnitIds.compactMap { unitId in
-            QuestionService.shared.trainingQuestions(for: unitId).shuffled().first
+        // 直近2回の診断で使った問題はなるべく避ける（毎回同じ問題になる体感を減らす）
+        let recent = Set(UserDefaults.standard.stringArray(forKey: recentQuestionsKey) ?? [])
+        let selected = basicUnitIds.compactMap { unitId -> Question? in
+            let pool = QuestionService.shared.trainingQuestions(for: unitId)
+            let fresh = pool.filter { !recent.contains($0.id) }
+            return (fresh.isEmpty ? pool : fresh).shuffled().first
         }.shuffled()
+
+        // 履歴を更新（直近2回分＝最大28問を保持）
+        var history = UserDefaults.standard.stringArray(forKey: recentQuestionsKey) ?? []
+        history += selected.map { $0.id }
+        if history.count > 28 {
+            history = Array(history.suffix(28))
+        }
+        UserDefaults.standard.set(history, forKey: recentQuestionsKey)
+
+        return selected
     }
 
     // MARK: - Scoring

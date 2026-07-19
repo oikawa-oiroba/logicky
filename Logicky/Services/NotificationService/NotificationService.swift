@@ -24,12 +24,12 @@ final class NotificationService {
         center.removePendingNotificationRequests(withIdentifiers: [dailyId])
 
         let content = UNMutableNotificationContent()
-        content.title = "今日の5問の時間です 🧠"
-        content.body = "1日5問でロジカルスキルを積み上げよう。昨日の続きから始められます"
+        content.title = "おはようございます！今日の5問 🧠"
+        content.body = "朝の5問で頭のウォーミングアップ。ロジカルスキルを積み上げよう"
         content.sound = .default
 
         var components = DateComponents()
-        components.hour = 20
+        components.hour = 8
         components.minute = 0
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
 

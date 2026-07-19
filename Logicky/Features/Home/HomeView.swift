@@ -9,6 +9,9 @@ struct HomeView: View {
     @State private var showDiagnostic = false
     @State private var skillTab: Int = 0
     @State private var showPaywall = false
+    @State private var showLoginBonus = false
+    @State private var loginStreak = 0
+    @State private var loginBonusPoints = 0
 
     @AppStorage("logicky_nickname") private var nickname: String = ""
 
@@ -36,6 +39,47 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView()
+        }
+        .sheet(isPresented: $showLoginBonus) {
+            LoginBonusSheet(streak: loginStreak, bonusPoints: loginBonusPoints) {
+                showLoginBonus = false
+            }
+            .presentationDetents([.medium])
+        }
+        .onAppear {
+            checkLoginBonus()
+        }
+    }
+
+    // 1日1回、起動時にログインボーナスを表示（連続日数×10pt）
+    private func checkLoginBonus() {
+        let defaults = UserDefaults.standard
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        let lastLogin = defaults.object(forKey: "logicky_last_login") as? Date
+
+        if let last = lastLogin, calendar.isDate(last, inSameDayAs: today) {
+            return // 今日はもう表示済み
+        }
+
+        var streak = defaults.integer(forKey: "logicky_login_streak")
+        if let last = lastLogin,
+           let yesterday = calendar.date(byAdding: .day, value: -1, to: today),
+           calendar.isDate(last, inSameDayAs: yesterday) {
+            streak += 1
+        } else {
+            streak = 1
+        }
+
+        let bonus = min(streak, 10) * 10 // 連続日数×10pt（上限100pt/日）
+        defaults.set(today, forKey: "logicky_last_login")
+        defaults.set(streak, forKey: "logicky_login_streak")
+        defaults.set(defaults.integer(forKey: "logicky_bonus_points") + bonus, forKey: "logicky_bonus_points")
+
+        loginStreak = streak
+        loginBonusPoints = bonus
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            showLoginBonus = true
         }
     }
 
@@ -444,6 +488,58 @@ struct HomeView: View {
                 }
             }
         }
+    }
+}
+
+// MARK: - Login Bonus Sheet
+
+struct LoginBonusSheet: View {
+    let streak: Int
+    let bonusPoints: Int
+    let onDismiss: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Spacer()
+            ZStack {
+                Circle()
+                    .fill(Color.tiffany.opacity(0.1))
+                    .frame(width: 110, height: 110)
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 48))
+                    .foregroundStyle(Color(red: 243/255, green: 133/255, blue: 32/255))
+            }
+            VStack(spacing: 6) {
+                Text("連続\(streak)日目！")
+                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color.appText)
+                Text("ログインボーナス +\(bonusPoints)pt")
+                    .font(.headline)
+                    .foregroundStyle(Color.tiffany)
+                Text(streak == 1
+                     ? "今日から積み上げていこう！"
+                     : "継続は最強のロジカルトレーニング。今日も5問やろう！")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.appSub)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 4)
+            }
+            Spacer()
+            Button {
+                onDismiss()
+            } label: {
+                Text("今日の5問を始める")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(Color.tiffany)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 24)
+        }
+        .background(Color.appBg)
     }
 }
 
