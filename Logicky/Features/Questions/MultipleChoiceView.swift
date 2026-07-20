@@ -37,7 +37,11 @@ struct MultipleChoiceView: View {
                     }
                 }
                 .sheet(isPresented: $showTutor) {
-                    TutorChatView(context: tutorContext(for: question))
+                    // ミディアムサイズで開き、背後の問題・解説が見えるようにする
+                    TutorChatView(context: tutorContext(for: question), questionId: question.id)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.visible)
+                        .presentationBackgroundInteraction(.enabled(upThrough: .medium))
                 }
 
                 if showExplanation {

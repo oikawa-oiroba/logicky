@@ -21,3 +21,4 @@ Pods/
 
 # macOS
 .DS_Store
+.vercel

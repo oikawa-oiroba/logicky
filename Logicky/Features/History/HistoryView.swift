@@ -20,6 +20,7 @@ struct HistoryView: View {
             Picker("履歴タブ", selection: $selectedTab) {
                 Text("学習履歴").tag(0)
                 Text("診断履歴").tag(1)
+                Text("ロジ先生").tag(2)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal, 16)
@@ -28,8 +29,10 @@ struct HistoryView: View {
 
             if selectedTab == 0 {
                 quizHistoryTab
-            } else {
+            } else if selectedTab == 1 {
                 diagnosticHistoryTab
+            } else {
+                TutorLogListView()
             }
         }
         .navigationTitle("過去の結果")
