@@ -357,7 +357,7 @@ function StartScreen({
 
         {/* 2. Headline */}
         <h1 className="text-[26px] font-bold text-app-text mb-2.5 leading-snug">
-          あなたは、本当に論理的？
+          あなたの思考力は、いま何点？
         </h1>
 
         {/* 3. Description */}
