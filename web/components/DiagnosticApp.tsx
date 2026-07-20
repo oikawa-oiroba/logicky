@@ -357,7 +357,7 @@ function StartScreen({
 
         {/* 2. Headline */}
         <h1 className="text-[26px] font-bold text-app-text mb-2.5 leading-snug">
-          あなたの思考力は、いま何点？
+          あなたの&ldquo;ろんり&rdquo;的思考力を診断します。
         </h1>
 
         {/* 3. Description */}
