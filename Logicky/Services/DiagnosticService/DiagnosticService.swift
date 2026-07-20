@@ -17,14 +17,19 @@ final class DiagnosticService {
 
     private let recentQuestionsKey = "logicky_diagnostic_recent_qids"
 
-    func selectQuestions() -> [Question] {
+    func selectQuestions(advanced: Bool = false) -> [Question] {
         let basicUnitIds = ["grouping", "why_deep", "syllogism", "induction", "analogy",
                             "comparison", "abstraction", "hypothesis", "whole_part", "sequencing",
                             "fact_opinion", "pyramid", "so_what", "5w2h"]
         // 直近2回の診断で使った問題はなるべく避ける（毎回同じ問題になる体感を減らす）
         let recent = Set(UserDefaults.standard.stringArray(forKey: recentQuestionsKey) ?? [])
         let selected = basicUnitIds.compactMap { unitId -> Question? in
-            let pool = QuestionService.shared.trainingQuestions(for: unitId)
+            var pool = QuestionService.shared.trainingQuestions(for: unitId)
+            if advanced {
+                // 上級モードは難問プールから出題
+                let hard = pool.filter { $0.isHard }
+                if !hard.isEmpty { pool = hard }
+            }
             let fresh = pool.filter { !recent.contains($0.id) }
             return (fresh.isEmpty ? pool : fresh).shuffled().first
         }.shuffled()

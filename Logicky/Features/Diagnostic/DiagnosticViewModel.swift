@@ -19,8 +19,8 @@ final class DiagnosticViewModel: ObservableObject {
 
     // MARK: - Start
 
-    func startDiagnostic() {
-        questions = service.selectQuestions()
+    func startDiagnostic(advanced: Bool = false) {
+        questions = service.selectQuestions(advanced: advanced)
         selectedAnswers = Array(repeating: nil, count: questions.count)
         currentIndex = 0
         lastAnswerCorrect = nil

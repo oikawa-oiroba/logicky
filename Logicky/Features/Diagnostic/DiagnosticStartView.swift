@@ -65,6 +65,25 @@ struct DiagnosticStartView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
 
+                Button {
+                    vm.startDiagnostic(advanced: true)
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "flame.fill")
+                        Text("上級モードに挑戦")
+                            .fontWeight(.bold)
+                        Text("難問だけで構成")
+                            .font(.caption2)
+                            .opacity(0.8)
+                    }
+                    .font(.subheadline)
+                    .foregroundStyle(Color(red: 212/255, green: 132/255, blue: 32/255))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Color(red: 212/255, green: 132/255, blue: 32/255).opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+
                 Button("キャンセル") { dismiss() }
                     .font(.subheadline)
                     .foregroundStyle(Color.appSub)

@@ -32,4 +32,7 @@ struct Question: Codable, Identifiable {
     let sampleGoodAnswer: String?
     let sampleGoodPoints: [String]?
     let relatedBiases: [String]?
+    let difficulty: String? // nil/"normal"=通常, "hard"=上級
+
+    var isHard: Bool { difficulty == "hard" }
 }
