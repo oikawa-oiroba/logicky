@@ -3,6 +3,7 @@ import SwiftUI
 struct MultipleChoiceView: View {
     @EnvironmentObject var viewModel: QuizViewModel
     @State private var showHint = false
+    @State private var showTutor = false
     @State private var answeredChoiceId: String? = nil
     @State private var showExplanation = false
     @State private var showConfetti = false
@@ -34,6 +35,9 @@ struct MultipleChoiceView: View {
                             .presentationDetents([.medium])
                             .presentationDragIndicator(.visible)
                     }
+                }
+                .sheet(isPresented: $showTutor) {
+                    TutorChatView(context: tutorContext(for: question))
                 }
 
                 if showExplanation {
@@ -208,6 +212,23 @@ struct MultipleChoiceView: View {
                     // Badges row
                     badgesRow(question)
 
+                    // ロジ先生（AI家庭教師）に質問
+                    Button {
+                        showTutor = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "graduationcap.fill")
+                            Text("ロジ先生に質問する")
+                                .fontWeight(.semibold)
+                        }
+                        .font(.subheadline)
+                        .foregroundStyle(Color.tiffany)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 11)
+                        .background(Color.tiffany.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+
                     // Feedback（問題への意見）
                     QuestionFeedbackForm(
                         questionId: question.id,
@@ -268,6 +289,19 @@ struct MultipleChoiceView: View {
     private func hintMethod(for question: Question) -> ThinkingMethod? {
         guard let unitId = question.unit else { return nil }
         return ThinkingMethodService.shared.all.first { $0.unitId == unitId }
+    }
+
+    private func tutorContext(for question: Question) -> TutorService.QuestionContext {
+        let unit = UnitModel.all.first { $0.id == question.unit }
+        return TutorService.QuestionContext(
+            unitName: unit?.displayName,
+            methodName: unit?.name,
+            questionBody: question.body,
+            choices: question.choices,
+            correctChoiceId: question.correctChoiceId,
+            selectedChoiceId: answeredChoiceId,
+            explanation: question.explanation
+        )
     }
 }
 

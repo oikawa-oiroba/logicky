@@ -9,6 +9,10 @@ struct HomeView: View {
     @State private var showDiagnostic = false
     @State private var skillTab: Int = 0
     @State private var showPaywall = false
+    private struct LessonIntroTarget: Identifiable {
+        let id: String
+    }
+    @State private var lessonIntroTarget: LessonIntroTarget? = nil
     @State private var showLoginBonus = false
     @State private var loginStreak = 0
     @State private var loginBonusPoints = 0
@@ -39,6 +43,11 @@ struct HomeView: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallView()
+        }
+        .sheet(item: $lessonIntroTarget) { target in
+            TodayLessonIntroView(initialUnitId: target.id) { chosenUnitId in
+                startTraining(unitId: chosenUnitId)
+            }
         }
         .sheet(isPresented: $showLoginBonus) {
             LoginBonusSheet(streak: loginStreak, bonusPoints: loginBonusPoints) {
@@ -423,7 +432,8 @@ struct HomeView: View {
             }
 
             Button {
-                startTraining(unitId: unit.id)
+                // まず単元の解説を見せてから問題へ（シャッフルも可能）
+                lessonIntroTarget = LessonIntroTarget(id: unit.id)
             } label: {
                 HStack(spacing: 6) {
                     Text(viewModel.isAllUnitsCompleted ? "再挑戦する" : "始める")

@@ -38,6 +38,9 @@
 		NBLD0000000000000000000FE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FE /* ProfileView.swift */; };
 		NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FF /* BadgeCollectionView.swift */; };
 		NBLD00000000000000000102 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000102 /* OnboardingView.swift */; };
+		NBLD00000000000000000105 /* TutorChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000105 /* TutorChatView.swift */; };
+		NBLD00000000000000000104 /* TutorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000104 /* TutorService.swift */; };
+		NBLD00000000000000000103 /* TodayLessonIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000103 /* TodayLessonIntroView.swift */; };
 		NBLD00000000000000000101 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL00000000000000000101 /* NotificationService.swift */; };
 		NBLD0000000000000000000FD /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FD /* PaywallView.swift */; };
 		NBLD0000000000000000000FC /* PremiumService.swift in Sources */ = {isa = PBXBuildFile; fileRef = NFIL0000000000000000000FC /* PremiumService.swift */; };
@@ -99,6 +102,9 @@
 		NFIL0000000000000000000FE /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FF /* BadgeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeCollectionView.swift; sourceTree = "<group>"; };
 		NFIL00000000000000000102 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		NFIL00000000000000000105 /* TutorChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorChatView.swift; sourceTree = "<group>"; };
+		NFIL00000000000000000104 /* TutorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorService.swift; sourceTree = "<group>"; };
+		NFIL00000000000000000103 /* TodayLessonIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayLessonIntroView.swift; sourceTree = "<group>"; };
 		NFIL00000000000000000101 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FD /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		NFIL0000000000000000000FC /* PremiumService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumService.swift; sourceTree = "<group>"; };
@@ -179,6 +185,7 @@
 				NGRP0000000000000000000FB /* FeedbackService */,
 				NGRP0000000000000000000FC /* PremiumService */,
 				NGRP00000000000000000101 /* NotificationService */,
+				NGRP00000000000000000104 /* TutorService */,
 				NGRP000000000000000000003 /* DiagnosticService */,
 				NGRP000000000000000000006 /* CognitiveBiasService */,
 				NGRP000000000000000000007 /* SkillBadgeService */,
@@ -232,6 +239,7 @@
 			isa = PBXGroup;
 			children = (
 				NGRP0000000000000000000FD /* Premium */,
+				NGRP00000000000000000105 /* Tutor */,
 				NGRP0000000000000000000FE /* Profile */,
 				FEAT000000000000000000002 /* Onboarding */,
 				FEAT000000000000000000003 /* Home */,
@@ -259,6 +267,7 @@
 			children = (
 				200000000000000000000008 /* HomeView.swift */,
 				FILE000000000000000000003 /* HomeViewModel.swift */,
+				NFIL00000000000000000103 /* TodayLessonIntroView.swift */,
 				NFIL000000000000000000001 /* LevelSelectionView.swift */,
 				NFIL000000000000000000002 /* UnitSelectionView.swift */,
 				NFIL000000000000000000003 /* UnitDetailView.swift */,
@@ -350,6 +359,14 @@
 			path = Premium;
 			sourceTree = "<group>";
 		};
+		NGRP00000000000000000105 /* Tutor */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL00000000000000000105 /* TutorChatView.swift */,
+			);
+			path = Tutor;
+			sourceTree = "<group>";
+		};
 		NGRP0000000000000000000FC /* PremiumService */ = {
 			isa = PBXGroup;
 			children = (
@@ -364,6 +381,14 @@
 				NFIL00000000000000000101 /* NotificationService.swift */,
 			);
 			path = NotificationService;
+			sourceTree = "<group>";
+		};
+		NGRP00000000000000000104 /* TutorService */ = {
+			isa = PBXGroup;
+			children = (
+				NFIL00000000000000000104 /* TutorService.swift */,
+			);
+			path = TutorService;
 			sourceTree = "<group>";
 		};
 		NGRP000000000000000000003 /* DiagnosticService */ = {
@@ -535,6 +560,9 @@
 				NBLD0000000000000000000FE /* ProfileView.swift in Sources */,
 				NBLD0000000000000000000FF /* BadgeCollectionView.swift in Sources */,
 				NBLD00000000000000000102 /* OnboardingView.swift in Sources */,
+				NBLD00000000000000000105 /* TutorChatView.swift in Sources */,
+				NBLD00000000000000000104 /* TutorService.swift in Sources */,
+				NBLD00000000000000000103 /* TodayLessonIntroView.swift in Sources */,
 				NBLD00000000000000000101 /* NotificationService.swift in Sources */,
 				NBLD0000000000000000000FD /* PaywallView.swift in Sources */,
 				NBLD0000000000000000000FC /* PremiumService.swift in Sources */,
