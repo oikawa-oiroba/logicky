@@ -458,13 +458,12 @@ private struct AnswerChoiceButton: View {
         .animation(.easeInOut(duration: 0.25), value: state)
     }
 
+    // 解説文の「Aは〜」等の参照と対応がとれるよう、選択肢にA/B/C/Dラベルを表示する
     @ViewBuilder
     private var stateIcon: some View {
         switch state {
         case .normal:
-            Circle()
-                .stroke(Color.cardBorder, lineWidth: 1.5)
-                .frame(width: 22, height: 22)
+            letterBadge(color: Color.appSub, borderColor: Color.cardBorder)
         case .correct:
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 22))
@@ -474,9 +473,18 @@ private struct AnswerChoiceButton: View {
                 .font(.system(size: 22))
                 .foregroundStyle(Color.appGray)
         case .faded:
+            letterBadge(color: Color.appGray.opacity(0.6), borderColor: Color.cardBorder.opacity(0.5))
+        }
+    }
+
+    private func letterBadge(color: Color, borderColor: Color) -> some View {
+        ZStack {
             Circle()
-                .stroke(Color.cardBorder.opacity(0.5), lineWidth: 1.5)
+                .stroke(borderColor, lineWidth: 1.5)
                 .frame(width: 22, height: 22)
+            Text(choice.id.uppercased())
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(color)
         }
     }
 
