@@ -4,6 +4,8 @@ struct ResultView: View {
     @Binding var navigationPath: NavigationPath
     @EnvironmentObject var viewModel: QuizViewModel
     @State private var showClearConfetti = false
+    private struct LessonIntroTarget: Identifiable { let id: String }
+    @State private var lessonIntroTarget: LessonIntroTarget? = nil
 
     // このセッションの正答率（4択のみ）。80%以上でクリア
     private var sessionCorrectRate: Double {
@@ -65,6 +67,11 @@ struct ResultView: View {
         .sheet(item: $viewModel.newlyAcquiredBadge) { celebration in
             BadgeAcquisitionSheet(unit: celebration.unit, isAcquired: celebration.isAcquired) {
                 viewModel.newlyAcquiredBadge = nil
+            }
+        }
+        .sheet(item: $lessonIntroTarget) { target in
+            TodayLessonIntroView(initialUnitId: target.id) { chosenUnitId in
+                navigationPath.append(AppRoute.quiz(unitId: chosenUnitId, mode: .training))
             }
         }
     }
@@ -453,7 +460,7 @@ struct ResultView: View {
             let sameUnit = nextUnitId == viewModel.unitId
             let unitName = UnitModel.all.first { $0.id == nextUnitId }?.displayName ?? ""
             Button {
-                navigationPath.append(AppRoute.quiz(unitId: nextUnitId, mode: .training))
+                lessonIntroTarget = LessonIntroTarget(id: nextUnitId)
             } label: {
                 HStack {
                     Image(systemName: "arrow.right.circle.fill")
